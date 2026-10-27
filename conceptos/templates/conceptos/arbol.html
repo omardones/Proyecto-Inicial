@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Árbol de conceptos</title>
+{% verbatim %}
+<style>
+:root{--fondo:#EDF2F7;--papel:#fff;--tinta:#1B2433;--suave:#5A6678;--linea:#CBD5E1;--azul:#274690;
+--n1:#2A9D8F;--n2:#D98E1F;--n3:#C0452F}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:1rem/1.6 system-ui,sans-serif}
+main{max-width:1200px;margin:0 auto;padding:1.25rem}
+h1{margin:.2rem 0}
+nav a{margin-right:1rem}
+a{color:var(--azul)}
+
+.leyenda{display:flex;flex-wrap:wrap;gap:.4rem 1.1rem;font-size:.9rem;color:var(--suave);margin:1rem 0 .5rem}
+.leyenda i{display:inline-block;vertical-align:middle;margin-right:.35rem}
+.arbol-scroll{overflow-x:auto;background:var(--papel);border-radius:6px;padding:.75rem}
+#arbol{display:block;width:100%;min-width:900px;height:auto}
+#arbol text{font-family:inherit}
+.nd{cursor:pointer}
+.nd:focus-visible rect{stroke-width:3}
+.detalle-arbol{margin-top:1rem;background:var(--papel);border-left:5px solid var(--azul);padding:.9rem 1.1rem;border-radius:0 6px 6px 0;min-height:3.5rem}
+.detalle-arbol a{font-weight:600}
+
+</style>
+{% endverbatim %}
+</head>
+<body>
+<main>
+  <nav><a href="{% url 'conceptos:lista' %}">Conceptos</a> <a href="{% url 'conceptos:arbol' %}"><strong>Árbol</strong></a></nav>
+  <h1>Árbol de conceptos</h1>
+  <p>Cada línea une un concepto con lo que debes saber antes. Toca un concepto para ver su camino.</p>
+  <div id="leyenda" class="leyenda"></div>
+  <div class="arbol-scroll"><svg id="arbol" role="img" aria-label="Árbol de prerrequisitos entre conceptos financieros"></svg></div>
+  <div id="detalle-arbol" class="detalle-arbol" aria-live="polite"></div>
+</main>
+{{ datos|json_script:"datos-arbol" }}
+<script>
+{% verbatim %}
+const DATOS = JSON.parse(document.getElementById('datos-arbol').textContent);
+const PALETA = {
+  fundamentos: ['#F1EFE8', '#5F5E5A', '#444441'],
+  ahorro:      ['#E1F5EE', '#0F6E56', '#085041'],
+  deuda:       ['#FAECE7', '#993C1D', '#712B13'],
+  macro:       ['#EEEDFE', '#534AB7', '#3C3489']
+};
+const AZUL = '#274690', AMBAR = '#D98E1F';
+const NS = 'http://www.w3.org/2000/svg';
+
+const por = {}, prof = {}, hijos = {};
+DATOS.forEach(d => { por[d.slug] = d; });
+const calc = s => prof[s] || (prof[s] = 1 + Math.max(0, ...por[s].pre.map(calc)));
+DATOS.forEach(d => calc(d.slug));
+DATOS.forEach(d => d.pre.forEach(p => (hijos[p] = hijos[p] || []).push(d.slug)));
+
+function lineas(texto, max) {
+  const out = []; let cur = '';
+  texto.split(' ').forEach(w => {
+    if (cur && (cur + ' ' + w).length > max) { out.push(cur); cur = w; }
+    else { cur = cur ? cur + ' ' + w : w; }
+  });
+  if (cur) out.push(cur);
+  return out;
+}
+
+const W = 120, G = 28, X0 = 2, H = 44, PASO = 56, TOP = 34;
+const ncols = Math.max(...Object.values(prof));
+const cols = Array.from({ length: ncols }, () => []);
+DATOS.forEach(d => cols[prof[d.slug] - 1].push(d.slug));
+const maxN = Math.max(...cols.map(c => c.length));
+const pos = {};
+cols.forEach((c, i) => {
+  if (i > 0) {
+    const media = s => por[s].pre.reduce((a, p) => a + pos[p].y, 0) / por[s].pre.length;
+    c.sort((a, b) => media(a) - media(b));
+  }
+  c.forEach((s, j) => { pos[s] = { x: X0 + i * (W + G), y: TOP + ((maxN - c.length) / 2 + j) * PASO }; });
+});
+
+const svg = document.getElementById('arbol');
+const ancho = X0 * 2 + ncols * (W + G) - G;
+const alto = TOP + (maxN - 1) * PASO + H + 12;
+svg.setAttribute('viewBox', '0 0 ' + ancho + ' ' + alto);
+
+function el(tag, attrs, padre) {
+  const e = document.createElementNS(NS, tag);
+  Object.keys(attrs).forEach(k => e.setAttribute(k, attrs[k]));
+  if (padre) padre.appendChild(e);
+  return e;
+}
+
+for (let i = 0; i < ncols; i++) {
+  const t = el('text', { x: X0 + i * (W + G) + W / 2, y: 18, 'text-anchor': 'middle', fill: '#5A6678', 'font-size': 13 }, svg);
+  t.textContent = 'Paso ' + (i + 1);
+}
+
+const aristas = [];
+DATOS.forEach(d => d.pre.forEach(p => {
+  const x1 = pos[p].x + W, y1 = pos[p].y + H / 2, x2 = pos[d.slug].x, y2 = pos[d.slug].y + H / 2;
+  const c = Math.max(12, (x2 - x1) * 0.5);
+  const e = el('path', {
+    d: 'M' + x1 + ' ' + y1 + 'C' + (x1 + c) + ' ' + y1 + ',' + (x2 - c) + ' ' + y2 + ',' + x2 + ' ' + y2,
+    fill: 'none', stroke: '#94A3B8', 'stroke-width': 1, opacity: 0.55
+  }, svg);
+  aristas.push({ e, a: p, b: d.slug });
+}));
+
+const nodos = {};
+DATOS.forEach(d => {
+  const k = PALETA[d.cat] || PALETA.fundamentos, p = pos[d.slug];
+  const g = el('g', { class: 'nd', tabindex: 0, role: 'button', 'aria-label': d.nombre }, svg);
+  const r = el('rect', { x: p.x, y: p.y, width: W, height: H, rx: 6, fill: k[0], stroke: k[1], 'stroke-width': 1 }, g);
+  const L = lineas(d.nombre, 17);
+  L.forEach((txt, i) => {
+    const t = el('text', {
+      x: p.x + W / 2, y: p.y + H / 2 + (i - (L.length - 1) / 2) * 14,
+      'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': 12, 'font-weight': 600, fill: k[2]
+    }, g);
+    t.textContent = txt;
+  });
+  nodos[d.slug] = { g, r, k };
+  g.addEventListener('click', ev => { ev.stopPropagation(); elegir(d.slug); });
+  g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); elegir(d.slug); } });
+});
+
+const leyenda = document.getElementById('leyenda');
+const vistos = {};
+DATOS.forEach(d => { vistos[d.cat] = d.catnombre; });
+Object.keys(vistos).forEach(c => {
+  const k = PALETA[c] || PALETA.fundamentos;
+  leyenda.insertAdjacentHTML('beforeend',
+    '<span><i style="width:12px;height:12px;border-radius:3px;background:' + k[0] + ';border:1px solid ' + k[1] + '"></i>' + vistos[c] + '</span>');
+});
+leyenda.insertAdjacentHTML('beforeend',
+  '<span><i style="width:16px;border-top:3px solid ' + AZUL + '"></i>Antes (prerrequisitos)</span>' +
+  '<span><i style="width:16px;border-top:3px solid ' + AMBAR + '"></i>Después (desbloquea)</span>');
+
+const panel = document.getElementById('detalle-arbol');
+const antecesores = s => { const o = new Set(); (function v(x) { por[x].pre.forEach(p => { o.add(p); v(p); }); })(s); return o; };
+const descendientes = s => { const o = new Set(); (function v(x) { (hijos[x] || []).forEach(q => { o.add(q); v(q); }); })(s); return o; };
+const nombres = (set, vacio) => {
+  const a = [...set].sort((m, n) => prof[m] - prof[n]);
+  if (!a.length) return vacio;
+  return a.length <= 10 ? a.map(s => por[s].nombre).join(', ') : a.length + ' conceptos';
+};
+
+function limpiar() {
+  Object.keys(nodos).forEach(s => {
+    nodos[s].g.style.opacity = 1;
+    nodos[s].r.setAttribute('stroke', nodos[s].k[1]);
+    nodos[s].r.setAttribute('stroke-width', 1);
+  });
+  aristas.forEach(a => { a.e.setAttribute('stroke', '#94A3B8'); a.e.setAttribute('stroke-width', 1); a.e.setAttribute('opacity', 0.55); });
+  panel.textContent = 'Toca un concepto para ver de dónde viene y qué desbloquea.';
+}
+
+function elegir(s) {
+  const A = antecesores(s), B = descendientes(s);
+  Object.keys(nodos).forEach(t => {
+    const esA = A.has(t), esB = B.has(t), yo = t === s;
+    nodos[t].g.style.opacity = (yo || esA || esB) ? 1 : 0.2;
+    nodos[t].r.setAttribute('stroke', yo ? '#1B2433' : esA ? AZUL : esB ? AMBAR : nodos[t].k[1]);
+    nodos[t].r.setAttribute('stroke-width', yo ? 3 : (esA || esB) ? 2.5 : 1);
+  });
+  aristas.forEach(a => {
+    const ia = (a.a === s || A.has(a.a)) && (a.b === s || A.has(a.b));
+    const ib = (a.a === s || B.has(a.a)) && (a.b === s || B.has(a.b));
+    a.e.setAttribute('stroke', ia ? AZUL : ib ? AMBAR : '#94A3B8');
+    a.e.setAttribute('stroke-width', (ia || ib) ? 2.5 : 1);
+    a.e.setAttribute('opacity', (ia || ib) ? 1 : 0.08);
+  });
+  panel.textContent = '';
+  const a = document.createElement('a');
+  a.href = por[s].url; a.textContent = por[s].nombre;
+  panel.appendChild(a);
+  panel.appendChild(document.createTextNode(
+    '. Antes necesitas: ' + nombres(A, 'nada, puedes empezar aquí') +
+    '. Desbloquea: ' + nombres(B, 'nada más, es un concepto final') + '.'));
+}
+
+svg.addEventListener('click', limpiar);
+limpiar();
+{% endverbatim %}
+</script>
+</body>
+</html>

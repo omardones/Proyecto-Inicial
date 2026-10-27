@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Conceptos</title>
+</head>
+<body>
+  <h1>Conceptos</h1>
+
+  <form method="get">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar concepto">
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% for c in conceptos %}
+    <article>
+      <h2>{{ c.nombre }}</h2>
+      <p>{{ c.definicion }}</p>
+    </article>
+  {% empty %}
+    <p>No se encontraron conceptos.</p>
+  {% endfor %}
+</body>
+  <nav><a href="{% url 'conceptos:lista' %}">Conceptos</a> | <a href="{% url 'conceptos:arbol' %}">Árbol</a></nav>
+</html>
