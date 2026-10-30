@@ -1,0 +1,17 @@
+{
+  "version": "1.7.0",
+  "autor": "mindicador.cl",
+  "codigo": "tpm",
+  "nombre": "Tasa Pol\u00edtica Monetaria (TPM)",
+  "unidad_medida": "Porcentaje",
+  "serie": [
+    {
+      "fecha": "2026-10-23T03:00:00.000Z",
+      "valor": 4.5
+    },
+    {
+      "fecha": "2026-10-22T03:00:00.000Z",
+      "valor": 4.75
+    }
+  ]
+}
