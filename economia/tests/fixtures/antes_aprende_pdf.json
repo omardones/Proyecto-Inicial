@@ -1,0 +1,217 @@
+{
+  "costo-de-oportunidad": [
+    "escasez"
+  ],
+  "dinero": [],
+  "escasez": [],
+  "impuestos": [
+    "ingresos-y-gastos"
+  ],
+  "inflacion": [
+    "dinero"
+  ],
+  "ingresos-y-gastos": [],
+  "oferta-y-demanda": [
+    "escasez"
+  ],
+  "presupuesto": [
+    "ingresos-y-gastos"
+  ],
+  "interes": [
+    "dinero"
+  ],
+  "ahorro": [
+    "ingresos-y-gastos",
+    "presupuesto"
+  ],
+  "fondo-de-emergencia": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro"
+  ],
+  "interes-compuesto": [
+    "dinero",
+    "interes"
+  ],
+  "inversion": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes"
+  ],
+  "pension-y-ahorro-previsional": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "interes-compuesto"
+  ],
+  "tasa-nominal-y-real": [
+    "dinero",
+    "interes",
+    "inflacion"
+  ],
+  "accion": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion",
+    "riesgo-y-rentabilidad"
+  ],
+  "bolsa-de-valores": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion",
+    "riesgo-y-rentabilidad",
+    "accion"
+  ],
+  "bono": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion"
+  ],
+  "criptomonedas": [
+    "dinero",
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "interes",
+    "inversion",
+    "riesgo-y-rentabilidad"
+  ],
+  "diversificacion": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion",
+    "riesgo-y-rentabilidad"
+  ],
+  "fondos-mutuos-y-etf": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion",
+    "riesgo-y-rentabilidad",
+    "diversificacion",
+    "accion",
+    "bono"
+  ],
+  "fraudes-y-piramides": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion",
+    "riesgo-y-rentabilidad"
+  ],
+  "liquidez": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion"
+  ],
+  "riesgo-y-rentabilidad": [
+    "ingresos-y-gastos",
+    "presupuesto",
+    "ahorro",
+    "dinero",
+    "interes",
+    "inversion"
+  ],
+  "cae": [
+    "dinero",
+    "interes",
+    "ingresos-y-gastos",
+    "deuda",
+    "interes-compuesto"
+  ],
+  "carga-financiera": [
+    "dinero",
+    "interes",
+    "ingresos-y-gastos",
+    "deuda"
+  ],
+  "deuda": [
+    "dinero",
+    "interes",
+    "ingresos-y-gastos"
+  ],
+  "tarjeta-de-credito": [
+    "dinero",
+    "interes",
+    "ingresos-y-gastos",
+    "deuda"
+  ],
+  "credito-hipotecario": [
+    "dinero",
+    "interes",
+    "ingresos-y-gastos",
+    "deuda",
+    "interes-compuesto",
+    "cae",
+    "inflacion",
+    "uf"
+  ],
+  "pib": [
+    "dinero"
+  ],
+  "banco-central": [
+    "dinero",
+    "inflacion",
+    "interes"
+  ],
+  "crecimiento-economico": [
+    "dinero",
+    "pib"
+  ],
+  "desempleo": [
+    "escasez",
+    "oferta-y-demanda"
+  ],
+  "politica-fiscal": [
+    "ingresos-y-gastos",
+    "impuestos",
+    "dinero",
+    "pib"
+  ],
+  "politica-monetaria-y-tpm": [
+    "dinero",
+    "inflacion",
+    "interes",
+    "banco-central"
+  ],
+  "recesion": [
+    "dinero",
+    "pib",
+    "crecimiento-economico",
+    "escasez",
+    "oferta-y-demanda",
+    "desempleo"
+  ],
+  "tipo-de-cambio": [
+    "escasez",
+    "oferta-y-demanda",
+    "dinero"
+  ],
+  "uf": [
+    "dinero",
+    "inflacion"
+  ]
+}

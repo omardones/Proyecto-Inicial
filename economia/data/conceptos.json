@@ -1,0 +1,739 @@
+[
+  {
+    "slug": "costo-de-oportunidad",
+    "nombre": "Costo de oportunidad",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "escasez"
+    ],
+    "definicion": "Lo que renuncias al elegir una opción en vez de otra.",
+    "ejemplo": "Si trabajas extra una tarde, el costo es el descanso que dejaste de tener.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "dinero",
+    "nombre": "Dinero",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [],
+    "definicion": "Lo que todos aceptamos para pagar, medir el valor de las cosas y guardar valor en el tiempo.",
+    "ejemplo": "Los pesos chilenos, en efectivo o en tu cuenta.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "escasez",
+    "nombre": "Escasez",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [],
+    "definicion": "Los recursos (dinero, tiempo, materias primas) son limitados y nuestras necesidades no. Por eso siempre hay que elegir.",
+    "ejemplo": "Con $50.000 al mes no puedes comprarlo todo: decides qué va primero.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "impuestos",
+    "nombre": "Impuestos",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "ingresos-y-gastos"
+    ],
+    "definicion": "Pagos obligatorios al Estado para financiar servicios públicos como salud, educación y seguridad.",
+    "ejemplo": "El IVA (19% en Chile) va incluido en el precio de casi todo lo que compras.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La tasa de IVA de 19% está verificada en el SII. La definición general viene de bibliografía."
+    },
+    "fuentes": [
+      "sii-iva",
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "inflacion",
+    "nombre": "Inflación",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "dinero"
+    ],
+    "definicion": "Alza generalizada y sostenida de los precios, que hace que cada peso compre menos con el tiempo.",
+    "ejemplo": "Si el kilo de pan pasa de $2.000 a $2.200, hubo 10% de inflación.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La meta de 3% está verificada en el Banco Central. La definición general viene de bibliografía."
+    },
+    "fuentes": [
+      "bcch-ipom-2024",
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "ingresos-y-gastos",
+    "nombre": "Ingresos y gastos",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [],
+    "definicion": "Ingreso es el dinero que recibes; gasto es el dinero que pagas. La diferencia entre ambos es la base de tus finanzas.",
+    "ejemplo": "Con un sueldo de $700.000 y gastos de $600.000, te sobran $100.000.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La fuente trata ingresos, gastos y análisis como base del presupuesto."
+    },
+    "fuentes": [
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "oferta-y-demanda",
+    "nombre": "Oferta y demanda",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "escasez"
+    ],
+    "definicion": "La demanda es cuánto quiere comprar la gente y la oferta cuánto quieren vender las empresas. Su encuentro define el precio.",
+    "ejemplo": "Si todos quieren paltas y hay pocas, el precio sube.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "presupuesto",
+    "nombre": "Presupuesto",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "ingresos-y-gastos"
+    ],
+    "definicion": "Un plan que reparte tus ingresos entre gastos, ahorro y deudas antes de gastar.",
+    "ejemplo": "Un método popular, la regla 50/30/20, propone 50% necesidades, 30% gustos y 20% ahorro.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "Los pasos (anotar, categorizar, analizar) están en la fuente. La regla 50/30/20 es un método popular, no una recomendación de la CMF."
+    },
+    "fuentes": [
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "interes",
+    "nombre": "Interés",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "dinero"
+    ],
+    "definicion": "El precio de usar dinero ajeno en el tiempo: lo que cobras si prestas o pagas si te prestan.",
+    "ejemplo": "Un préstamo de $100.000 al 2% mensual cuesta $2.000 de interés al mes.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "ahorro",
+    "nombre": "Ahorro",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "presupuesto"
+    ],
+    "definicion": "La parte de tu ingreso que no gastas hoy para usarla después.",
+    "ejemplo": "Separar $50.000 el día que te pagan, antes de gastar.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": null
+    },
+    "fuentes": [
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "fondo-de-emergencia",
+    "nombre": "Fondo de emergencia",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ahorro"
+    ],
+    "definicion": "Dinero de fácil acceso para imprevistos como perder el empleo o una urgencia médica. Como regla práctica (no oficial), se suele apuntar a 3 a 6 meses de gastos.",
+    "ejemplo": "Si gastas $600.000 al mes, tu meta sería entre $1,8 y $3,6 millones.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": "Los 3 a 6 meses son una regla práctica muy difundida. No encontramos una norma ni recomendación oficial; conviene buscar respaldo en CMF Educa antes de publicarla como dato."
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "interes-compuesto",
+    "nombre": "Interés compuesto",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "interes"
+    ],
+    "definicion": "Interés que se calcula sobre el capital más los intereses ya ganados, por lo que el dinero crece cada vez más rápido.",
+    "ejemplo": "$100.000 al 10% anual: $110.000 el año 1 y $121.000 el año 2.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "inversion",
+    "nombre": "Inversión",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ahorro",
+      "interes"
+    ],
+    "definicion": "Poner tu dinero en algo que puede generar más dinero en el futuro, aceptando cierto riesgo.",
+    "ejemplo": "Comprar acciones, bonos o un departamento para arrendar.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La CMF pide considerar objetivo, perfil de riesgo y plazo al invertir."
+    },
+    "fuentes": [
+      "cmf-inversionistas",
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "pension-y-ahorro-previsional",
+    "nombre": "Pensión y ahorro previsional",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ahorro",
+      "interes-compuesto"
+    ],
+    "definicion": "Dinero para vivir cuando dejas de trabajar. Desde la reforma de 2025 (Ley 21.735), el sistema combina tu ahorro individual con un seguro social, financiado por una cotización adicional del empleador que sube de forma gradual.",
+    "ejemplo": "Tu cotización del 10% va a tu cuenta individual y crece con interés compuesto.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "El sistema mixto y el aporte gradual del empleador (hasta 8,5%) están en la nota técnica del Ministerio."
+    },
+    "fuentes": [
+      "mintrab-reforma-pensiones"
+    ]
+  },
+  {
+    "slug": "tasa-nominal-y-real",
+    "nombre": "Tasa nominal y real",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "interes",
+      "inflacion"
+    ],
+    "definicion": "La tasa nominal es la que te informan; la real es la nominal menos la inflación y mide cuánto crece de verdad tu poder de compra.",
+    "ejemplo": "Ganas 5% y la inflación es 4%: tu ganancia real ronda el 1%.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "accion",
+    "nombre": "Acción",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "inversion",
+      "riesgo-y-rentabilidad"
+    ],
+    "definicion": "Una pequeña parte de la propiedad de una empresa. Ganas si su valor sube o si reparte utilidades (dividendos).",
+    "ejemplo": "Comprar una acción te hace dueño de una parte mínima de esa empresa.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La CMF tiene una sección dedicada a qué es una acción."
+    },
+    "fuentes": [
+      "cmf-inversionistas"
+    ]
+  },
+  {
+    "slug": "bolsa-de-valores",
+    "nombre": "Bolsa de valores",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "accion"
+    ],
+    "definicion": "Mercado organizado donde se compran y venden acciones y otros valores a precios que cambian cada día.",
+    "ejemplo": "La Bolsa de Santiago.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "bono",
+    "nombre": "Bono",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "inversion",
+      "interes"
+    ],
+    "definicion": "Un préstamo que le haces a una empresa o al Estado a cambio de intereses y de que te devuelvan el capital en una fecha fija.",
+    "ejemplo": "Un bono del Estado a 10 años que paga intereses cada semestre.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "criptomonedas",
+    "nombre": "Criptomonedas",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "dinero",
+      "riesgo-y-rentabilidad"
+    ],
+    "definicion": "Activos digitales que no son emitidos ni respaldados por bancos centrales. Su precio es muy volátil y, en Chile, la CMF y el Consejo de Estabilidad Financiera advierten sobre sus riesgos.",
+    "ejemplo": "Un activo que sube 50% en un mes también puede caer lo mismo.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "La CMF informa que no son emitidas ni respaldadas por bancos centrales. La volatilidad extrema figura entre los riesgos de la advertencia europea."
+    },
+    "fuentes": [
+      "cmf-riesgo-cripto",
+      "bde-riesgo-cripto"
+    ]
+  },
+  {
+    "slug": "diversificacion",
+    "nombre": "Diversificación",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "riesgo-y-rentabilidad"
+    ],
+    "definicion": "Repartir tu dinero en distintas inversiones para que una mala no te arruine.",
+    "ejemplo": "No poner todos tus ahorros en una sola empresa.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "fondos-mutuos-y-etf",
+    "nombre": "Fondos mutuos y ETF",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "diversificacion",
+      "accion",
+      "bono"
+    ],
+    "definicion": "Fondos donde muchas personas juntan dinero para invertir en una canasta de activos. Los ETF hacen lo mismo, pero se compran en bolsa.",
+    "ejemplo": "Con $50.000 puedes invertir en cientos de empresas a la vez.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "Los fondos mutuos y su regulación están en la CMF. La parte de ETF viene de bibliografía."
+    },
+    "fuentes": [
+      "cmf-inversionistas",
+      "cmf-fondos-mutuos"
+    ]
+  },
+  {
+    "slug": "fraudes-y-piramides",
+    "nombre": "Fraudes y pirámides",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "riesgo-y-rentabilidad"
+    ],
+    "definicion": "Ofertas de ganancias altas y seguras que se sostienen con el dinero de nuevos participantes hasta que colapsan.",
+    "ejemplo": "Si te prometen rentabilidades altas y garantizadas, desconfía y verifica en la CMF si la entidad está fiscalizada.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La CMF recomienda verificar si una entidad está fiscalizada y recuerda que no existe rentabilidad asegurada. La descripción de pirámides no se tomó de una fuente oficial."
+    },
+    "fuentes": [
+      "cmf-estafas",
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "liquidez",
+    "nombre": "Liquidez",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "inversion"
+    ],
+    "definicion": "Qué tan rápido puedes convertir un activo en dinero sin perder valor.",
+    "ejemplo": "El efectivo es muy líquido; una casa puede tardar meses en venderse.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "La CMF incluye el plazo (liquidez) como criterio al ahorrar o invertir."
+    },
+    "fuentes": [
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "riesgo-y-rentabilidad",
+    "nombre": "Riesgo y rentabilidad",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "inversion"
+    ],
+    "definicion": "Riesgo y rentabilidad esperada suelen ir unidos, pero aceptar más riesgo no garantiza ganar más. Nadie puede asegurarte una rentabilidad alta sin riesgo.",
+    "ejemplo": "Un depósito a plazo rinde poco pero es seguro; una acción puede subir mucho o caer.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "La CMF indica que riesgo y rentabilidad esperada van unidos, pero más riesgo no garantiza mayores ganancias."
+    },
+    "fuentes": [
+      "cmf-inversionistas"
+    ]
+  },
+  {
+    "slug": "cae",
+    "nombre": "CAE (Carga Anual Equivalente)",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda",
+      "interes-compuesto"
+    ],
+    "definicion": "Indicador porcentual que expresa en forma anual el costo de un crédito, con intereses, gastos y seguros. Permite comparar objetivamente el costo entre distintas entidades.",
+    "ejemplo": "Entre dos créditos, el de menor CAE es financieramente el más conveniente.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "El nombre correcto es Carga Anual Equivalente (la primera versión de la app decía Costo)."
+    },
+    "fuentes": [
+      "suseso-cae"
+    ]
+  },
+  {
+    "slug": "carga-financiera",
+    "nombre": "Carga financiera",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Qué porcentaje de tu ingreso mensual se va en pagar deudas. Mientras más alto, menos margen te queda para imprevistos.",
+    "ejemplo": "Ganas $1.000.000 y pagas $300.000 en cuotas: tu carga es 30%.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": "Se eliminó el umbral numérico (30 a 40%) de la app porque no hay fuente oficial verificada."
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "deuda",
+    "nombre": "Deuda",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "interes",
+      "ingresos-y-gastos"
+    ],
+    "definicion": "Dinero que debes devolver a otra persona o institución, normalmente con intereses.",
+    "ejemplo": "Compras un notebook en 12 cuotas y terminas pagando más que al contado.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "tarjeta-de-credito",
+    "nombre": "Tarjeta de crédito",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Te deja comprar hoy y pagar después; si no pagas el total, te cobran intereses altos sobre el saldo.",
+    "ejemplo": "Pagar solo el mínimo puede alargar la deuda por meses o años.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": "La CMF clasifica la tarjeta de crédito como obligación; el detalle de intereses no se verificó."
+    },
+    "fuentes": [
+      "cmf-presentacion"
+    ]
+  },
+  {
+    "slug": "credito-hipotecario",
+    "nombre": "Crédito hipotecario",
+    "categoria": "deudas-y-creditos",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "cae",
+      "uf"
+    ],
+    "definicion": "Préstamo a largo plazo para comprar una vivienda, garantizado por la propia propiedad. Suele estar en UF y durar de 20 a 30 años.",
+    "ejemplo": "Si no pagas, el banco puede quedarse con la vivienda.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "El uso de UF está respaldado. Plazos típicos (20 a 30 años) no se verificaron."
+    },
+    "fuentes": [
+      "bcch-metodologia-uf"
+    ]
+  },
+  {
+    "slug": "pib",
+    "nombre": "PIB",
+    "categoria": "macroeconomia",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "dinero"
+    ],
+    "definicion": "Valor de todos los bienes y servicios que produce un país en un año. Es la medida más usada del tamaño de una economía.",
+    "ejemplo": "Si el PIB sube, el país produjo más que el año anterior.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": null
+    },
+    "fuentes": [
+      "bcch-cuentas-nacionales"
+    ]
+  },
+  {
+    "slug": "banco-central",
+    "nombre": "Banco Central",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inflacion",
+      "interes"
+    ],
+    "definicion": "Institución autónoma que toma sus decisiones de política monetaria de forma independiente. En Chile, su meta es que la inflación proyectada a dos años se ubique en 3%.",
+    "ejemplo": "Si la inflación sube mucho, el Banco Central sube las tasas.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "Meta de inflación proyectada de 3% a dos años y decisiones autónomas."
+    },
+    "fuentes": [
+      "bcch-ipom-2024"
+    ]
+  },
+  {
+    "slug": "crecimiento-economico",
+    "nombre": "Crecimiento económico",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "pib"
+    ],
+    "definicion": "Aumento del PIB en el tiempo. Cuando es sostenido, suele traer más empleo e ingresos.",
+    "ejemplo": "Un crecimiento de 2% significa que la economía produjo 2% más.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": null
+    },
+    "fuentes": [
+      "bcch-cuentas-nacionales",
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "desempleo",
+    "nombre": "Desempleo",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "oferta-y-demanda"
+    ],
+    "definicion": "Porcentaje de personas que quieren trabajar y buscan empleo, pero no lo encuentran.",
+    "ejemplo": "Con 8% de desempleo, 8 de cada 100 personas activas no tienen trabajo.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "El INE mide como desocupadas a las personas que buscan empleo, respecto de la fuerza de trabajo."
+    },
+    "fuentes": [
+      "ine-desocupacion"
+    ]
+  },
+  {
+    "slug": "politica-fiscal",
+    "nombre": "Política fiscal",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "impuestos",
+      "pib"
+    ],
+    "definicion": "Decisiones del gobierno sobre cuánto gasta y cuánto recauda en impuestos para influir en la economía.",
+    "ejemplo": "Más gasto público en obras puede impulsar el empleo.",
+    "verificacion": {
+      "estado": "C",
+      "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
+      "nota": null
+    },
+    "fuentes": [
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "politica-monetaria-y-tpm",
+    "nombre": "Política monetaria y TPM",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "banco-central"
+    ],
+    "definicion": "Decisiones del banco central para cumplir la meta de inflación. Su principal instrumento es la Tasa de Política Monetaria (TPM).",
+    "ejemplo": "Subir la TPM encarece los créditos y enfría el consumo.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "La TPM es el principal instrumento para lograr la meta de inflación."
+    },
+    "fuentes": [
+      "bcch-ipom-2024"
+    ]
+  },
+  {
+    "slug": "recesion",
+    "nombre": "Recesión",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "crecimiento-economico",
+      "desempleo"
+    ],
+    "definicion": "Caída significativa de la actividad económica, extendida a varios sectores y que dura más de unos pocos meses. Se nota en producción, empleo e ingresos.",
+    "ejemplo": "Una regla popular dice \"dos trimestres seguidos de PIB a la baja\", pero es un atajo y no la definición oficial.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "El NBER no usa la regla de dos trimestres de PIB a la baja; es un atajo popular."
+    },
+    "fuentes": [
+      "nber-ciclos",
+      "frbsf-recesion"
+    ]
+  },
+  {
+    "slug": "tipo-de-cambio",
+    "nombre": "Tipo de cambio",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "oferta-y-demanda",
+      "dinero"
+    ],
+    "definicion": "Precio de una moneda en términos de otra. Sube o baja según la oferta y la demanda de divisas.",
+    "ejemplo": "Si el dólar pasa de $900 a $1.000, importar se encarece.",
+    "verificacion": {
+      "estado": "B",
+      "etiqueta": "PARCIAL: parte verificada en fuente oficial",
+      "nota": "El IPoM describe el esquema chileno de tipo de cambio flexible."
+    },
+    "fuentes": [
+      "bcch-ipom-2024",
+      "mankiw"
+    ]
+  },
+  {
+    "slug": "uf",
+    "nombre": "UF (Unidad de Fomento)",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inflacion"
+    ],
+    "definicion": "Unidad de Fomento: índice de reajustabilidad calculado por el Banco Central, que sigue la inflación. No es dinero: sirve para expresar precios y deudas, como en créditos hipotecarios y arriendos.",
+    "ejemplo": "Un crédito en UF aumenta su monto en pesos cuando hay inflación.",
+    "verificacion": {
+      "estado": "A",
+      "etiqueta": "VERIFICADO en fuente oficial",
+      "nota": "El Banco Central la define como índice de reajustabilidad. La CMF aclara que no es dinero."
+    },
+    "fuentes": [
+      "bcch-metodologia-uf",
+      "cmf-uf-es-dinero"
+    ]
+  }
+]

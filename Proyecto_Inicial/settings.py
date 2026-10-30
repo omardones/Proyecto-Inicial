@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # API de economía para jóvenes (conceptos + indicadores en vivo)
+    'economia',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'economia.middleware.CorsSimpleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,3 +129,19 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+
+# ---------------------------------------------------------------------------
+# API de economía (app "economia"). Todos estos ajustes son OPCIONALES:
+# si los borras, se usan los valores que se muestran aquí.
+# ---------------------------------------------------------------------------
+import os
+
+# API pública de donde salen los datos en vivo (UF, dólar, TPM, ...)
+ECONOMIA_FUENTE_URL = os.environ.get('ECONOMIA_FUENTE_URL', 'https://mindicador.cl/api')
+# Cuántos segundos se reutiliza una respuesta antes de volver a consultar la API
+ECONOMIA_CACHE_SEGUNDOS = 600
+# Tiempo máximo de espera a la API externa, en segundos
+ECONOMIA_TIMEOUT_SEGUNDOS = 8
+# Quién puede llamar a esta API desde un navegador ('*' = cualquiera). Ver economia/middleware.py
+ECONOMIA_CORS_ORIGEN = '*'
