@@ -1,0 +1,121 @@
+[
+  {
+    "id": "bcch-ipom-2024",
+    "organizacion": "Banco Central de Chile",
+    "titulo": "Informe de Política Monetaria, marzo 2024",
+    "url": "https://www.bcentral.cl/documents/33528/5605171/IPoM-Marzo-2024/34a5b9b7-0a56-159c-0e7d-1f4ae61156c0",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "suseso-cae",
+    "organizacion": "SUSESO (Superintendencia de Seguridad Social)",
+    "titulo": "¿Qué es la CAE?",
+    "url": "https://www.suseso.gob.cl/606/w3-article-19878.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "cmf-uf-es-dinero",
+    "organizacion": "CMF Educa",
+    "titulo": "¿La Unidad de Fomento es dinero?",
+    "url": "https://www.cmfchile.cl/educa/600/w3-article-27474.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "bcch-metodologia-uf",
+    "organizacion": "Banco Central de Chile",
+    "titulo": "Metodología: Unidad de Fomento",
+    "url": "https://si3.bcentral.cl/estadisticas/Principal1/Metodologias/EMF/UF.pdf",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "sii-iva",
+    "organizacion": "SII Educa (Servicio de Impuestos Internos)",
+    "titulo": "Guía de contenidos: Impuesto al Valor Agregado",
+    "url": "https://www.sii.cl/siieduca/material-educativo/85-GA-201303123007.pdf",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "cmf-riesgo-cripto",
+    "organizacion": "CMF / Consejo de Estabilidad Financiera",
+    "titulo": "Advertencia sobre riesgos de las criptomonedas",
+    "url": "https://www.cmfchile.cl/portal/prensa/625/w4-article-24742.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "bde-riesgo-cripto",
+    "organizacion": "Banco de España (advertencia de EBA, ESMA y EIOPA)",
+    "titulo": "Riesgos de los criptoactivos",
+    "url": "https://clientebancario.bde.es/pcb/es/blog/advertencia-de-los-reguladores-financieros-europeos-en-relacion-con-los-riesgos-de-los-criptoactivos.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "cmf-estafas",
+    "organizacion": "CMF",
+    "titulo": "Alerta y denuncia por estafa: recomendaciones a la ciudadanía",
+    "url": "https://www.cmfchile.cl/portal/prensa/615/w3-article-75946.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "mintrab-reforma-pensiones",
+    "organizacion": "Ministerio del Trabajo y Previsión Social",
+    "titulo": "Nota Técnica Reforma de Pensiones, Ley 21.735 (julio 2025)",
+    "url": "https://previsionsocial.gob.cl/wp-content/uploads/2025/08/Nota-Tecnica-Reforma-de-Pensiones-Ley-N%C2%B021.735.pdf",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "bcch-cuentas-nacionales",
+    "organizacion": "Banco Central de Chile",
+    "titulo": "Cuentas Nacionales de Chile: métodos y fuentes de información",
+    "url": "https://si3.bcentral.cl/estadisticas/Principal1/Metodologias/CCNN/imacec/Cuentas_Nacionales_metodos_fuentes.pdf",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "nber-ciclos",
+    "organizacion": "NBER (National Bureau of Economic Research)",
+    "titulo": "Business Cycle Dating",
+    "url": "https://www.nber.org/cycles/",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "frbsf-recesion",
+    "organizacion": "Reserva Federal de San Francisco",
+    "titulo": "Recession definition and indicators",
+    "url": "https://www.frbsf.org/research-and-insights/publications/doctor-econ/recession-definition-indicators",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "cmf-inversionistas",
+    "organizacion": "CMF Educa",
+    "titulo": "Consultas y trámites para inversionistas (riesgo y rentabilidad, acciones, fondos mutuos)",
+    "url": "https://www.cmfchile.cl/educa/621/w3-propertyvalue-1131.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "cmf-presentacion",
+    "organizacion": "CMF Educa",
+    "titulo": "Presentación de educación financiera (presupuesto, ahorro e inversión)",
+    "url": "https://www.cmfchile.cl/portal/prensa/615/articles-95734_doc_pdf.pdf",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "cmf-fondos-mutuos",
+    "organizacion": "CMF",
+    "titulo": "Portal de Fondos Mutuos",
+    "url": "https://www.cmfchile.cl/portal/prensa/625/w4-article-95157.html",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "ine-desocupacion",
+    "organizacion": "INE (Instituto Nacional de Estadísticas)",
+    "titulo": "Encuesta Nacional de Empleo: tasa de desocupación",
+    "url": "https://www.ine.gob.cl/sala-de-prensa/prensa/general/noticia/2021/02/26/tasa-de-desocupaci%C3%B3n-nacional-alcanz%C3%B3-10-2-en-el-trimestre-noviembre-2020-enero-2021",
+    "consultada_en_linea": true
+  },
+  {
+    "id": "mankiw",
+    "organizacion": "Bibliografía",
+    "titulo": "N. G. Mankiw, Principios de Economía (texto universitario estándar)",
+    "url": null,
+    "consultada_en_linea": false
+  }
+]

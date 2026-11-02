@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Economía para jóvenes</title>
+<style>
+  /* Página deliberadamente básica: casi todo es estilo por defecto del navegador. */
+  body { font-family: "Times New Roman", Times, serif; max-width: 760px; margin: 8px auto; padding: 0 12px; }
+  table { border-collapse: collapse; }
+  th, td { border: 1px solid gray; padding: 4px 8px; text-align: left; }
+  .tabla { overflow-x: auto; }
+  .aviso { background: #fff3b0; color: #000; border: 1px solid gray; padding: 4px 8px; }
+  code { font-family: "Courier New", monospace; }
+</style>
+</head>
+<body>
+
+<h1>Economía para jóvenes</h1>
+<p>
+  <a href="#indicadores">Valores de hoy</a> |
+  <a href="#conceptos">Conceptos</a> |
+  <a href="#ruta">Ruta de aprendizaje</a> |
+  <a href="#convertir">Convertidor</a> |
+  <a href="/api/">API (JSON)</a>
+</p>
+<hr>
+
+<h2 id="indicadores">Valores de hoy en Chile</h2>
+<p><code>GET /api/indicadores/</code></p>
+<p id="indicadores-estado">Cargando...</p>
+<div class="tabla">
+  <table id="indicadores-tabla" hidden>
+    <thead><tr><th>Indicador</th><th>Valor</th><th>Fecha del dato</th><th>Aviso</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+<hr>
+
+<h2 id="conceptos">Conceptos</h2>
+<p><code>GET /api/conceptos/?nivel=</code></p>
+<p>
+  <label for="nivel">Nivel:</label>
+  <select id="nivel">
+    <option value="">Todos</option>
+    <option value="basico">Básico</option>
+    <option value="intermedio">Intermedio</option>
+    <option value="avanzado">Avanzado</option>
+  </select>
+</p>
+<p id="conceptos-estado">Cargando...</p>
+<ul id="conceptos-lista"></ul>
+<p><small>Estado: A = verificado en fuente oficial, B = fuente secundaria, C = por verificar.</small></p>
+<hr>
+
+<h2 id="ruta">Ruta de aprendizaje hasta Crédito hipotecario</h2>
+<p><code>GET /api/ruta-aprendizaje/?hasta=credito-hipotecario</code></p>
+<p id="ruta-estado">Cargando...</p>
+<ol id="ruta-lista"></ol>
+<hr>
+
+<h2 id="convertir">Convertidor</h2>
+<p><code>GET /api/herramientas/convertir/?de=usd&amp;a=clp&amp;monto=100</code></p>
+<form id="form">
+  <p>
+    <label for="monto">Monto:</label>
+    <input id="monto" type="text" value="100" size="10">
+  </p>
+  <p>
+    <label for="de">De:</label>
+    <select id="de">
+      <option value="clp">CLP</option>
+      <option value="uf">UF</option>
+      <option value="usd" selected>USD</option>
+      <option value="eur">EUR</option>
+    </select>
+    <label for="a">a:</label>
+    <select id="a">
+      <option value="clp" selected>CLP</option>
+      <option value="uf">UF</option>
+      <option value="usd">USD</option>
+      <option value="eur">EUR</option>
+    </select>
+    <button type="submit">Convertir</button>
+  </p>
+</form>
+<p id="convertir-resultado" aria-live="polite"></p>
+<hr>
+
+<p><small>Fuente de los datos: mindicador.cl, a través de esta API.</small></p>
+
+<script>
+  // Todo el texto que viene de la API se inserta con textContent (nunca innerHTML).
+  function $(id) { return document.getElementById(id); }
+
+  function pedir(ruta) {
+    return fetch(ruta).then(function (r) {
+      return r.json().then(
+        function (datos) { return { ok: r.ok, datos: datos }; },
+        function () { return { ok: false, datos: null }; }
+      );
+    });
+  }
+
+  function mensajeDeError(res) {
+    if (res && res.datos && res.datos.error) { return res.datos.error.mensaje; }
+    return 'No se pudo obtener la respuesta del servidor.';
+  }
+
+  function celda(fila, texto) {
+    var td = document.createElement('td');
+    td.textContent = texto;
+    fila.appendChild(td);
+  }
+
+  function cargarIndicadores() {
+    pedir('/api/indicadores/').then(function (res) {
+      var estado = $('indicadores-estado');
+      if (!res.ok) { estado.textContent = mensajeDeError(res); return; }
+      var cuerpo = $('indicadores-tabla').querySelector('tbody');
+      res.datos.indicadores.forEach(function (i) {
+        var fila = document.createElement('tr');
+        celda(fila, i.nombre);
+        celda(fila, i.valor_formateado);
+        celda(fila, i.fecha_dato);
+        celda(fila, i.dato_atrasado ? 'Dato atrasado' : '');
+        cuerpo.appendChild(fila);
+      });
+      $('indicadores-tabla').hidden = false;
+      var cache = res.datos.meta.cache;
+      estado.textContent = 'Datos de ' + res.datos.meta.fuente.nombre +
+        (cache.obsoleta ? ' (copia guardada: la fuente no respondió)' : '') + '.';
+    }, function () { $('indicadores-estado').textContent = 'No se pudo conectar con el servidor.'; });
+  }
+
+  function cargarConceptos() {
+    var nivel = $('nivel').value;
+    var ruta = '/api/conceptos/' + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
+    $('conceptos-estado').textContent = 'Cargando...';
+    pedir(ruta).then(function (res) {
+      var lista = $('conceptos-lista');
+      lista.textContent = '';
+      if (!res.ok) { $('conceptos-estado').textContent = mensajeDeError(res); return; }
+      $('conceptos-estado').textContent = res.datos.total + ' conceptos.';
+      res.datos.conceptos.forEach(function (c) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '/api/conceptos/' + encodeURIComponent(c.slug) + '/';
+        a.textContent = c.nombre;
+        li.appendChild(a);
+        li.appendChild(document.createTextNode(' (' + c.nivel.nombre + ', estado ' + c.estado_verificacion + '): ' + c.definicion));
+        lista.appendChild(li);
+      });
+    }, function () { $('conceptos-estado').textContent = 'No se pudo conectar con el servidor.'; });
+  }
+
+  function cargarRuta() {
+    pedir('/api/ruta-aprendizaje/?hasta=credito-hipotecario').then(function (res) {
+      if (!res.ok) { $('ruta-estado').textContent = mensajeDeError(res); return; }
+      $('ruta-estado').textContent = res.datos.total_pasos + ' pasos, en orden.';
+      res.datos.pasos.forEach(function (p) {
+        var li = document.createElement('li');
+        li.textContent = p.nombre + ' (' + p.nivel.nombre + ')';
+        $('ruta-lista').appendChild(li);
+      });
+    }, function () { $('ruta-estado').textContent = 'No se pudo conectar con el servidor.'; });
+  }
+
+  function convertir(evento) {
+    if (evento) { evento.preventDefault(); }
+    var salida = $('convertir-resultado');
+    var ruta = '/api/herramientas/convertir/?de=' + encodeURIComponent($('de').value) +
+      '&a=' + encodeURIComponent($('a').value) +
+      '&monto=' + encodeURIComponent($('monto').value.trim());
+    pedir(ruta).then(function (res) {
+      if (!res.ok) { salida.textContent = 'Error: ' + mensajeDeError(res); return; }
+      salida.textContent = res.datos.conversion.lectura_simple;
+    }, function () { salida.textContent = 'No se pudo conectar con el servidor.'; });
+  }
+
+  $('nivel').addEventListener('change', cargarConceptos);
+  $('form').addEventListener('submit', convertir);
+  cargarIndicadores();
+  cargarConceptos();
+  cargarRuta();
+  convertir();
+</script>
+
+</body>
+</html>
