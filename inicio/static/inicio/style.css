@@ -1,0 +1,92 @@
+body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+}
+header {
+    background-color: #d1e7dd;
+    padding: 20px;
+    text-align: right;
+    border-bottom: 2px solid #a3cfbb;
+}
+.menu-icon{
+            font-size: 24px;
+            cursor: pointer;
+
+}
+.container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #e8f5e9;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+}
+h1 {
+            color: #2e7d32;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+}
+.search-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+}
+input[type="text"] {
+            width: 70%;
+            padding: 12px 15px;
+            border: 2px solid #a5d6a7;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+}
+button {
+            background-color: #43a047;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+}
+button:hover {
+            background-color: #2e7d32;
+}
+.sugerencias {
+            text-align: left;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+}
+.sugerencias h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #388e3c;
+}
+.sugerencias ul {
+            padding-left: 20px;
+            margin: 0;
+}
+.sugerencias li {
+            margin-bottom: 8px;
+}
+.sugerencias a {
+            color: #2e7d32;
+            text-decoration: none;
+}
+.sugerencias a:hover {
+            text-decoration: underline;
+}
+.resultado-busqueda {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+            border-left: 5px solid #43a047;
+}

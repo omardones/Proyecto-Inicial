@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOESIS - Educación Financiera</title>
+    <link rel="stylesheet" href="{% static 'inicio/style.css' %}">
+</head>
+<body>
+
+    <header>
+        <span class="menu-icon">☰</span>
+    </header>
+
+    <div class="container">
+        <h1>¿Qué quieres aprender hoy?</h1>
+        
+        <!-- Formulario de búsqueda (Boceto 1) -->
+        <form method="GET" action="" class="search-box">
+            <input type="text" name="q" placeholder="Ej: AFP, Ahorro, APV..." value="{{ query }}">
+            <button type="submit">🔍</button>
+        </form>
+
+        {% if resultado %}
+            <div class="resultado-busqueda">
+                <h3>Resultado para: "{{ query }}"</h3>
+                <h2>{{ resultado.titulo }}</h2>
+                <p><strong>¿Qué es?:</strong> {{ resultado.definicion }}</p>
+                <p><strong>Ejemplo práctico:</strong> {{ resultado.ejemplo }}</p>
+                <a href="{% url 'detalle_concepto' resultado.id %}">Ver información completa y fuentes ➔</a>
+            </div>
+        {% elif query %}
+            <div class="resultado-busqueda">
+                <p>No encontramos información exacta para "{{ query }}". Prueba buscando "AFP" o "Ahorro".</p>
+            </div>
+        {% endif %}
+
+        <!-- Conceptos sugeridos rápidos -->
+        <div class="sugerencias">
+            <h3>Conceptos clave recomendados:</h3>
+            <ul>
+                {% for c in conceptos_sugeridos %}
+                    <li><a href="{% url 'detalle_concepto' c.id %}">{{ c.titulo }}</a> - <small>{{ c.categoria }}</small></li>
+                {% empty %}
+                    <li>Aún no hay conceptos cargados en la base de datos. ¡Agrega algunos desde el panel de administración!</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
