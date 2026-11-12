@@ -37,7 +37,7 @@ class GeneralTests(ApiBase):
     def test_salud(self):
         d = self.json("/api/salud/")
         self.assertEqual(d["estado"], "ok")
-        self.assertEqual(d["conceptos_cargados"], 38)
+        self.assertEqual(d["conceptos_cargados"], 78)
         self.assertNotIn("fuente_externa", d)
         self.assertEqual(self.fuente.llamadas, [])  # por defecto no llama a internet
 
@@ -91,18 +91,18 @@ class GeneralTests(ApiBase):
 class ConceptosApiTests(ApiBase):
     def test_lista_completa_con_filtros_disponibles(self):
         d = self.json("/api/conceptos/")
-        self.assertEqual(d["total"], 38)
-        self.assertEqual(len(d["conceptos"]), 38)
+        self.assertEqual(d["total"], 78)
+        self.assertEqual(len(d["conceptos"]), 78)
         self.assertEqual(len(d["niveles_disponibles"]), 3)
         self.assertEqual(len(d["categorias_disponibles"]), 4)
         primero = d["conceptos"][0]
         self.assertEqual(set(primero), {"slug", "nombre", "categoria", "nivel", "definicion", "estado_verificacion"})
 
     def test_filtros(self):
-        self.assertEqual(self.json("/api/conceptos/?nivel=basico")["total"], 10)
-        self.assertEqual(self.json("/api/conceptos/?nivel=BASICO")["total"], 10)  # mayúsculas da igual
+        self.assertEqual(self.json("/api/conceptos/?nivel=basico")["total"], 18)
+        self.assertEqual(self.json("/api/conceptos/?nivel=BASICO")["total"], 18)  # mayúsculas da igual
         self.assertEqual(self.json("/api/conceptos/?estado=a")["total"], 9)
-        self.assertEqual(self.json("/api/conceptos/?categoria=macroeconomia&nivel=intermedio")["total"], 8)
+        self.assertEqual(self.json("/api/conceptos/?categoria=macroeconomia&nivel=intermedio")["total"], 14)
         self.assertEqual(self.json("/api/conceptos/?q=dólar")["total"], self.json("/api/conceptos/?q=dolar")["total"])
 
     def test_filtro_invalido_da_400_explicando_las_opciones(self):
@@ -160,8 +160,8 @@ class ConceptosApiTests(ApiBase):
 
     def test_ruta_de_aprendizaje(self):
         d = self.json("/api/ruta-aprendizaje/")
-        self.assertEqual(d["total_pasos"], 38)
-        self.assertEqual([p["paso"] for p in d["pasos"]], list(range(1, 39)))
+        self.assertEqual(d["total_pasos"], 78)
+        self.assertEqual([p["paso"] for p in d["pasos"]], list(range(1, 79)))
         self.assertIsNone(d["hasta"])
         d = self.json("/api/ruta-aprendizaje/?hasta=uf")
         self.assertEqual([p["slug"] for p in d["pasos"]], ["dinero", "inflacion", "uf"])
@@ -169,7 +169,7 @@ class ConceptosApiTests(ApiBase):
 
     def test_fuentes_y_leyenda(self):
         d = self.json("/api/fuentes/")
-        self.assertEqual([x["estado"] for x in d["leyenda_verificacion"]], ["A", "B", "C"])
+        self.assertEqual([x["estado"] for x in d["leyenda_verificacion"]], ["A", "B", "C", "P"])
         self.assertEqual(d["total_fuentes"], 17)
         for f in d["fuentes"]:
             self.assertTrue(f["usada_en"], f"{f['id']} no la usa ningún concepto")

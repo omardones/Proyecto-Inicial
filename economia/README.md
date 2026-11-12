@@ -1,6 +1,6 @@
 # App `economia` — API de Economía para jóvenes
 
-Backend (solo API, sin frontend) que explica **38 conceptos de economía y finanzas personales**
+Backend (solo API, sin frontend) que explica **78 conceptos de economía y finanzas personales**
 en lenguaje simple y los conecta con **datos económicos de Chile en vivo** (UF, dólar, TPM, etc.).
 Los conceptos, ejemplos, prerrequisitos y fuentes salen del PDF *"Conceptos financieros:
 prerrequisitos y fuentes"*.
@@ -28,7 +28,7 @@ Abre `http://127.0.0.1:8000/api/` en el navegador: la API se describe sola, con 
 | Ruta | Para qué sirve |
 |---|---|
 | `GET /api/` | Mapa de la API con ejemplos |
-| `GET /api/conceptos/` | Los 38 conceptos. Filtros: `nivel`, `categoria`, `estado` (A/B/C), `q` (texto) |
+| `GET /api/conceptos/` | Los 78 conceptos. Filtros: `nivel`, `categoria`, `estado` (A/B/C), `q` (texto) |
 | `GET /api/conceptos/{slug}/` | Ficha completa: definición, ejemplo, prerrequisitos, qué desbloquea, fuentes y datos en vivo relacionados (`?en_vivo=0` para omitirlos) |
 | `GET /api/ruta-aprendizaje/` | En qué orden estudiar. `?hasta={slug}` entrega solo lo necesario para llegar a ese concepto |
 | `GET /api/fuentes/` | Fuentes consultadas y significado de A, B y C |
@@ -71,7 +71,7 @@ El PDF pide contrastar los C antes de darlos por definitivos; el frontend puede 
 
 | Archivo | Responsabilidad |
 |---|---|
-| `data/conceptos.json`, `data/fuentes.json` | Contenido del PDF (38 conceptos, 17 fuentes) |
+| `data/conceptos.json`, `data/fuentes.json` | Contenido del PDF (78 conceptos, 17 fuentes) |
 | `conceptos.py` | Carga, búsqueda, prerrequisitos y ruta de aprendizaje |
 | `indicadores.py` | Catálogo de indicadores, cliente de la API externa y caché |
 | `herramientas.py` | Calculadoras (funciones puras, con `Decimal`) |

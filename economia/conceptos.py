@@ -1,5 +1,5 @@
 """
-Los 38 conceptos del PDF "Conceptos financieros: prerrequisitos y fuentes".
+Catálogo de 38 conceptos del PDF y 40 incorporaciones nuevas.
 
 Los datos viven en economia/data/conceptos.json y economia/data/fuentes.json
 (se generaron leyendo el PDF y verificando que todo calce). Este módulo los
@@ -46,6 +46,13 @@ ESTADOS = {
         "etiqueta": "BIBLIOGRAFÍA: sin fuente oficial consultada",
         "para_el_lector": "Esta definición viene de un libro de texto y aún no se contrasta con una fuente oficial.",
     },
+    "P": {
+    "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+    "para_el_lector": (
+        "Este concepto es una incorporación nueva y todavía "
+        "no cuenta con verificación bibliográfica."
+    ),
+},
 }
 
 
