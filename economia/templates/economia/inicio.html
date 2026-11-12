@@ -50,6 +50,12 @@
 </p>
 <p id="conceptos-estado">Cargando...</p>
 <ul id="conceptos-lista"></ul>
+<section id="ficha-concepto" hidden>
+  <h3 id="ficha-titulo"></h3>
+  <p id="ficha-definicion"></p>
+  <p id="ficha-ejemplo"></p>
+  <p id="ficha-fuente"></p>
+</section>
 <p><small>Estado: A = verificado en fuente oficial, B = fuente secundaria, C = por verificar.</small></p>
 <hr>
 
@@ -133,6 +139,67 @@
     }, function () { $('indicadores-estado').textContent = 'No se pudo conectar con el servidor.'; });
   }
 
+function mostrarFicha(slug) {
+  pedir('/api/conceptos/' + encodeURIComponent(slug) + '/').then(function (res) {
+    if (!res.ok) {
+      alert(mensajeDeError(res));
+      return;
+    }
+
+    var c = res.datos.concepto;
+    $('ficha-titulo').textContent = c.nombre;
+    $('ficha-definicion').textContent = c.definicion;
+    $('ficha-ejemplo').textContent = 'Ejemplo: ' + (c.ejemplo || 'No disponible');
+    var contenedorFuentes = $('ficha-fuente');
+    contenedorFuentes.replaceChildren();
+
+    var fuentes = c.fuentes || [];
+
+    if (fuentes.length === 0) {
+      contenedorFuentes.textContent = 'Fuentes: No registradas';
+    } else {
+      var tituloFuentes = document.createElement('strong');
+      tituloFuentes.textContent = 'Fuentes:';
+      contenedorFuentes.appendChild(tituloFuentes);
+
+      fuentes.forEach(function (fuente, indice) {
+        var texto = fuente.titulo || fuente.organizacion || 'Fuente sin título';
+        var elemento = document.createElement('span');
+
+        if (indice > 0) {
+          contenedorFuentes.appendChild(document.createTextNode(' | '));
+        } else {
+          contenedorFuentes.appendChild(document.createTextNode(' '));
+        }
+
+        if (fuente.url) {
+          try {
+            var direccion = new URL(fuente.url);
+
+            if (direccion.protocol === 'https:' || direccion.protocol === 'http:') {
+              var enlace = document.createElement('a');
+              enlace.href = direccion.href;
+              enlace.target = '_blank';
+              enlace.rel = 'noopener noreferrer';
+              enlace.textContent = texto;
+              elemento.appendChild(enlace);
+            } else {
+              elemento.textContent = texto;
+            }
+          } catch (error) {
+            elemento.textContent = texto;
+          }
+        } else {
+          elemento.textContent = texto;
+        }
+
+        contenedorFuentes.appendChild(elemento);
+      });
+    }
+    $('ficha-concepto').hidden = false;
+    $('ficha-concepto').scrollIntoView({ behavior: 'smooth' });
+  });
+}
   function cargarConceptos() {
     var nivel = $('nivel').value;
     var ruta = '/api/conceptos/' + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
@@ -145,7 +212,10 @@
       res.datos.conceptos.forEach(function (c) {
         var li = document.createElement('li');
         var a = document.createElement('a');
-        a.href = '/api/conceptos/' + encodeURIComponent(c.slug) + '/';
+        a.href = '#ficha-concepto';
+        a.addEventListener('click', function () {
+          mostrarFicha(c.slug);
+        });
         a.textContent = c.nombre;
         li.appendChild(a);
         li.appendChild(document.createTextNode(' (' + c.nivel.nombre + ', estado ' + c.estado_verificacion + '): ' + c.definicion));

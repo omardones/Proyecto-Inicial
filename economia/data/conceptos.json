@@ -735,5 +735,695 @@
       "bcch-metodologia-uf",
       "cmf-uf-es-dinero"
     ]
+  },
+  {
+    "slug": "precio",
+    "nombre": "Precio",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "oferta-y-demanda"
+    ],
+    "definicion": "Cantidad de dinero que se paga por un bien o servicio.",
+    "ejemplo": "Un cuaderno cuesta 2.000 pesos.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "bien-y-servicio",
+    "nombre": "Bienes y servicios",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "escasez"
+    ],
+    "definicion": "Un bien es un producto material; un servicio es una actividad que satisface una necesidad.",
+    "ejemplo": "Una bicicleta es un bien y una reparación es un servicio.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "necesidad-y-deseo",
+    "nombre": "Necesidades y deseos",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "escasez"
+    ],
+    "definicion": "Una necesidad es algo esencial para vivir o funcionar; un deseo es algo que se quiere, pero puede no ser indispensable.",
+    "ejemplo": "Alimentarse es una necesidad; comprar un teléfono de lujo puede ser un deseo.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "consumo",
+    "nombre": "Consumo",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "ingresos-y-gastos"
+    ],
+    "definicion": "Uso de bienes y servicios para satisfacer necesidades o deseos.",
+    "ejemplo": "Pagar un viaje en autobús es consumir un servicio.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "poder-adquisitivo",
+    "nombre": "Poder adquisitivo",
+    "categoria": "fundamentos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "dinero",
+      "inflacion"
+    ],
+    "definicion": "Cantidad de bienes y servicios que puede comprarse con una suma de dinero.",
+    "ejemplo": "Si suben los precios y el sueldo no cambia, disminuye el poder adquisitivo.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "costo-fijo",
+    "nombre": "Costo fijo",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "ingresos-y-gastos"
+    ],
+    "definicion": "Gasto que se mantiene relativamente estable durante un período, aunque cambie el consumo.",
+    "ejemplo": "El arriendo mensual suele ser un costo fijo del hogar.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "costo-variable",
+    "nombre": "Costo variable",
+    "categoria": "fundamentos",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "ingresos-y-gastos"
+    ],
+    "definicion": "Gasto cuyo monto cambia según el uso o la cantidad consumida.",
+    "ejemplo": "El gasto mensual en transporte puede aumentar si se realizan más viajes.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "incentivo-economico",
+    "nombre": "Incentivo económico",
+    "categoria": "fundamentos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "costo-de-oportunidad"
+    ],
+    "definicion": "Beneficio o costo que influye en una decisión económica.",
+    "ejemplo": "Un descuento puede incentivar la compra de un producto.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "meta-de-ahorro",
+    "nombre": "Meta de ahorro",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ahorro",
+      "presupuesto"
+    ],
+    "definicion": "Cantidad de dinero que se propone reunir para un objetivo y un plazo definidos.",
+    "ejemplo": "Ahorrar 10.000 pesos semanales para comprar un computador.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "capacidad-de-ahorro",
+    "nombre": "Capacidad de ahorro",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ingresos-y-gastos",
+      "ahorro"
+    ],
+    "definicion": "Parte de los ingresos que puede reservarse después de cubrir los gastos necesarios.",
+    "ejemplo": "Si ingresan 600.000 pesos y se gastan 550.000, quedan 50.000 para ahorrar.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "cuenta-de-ahorro",
+    "nombre": "Cuenta de ahorro",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ahorro"
+    ],
+    "definicion": "Producto financiero destinado a guardar dinero, sujeto a las condiciones de la entidad que lo ofrece.",
+    "ejemplo": "Depositar una parte del sueldo en una cuenta de ahorro.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "deposito-a-plazo",
+    "nombre": "Depósito a plazo",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ahorro",
+      "interes"
+    ],
+    "definicion": "Dinero entregado a una institución financiera por un período acordado bajo condiciones de rentabilidad determinadas.",
+    "ejemplo": "Mantener fondos durante 90 días a una tasa pactada.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "rentabilidad-real",
+    "nombre": "Rentabilidad real",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "riesgo-y-rentabilidad",
+      "inflacion"
+    ],
+    "definicion": "Rendimiento de una inversión después de considerar el efecto de la inflación.",
+    "ejemplo": "Una inversión que rinde 6 % con inflación de 4 % tiene una ganancia real menor que 6 %.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "dividendo-de-accion",
+    "nombre": "Dividendo de una acción",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "accion"
+    ],
+    "definicion": "Distribución de utilidades que una empresa puede pagar a quienes poseen sus acciones.",
+    "ejemplo": "Una empresa reparte parte de sus ganancias entre sus accionistas.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "ganancia-de-capital",
+    "nombre": "Ganancia de capital",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inversion"
+    ],
+    "definicion": "Diferencia positiva entre el precio de venta y el costo de adquisición de un activo, sin considerar otros gastos.",
+    "ejemplo": "Comprar un activo por 80.000 pesos y venderlo por 95.000 genera una ganancia bruta de 15.000.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "perfil-de-riesgo",
+    "nombre": "Perfil de riesgo",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "riesgo-y-rentabilidad"
+    ],
+    "definicion": "Evaluación de la disposición y capacidad de una persona para asumir pérdidas o variaciones en sus inversiones.",
+    "ejemplo": "Quien necesitará su dinero pronto puede preferir inversiones menos volátiles.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "horizonte-de-inversion",
+    "nombre": "Horizonte de inversión",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inversion"
+    ],
+    "definicion": "Tiempo durante el cual se planea mantener una inversión antes de utilizar sus recursos.",
+    "ejemplo": "Ahorrar para una vivienda en cinco años implica un horizonte de cinco años.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "volatilidad",
+    "nombre": "Volatilidad",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "riesgo-y-rentabilidad"
+    ],
+    "definicion": "Medida de cuánto fluctúa el valor o rendimiento de un activo a lo largo del tiempo.",
+    "ejemplo": "Una acción cuyo precio cambia bruscamente cada día presenta alta volatilidad.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "comision-de-inversion",
+    "nombre": "Comisión de inversión",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inversion"
+    ],
+    "definicion": "Cobro asociado a la administración, intermediación o ejecución de operaciones de inversión.",
+    "ejemplo": "Un fondo puede cobrar una comisión anual de administración.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "rebalanceo-de-cartera",
+    "nombre": "Rebalanceo de cartera",
+    "categoria": "ahorro-e-inversion",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "diversificacion"
+    ],
+    "definicion": "Ajuste de las proporciones de una cartera para recuperar la distribución de activos deseada.",
+    "ejemplo": "Vender parte de un activo que creció mucho para restablecer la distribución inicial.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "cuota-de-credito",
+    "nombre": "Cuota de crédito",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Pago periódico acordado para devolver un crédito, que puede incluir capital, intereses y otros cargos.",
+    "ejemplo": "Pagar una cuota mensual de un préstamo.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "capital-adeudado",
+    "nombre": "Capital adeudado",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Monto principal de una obligación financiera que todavía está pendiente de pago.",
+    "ejemplo": "De un préstamo original de 1.000.000 de pesos quedan 700.000 de capital por devolver.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "plazo-de-credito",
+    "nombre": "Plazo de crédito",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Tiempo acordado para pagar una obligación financiera.",
+    "ejemplo": "Un crédito pactado a 24 meses tiene un plazo de dos años.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "amortizacion",
+    "nombre": "Amortización de deuda",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "capital-adeudado",
+      "cuota-de-credito"
+    ],
+    "definicion": "Reducción progresiva del capital pendiente mediante pagos.",
+    "ejemplo": "Parte de cada cuota de un préstamo disminuye el capital adeudado.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "mora",
+    "nombre": "Mora",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Situación en que un pago exigible no se realiza dentro del plazo acordado.",
+    "ejemplo": "No pagar una cuota en su fecha de vencimiento puede generar mora.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "interes-moratorio",
+    "nombre": "Interés moratorio",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "mora",
+      "interes"
+    ],
+    "definicion": "Interés que puede cobrarse por el retraso en el pago de una obligación, según las condiciones y normas aplicables.",
+    "ejemplo": "Una cuota vencida puede generar intereses por los días de atraso.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "pago-minimo",
+    "nombre": "Pago mínimo de tarjeta",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "tarjeta-de-credito"
+    ],
+    "definicion": "Monto mínimo que el emisor exige pagar en un período para cumplir esa obligación de pago, sin necesariamente saldar la deuda.",
+    "ejemplo": "Pagar solo el mínimo deja un saldo pendiente que puede generar intereses.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "cupo-de-credito",
+    "nombre": "Cupo de crédito",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "tarjeta-de-credito"
+    ],
+    "definicion": "Límite máximo de financiamiento disponible en una línea o tarjeta de crédito.",
+    "ejemplo": "Una tarjeta con cupo de 500.000 pesos no permite usar indefinidamente más que ese límite.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "garantia-de-credito",
+    "nombre": "Garantía de crédito",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "deuda"
+    ],
+    "definicion": "Bien o compromiso que respalda el cumplimiento de una obligación financiera.",
+    "ejemplo": "Un vehículo puede servir como garantía de un préstamo bajo ciertas condiciones.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "sobreendeudamiento",
+    "nombre": "Sobreendeudamiento",
+    "categoria": "deudas-y-creditos",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "carga-financiera",
+      "presupuesto"
+    ],
+    "definicion": "Situación en la que las obligaciones de deuda resultan difíciles de sostener con los recursos disponibles.",
+    "ejemplo": "Destinar casi todos los ingresos al pago de cuotas puede indicar sobreendeudamiento.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "ipc",
+    "nombre": "Índice de Precios al Consumidor (IPC)",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inflacion"
+    ],
+    "definicion": "Indicador que mide la variación de precios de una canasta representativa de consumo de los hogares.",
+    "ejemplo": "Si el IPC aumenta, refleja un alza del nivel de precios medido por el índice.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "deflacion",
+    "nombre": "Deflación",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "inflacion"
+    ],
+    "definicion": "Disminución sostenida del nivel general de precios en una economía.",
+    "ejemplo": "Una caída general y persistente de precios puede caracterizar un período deflacionario.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "salario-real",
+    "nombre": "Salario real",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "ingresos-y-gastos",
+      "inflacion"
+    ],
+    "definicion": "Remuneración expresada en términos de su capacidad para comprar bienes y servicios.",
+    "ejemplo": "Si el salario sube menos que los precios, su valor real disminuye.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "productividad",
+    "nombre": "Productividad",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "pib"
+    ],
+    "definicion": "Relación entre la producción obtenida y los recursos utilizados para generarla.",
+    "ejemplo": "Producir más unidades con las mismas horas de trabajo aumenta la productividad laboral.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "balanza-comercial",
+    "nombre": "Balanza comercial",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "tipo-de-cambio"
+    ],
+    "definicion": "Diferencia entre el valor de las exportaciones y las importaciones de bienes de un país.",
+    "ejemplo": "Si las exportaciones de bienes superan las importaciones, existe superávit comercial.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "exportaciones",
+    "nombre": "Exportaciones",
+    "categoria": "macroeconomia",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "oferta-y-demanda"
+    ],
+    "definicion": "Bienes o servicios vendidos desde un país a compradores del exterior.",
+    "ejemplo": "Chile exporta cobre a otros mercados.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "importaciones",
+    "nombre": "Importaciones",
+    "categoria": "macroeconomia",
+    "nivel": "basico",
+    "prerrequisitos": [
+      "oferta-y-demanda"
+    ],
+    "definicion": "Bienes o servicios adquiridos por residentes de un país a proveedores del exterior.",
+    "ejemplo": "Comprar maquinaria fabricada en otro país es importar.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "deficit-fiscal",
+    "nombre": "Déficit fiscal",
+    "categoria": "macroeconomia",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "politica-fiscal"
+    ],
+    "definicion": "Situación en que los gastos del sector público superan sus ingresos durante un período.",
+    "ejemplo": "Si el Estado gasta más de lo que recauda en un año, registra déficit fiscal.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "deuda-publica",
+    "nombre": "Deuda pública",
+    "categoria": "macroeconomia",
+    "nivel": "avanzado",
+    "prerrequisitos": [
+      "politica-fiscal",
+      "bono"
+    ],
+    "definicion": "Conjunto de obligaciones financieras contraídas por el sector público.",
+    "ejemplo": "El Estado puede emitir bonos para obtener financiamiento.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
+  },
+  {
+    "slug": "tasa-de-participacion-laboral",
+    "nombre": "Tasa de participación laboral",
+    "categoria": "macroeconomia",
+    "nivel": "intermedio",
+    "prerrequisitos": [
+      "desempleo"
+    ],
+    "definicion": "Porcentaje de la población en edad de trabajar que integra la fuerza de trabajo.",
+    "ejemplo": "Personas ocupadas y desocupadas que buscan empleo forman parte de la fuerza de trabajo.",
+    "verificacion": {
+      "estado": "P",
+      "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+      "nota": null
+    },
+    "fuentes": []
   }
 ]

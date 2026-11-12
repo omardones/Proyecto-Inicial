@@ -116,7 +116,7 @@ def indice(request):
         ),
         "endpoints": {
             "conceptos": [
-                e("/api/conceptos/", "Lista de los 38 conceptos, con filtros.",
+                e("/api/conceptos/", "Lista de los 78 conceptos, con filtros.",
                   "/api/conceptos/?nivel=basico",
                   {"nivel": "basico | intermedio | avanzado", "categoria": "fundamentos | ahorro-e-inversion | deudas-y-creditos | macroeconomia",
                    "estado": "A | B | C (qué tan respaldado está)", "q": "texto a buscar"}),

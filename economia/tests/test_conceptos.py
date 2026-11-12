@@ -9,13 +9,14 @@ from .ayudas import FIXTURES
 
 
 class DatosDelPdfTests(SimpleTestCase):
-    def test_hay_38_conceptos_con_slugs_unicos(self):
+    def test_hay_78_conceptos_con_slugs_unicos(self):
         slugs = [c["slug"] for c in conceptos.todos()]
-        self.assertEqual(len(slugs), 38)
-        self.assertEqual(len(set(slugs)), 38)
+        self.assertEqual(len(slugs), 78)
+        self.assertEqual(len(set(slugs)), 78)
 
     def test_cantidades_por_nivel_como_en_el_pdf(self):
-        por_nivel = {n: len(conceptos.buscar(nivel=n)) for n in conceptos.NIVELES}
+        originales = set(json.loads((FIXTURES / "antes_aprende_pdf.json").read_text(encoding="utf-8")))
+        por_nivel = {n: sum(c["nivel"] == n for c in conceptos.todos() if c["slug"] in originales) for n in conceptos.NIVELES}
         self.assertEqual(por_nivel, {"basico": 10, "intermedio": 18, "avanzado": 10})
 
     def test_prerrequisitos_existen_y_no_hay_ciclos(self):
@@ -53,14 +54,16 @@ class DatosDelPdfTests(SimpleTestCase):
                 self.assertTrue(oficiales, f"{c['slug']} es {estado} pero no cita fuente oficial")
 
     def test_el_pdf_trae_9_conceptos_A_14_B_y_15_C(self):
-        conteo = {e: len(conceptos.buscar(estado=e)) for e in conceptos.ESTADOS}
+        originales = set(json.loads((FIXTURES / "antes_aprende_pdf.json").read_text(encoding="utf-8")))
+        conteo = {e: sum(c["verificacion"]["estado"] == e for c in conceptos.todos() if c["slug"] in originales) for e in ("A", "B", "C")}
         self.assertEqual(conteo, {"A": 9, "B": 14, "C": 15})
+        self.assertEqual(len(conceptos.buscar(estado="P")), 40)
 
 
 class RutaDeAprendizajeTests(SimpleTestCase):
     def test_la_ruta_completa_incluye_todo_y_respeta_prerrequisitos(self):
         ruta = conceptos.ruta_aprendizaje()
-        self.assertEqual(len(ruta), 38)
+        self.assertEqual(len(ruta), 78)
         self.assertEqual(set(ruta), {c["slug"] for c in conceptos.todos()})
         for i, slug in enumerate(ruta):
             for p in conceptos.obtener(slug)["prerrequisitos"]:
@@ -84,9 +87,9 @@ class RutaDeAprendizajeTests(SimpleTestCase):
 
 class BusquedaTests(SimpleTestCase):
     def test_filtros_por_nivel_categoria_y_estado(self):
-        self.assertEqual(len(conceptos.buscar(nivel="basico")), 10)
-        self.assertEqual(len(conceptos.buscar(categoria="macroeconomia")), 9)
-        self.assertEqual(len(conceptos.buscar(categoria="deudas-y-creditos")), 5)
+        self.assertEqual(len(conceptos.buscar(nivel="basico")), 18)
+        self.assertEqual(len(conceptos.buscar(categoria="macroeconomia")), 19)
+        self.assertEqual(len(conceptos.buscar(categoria="deudas-y-creditos")), 15)
 
     def test_busqueda_de_texto_ignora_tildes_y_mayusculas(self):
         for texto in ("inflacion", "INFLACIÓN", "Inflación"):
