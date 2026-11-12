@@ -50,6 +50,12 @@
 </p>
 <p id="conceptos-estado">Cargando...</p>
 <ul id="conceptos-lista"></ul>
+<section id="ficha-concepto" hidden>
+  <h3 id="ficha-titulo"></h3>
+  <p id="ficha-definicion"></p>
+  <p id="ficha-ejemplo"></p>
+  <p id="ficha-fuente"></p>
+</section>
 <p><small>Estado: A = verificado en fuente oficial, B = fuente secundaria, C = por verificar.</small></p>
 <hr>
 
@@ -133,6 +139,23 @@
     }, function () { $('indicadores-estado').textContent = 'No se pudo conectar con el servidor.'; });
   }
 
+function mostrarFicha(slug) {
+  pedir('/api/conceptos/' + encodeURIComponent(slug) + '/').then(function (res) {
+    if (!res.ok) {
+      alert(mensajeDeError(res));
+      return;
+    }
+
+    var c = res.datos.concepto;
+    $('ficha-titulo').textContent = c.nombre;
+    $('ficha-definicion').textContent = c.definicion;
+    $('ficha-ejemplo').textContent = 'Ejemplo: ' + (c.ejemplo || 'No disponible');
+    $('ficha-fuente').textContent = 'Fuente: ' +
+      (c.fuentes && c.fuentes.length ? c.fuentes[0].titulo : 'No registrada');
+    $('ficha-concepto').hidden = false;
+    $('ficha-concepto').scrollIntoView({ behavior: 'smooth' });
+  });
+}
   function cargarConceptos() {
     var nivel = $('nivel').value;
     var ruta = '/api/conceptos/' + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
@@ -145,7 +168,10 @@
       res.datos.conceptos.forEach(function (c) {
         var li = document.createElement('li');
         var a = document.createElement('a');
-        a.href = '/api/conceptos/' + encodeURIComponent(c.slug) + '/';
+        a.href = '#ficha-concepto';
+        a.addEventListener('click', function () {
+          mostrarFicha(c.slug);
+        });
         a.textContent = c.nombre;
         li.appendChild(a);
         li.appendChild(document.createTextNode(' (' + c.nivel.nombre + ', estado ' + c.estado_verificacion + '): ' + c.definicion));
