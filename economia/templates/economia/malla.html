@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Malla de conceptos · Economía para jóvenes</title>
+{% verbatim %}
+<style>
+  :root { --fondo:#EDF2F7; --papel:#fff; --tinta:#1B2433; --suave:#5A6678; --linea:#CBD5E1;
+          --azul:#274690; --ambar:#D98E1F; --verde:#2A9D8F; color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--fondo); color:var(--tinta);
+         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  header, main { max-width:1280px; margin:0 auto; padding:0 16px; }
+  header { padding-top:16px; }
+  h1 { margin:.2rem 0 .1rem; font-size:1.6rem; }
+  h2 { margin:0 0 .4rem; font-size:1.25rem; }
+  h3 { margin:1rem 0 .3rem; font-size:.95rem; color:var(--suave); text-transform:uppercase; letter-spacing:.04em; }
+  .sub { margin:0 0 .6rem; color:var(--suave); }
+  nav a { margin-right:1rem; color:var(--azul); }
+  .barra { display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; align-items:center; margin:.8rem 0; font-size:.9rem; color:var(--suave); }
+  .leyenda span { display:inline-flex; align-items:center; gap:.35rem; margin-right:.9rem; }
+  .muestra { display:inline-block; width:14px; height:14px; border-radius:4px; border:2px solid; }
+  .progreso { margin-left:auto; display:flex; align-items:center; gap:.6rem; }
+  .progreso progress { width:140px; height:10px; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--linea); background:var(--papel);
+           color:var(--tinta); border-radius:8px; padding:.35rem .8rem; }
+  button:hover { border-color:var(--azul); }
+  button.principal { background:var(--azul); border-color:var(--azul); color:#fff; }
+  .sugeridos { background:#FFF7E6; border-left:4px solid var(--ambar); padding:.5rem .8rem; border-radius:6px; margin-bottom:.8rem; font-size:.95rem; }
+  .sugeridos button { margin:.15rem .3rem .15rem 0; padding:.1rem .6rem; font-size:.9rem; }
+  .cuerpo { display:grid; grid-template-columns:1fr; gap:1rem; align-items:start; padding-bottom:2rem; }
+  @media (min-width:1050px) { .cuerpo { grid-template-columns:minmax(0,1fr) 360px; } .panel { position:sticky; top:12px; } }
+  .lienzo { background:var(--papel); border-radius:12px; overflow:auto; padding:8px; max-height:78vh; }
+  svg { display:block; }
+  .panel { background:var(--papel); border-radius:12px; padding:1rem 1.1rem; border-left:6px solid var(--azul); }
+  .chips span { display:inline-block; font-size:.78rem; padding:.05rem .55rem; border-radius:999px; background:#E2E8F0; margin:0 .3rem .3rem 0; }
+  .insignia { border-radius:8px; padding:.5rem .7rem; font-size:.9rem; margin:.6rem 0; }
+  .insignia b { display:inline-block; min-width:1.5rem; text-align:center; border-radius:6px; padding:0 .3rem; margin-right:.4rem; color:#fff; }
+  .insignia.A { background:#E2EFDA; } .insignia.A b { background:#2E7D32; }
+  .insignia.B { background:#FFF2CC; } .insignia.B b { background:#B7791F; }
+  .insignia.C { background:#EDEDED; } .insignia.C b { background:#6B7280; }
+  .insignia.P { background:#E6EEF8; } .insignia.P b { background:#3B6FB6; }
+  .ejemplo { background:#F3F6FA; border-radius:8px; padding:.5rem .7rem; font-size:.95rem; }
+  ol.orden { margin:.2rem 0 0; padding-left:1.4rem; }
+  ol.orden li { margin:.1rem 0; }
+  .enlace { background:none; border:0; padding:0; color:var(--azul); text-decoration:underline; }
+  .fuentes { font-size:.88rem; padding-left:1.1rem; margin:.2rem 0; }
+  .acciones { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+  .error { color:#9B1C1C; }
+  .nodo { cursor:pointer; outline:none; user-select:none; -webkit-user-select:none; }
+  .nodo rect.caja { stroke-width:2; transition:opacity .15s; }
+  .nodo text { pointer-events:none; font-size:12px; font-weight:600; }
+  .nodo:focus-visible rect.caja { stroke:#000; stroke-width:3; }
+  .arista { fill:none; stroke:#B8C2D0; stroke-width:1.6; transition:opacity .15s; }
+  .arista.ant { stroke:var(--azul); stroke-width:2.6; }
+  .arista.des { stroke:var(--ambar); stroke-width:2.6; }
+  .atenuado { opacity:.2; }
+  .oculto { display:none; }
+  .herramientas { display:flex; flex-wrap:wrap; gap:.5rem 1.2rem; align-items:center; margin:.2rem 0 .8rem; font-size:.9rem; }
+  .herramientas input[type=search] { font:inherit; padding:.3rem .6rem; border:1px solid var(--linea); border-radius:8px; min-width:230px; }
+  .leyenda button.cat { padding:.1rem .6rem; font-size:.88rem; margin-right:.5rem; }
+  .leyenda button.cat[aria-pressed=true] { border-color:#000; font-weight:700; }
+  .zoom button { padding:.15rem .6rem; margin-left:.25rem; }
+  .claves { font-size:.85rem; color:var(--suave); }
+  .claves b { display:inline-block; width:1.3rem; text-align:center; border-radius:4px; color:#fff; margin:0 .2rem 0 .6rem; }
+  .sel rect.caja { stroke:#000 !important; stroke-width:4; }
+  .ant rect.caja { stroke:var(--azul) !important; stroke-width:3.5; }
+  .des rect.caja { stroke:var(--ambar) !important; stroke-width:3.5; }
+  .sugerido rect.caja { stroke-dasharray:6 3; }
+  .etapa { font-size:12px; fill:#5A6678; text-anchor:middle; }
+  @media print { .barra button, .acciones, nav { display:none; } }
+</style>
+{% endverbatim %}
+</head>
+<body>
+<header>
+  <nav><a href="/">Inicio</a><a href="/api/">API (JSON)</a></nav>
+  <h1>Malla de conceptos</h1>
+  <p class="sub">Un mapa para saber por dónde empezar. Cada línea une un concepto con lo que conviene entender antes.
+     Toca un concepto para ver su camino y su definición. Haz doble clic en un concepto para ver su ficha completa en la página principal.</p>
+</header>
+<main>
+  <div class="barra">
+    <div class="leyenda" id="leyenda"></div>
+    <div class="progreso">
+      <span id="contador">Aprendidos: 0</span>
+      <progress id="barra-progreso" value="0" max="1"></progress>
+      <button type="button" id="borrar">Borrar progreso</button>
+    </div>
+  </div>
+  <div class="herramientas">
+    <input type="search" id="buscar" list="lista-conceptos" placeholder="Buscar un concepto" aria-label="Buscar un concepto">
+    <datalist id="lista-conceptos"></datalist>
+    <label><input type="checkbox" id="solo-camino"> Ocultar lo que no se relaciona con el concepto elegido</label>
+    <span class="zoom" aria-label="Tamaño de la malla">Tamaño:
+      <button type="button" id="zoom-menos" aria-label="Alejar">−</button>
+      <button type="button" id="zoom-mas" aria-label="Acercar">+</button>
+      <button type="button" id="zoom-ajustar">Ajustar al ancho</button></span>
+    <span class="claves" id="claves"></span>
+  </div>
+  <div id="sugeridos" class="sugeridos" hidden></div>
+  <div class="cuerpo">
+    <div class="lienzo"><svg id="malla" role="img" aria-label="Malla de prerrequisitos entre conceptos"></svg></div>
+    <aside class="panel" id="panel" aria-live="polite">
+      <h2>Cómo usarla</h2>
+      <p id="estado">Cargando conceptos...</p>
+      <p>Azul: lo que debes saber antes. Ámbar: lo que se vuelve más fácil después. Los puntos de cada caja indican el nivel (1 básico, 2 intermedio, 3 avanzado).</p>
+      <p>Doble clic en un concepto (o Enter dos veces, o el enlace «Ver en el buscador de conceptos») te lleva a su ficha: definición, ejemplo y fuentes.</p>
+      <p>Marca los conceptos que ya dominas: la malla te sugerirá el siguiente paso. Tu progreso se guarda solo en este navegador.</p>
+    </aside>
+  </div>
+</main>
+{% verbatim %}
+<script>
+(function () {
+  'use strict';
+  var PALETA = {
+    'fundamentos':        ['#F1EFE8', '#5F5E5A', '#444441'],
+    'ahorro-e-inversion': ['#E1F5EE', '#0F6E56', '#085041'],
+    'deudas-y-creditos':  ['#FAECE7', '#993C1D', '#712B13'],
+    'macroeconomia':      ['#EEEDFE', '#534AB7', '#3C3489']
+  };
+  var NIVEL_PUNTOS = { basico: 1, intermedio: 2, avanzado: 3 };
+  var CLAVE = 'malla-aprendidos-v1';
+  var W = 170, H = 54, GX = 80, GY = 16, MX = 20, MY = 44;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  var nodos = [], por = {}, aprendidos = {}, seleccion = null, fichas = {};
+  var cajas = {}, lineas = [], filtroCat = null, zoom = 1, base = { w: 0, h: 0 };
+  var COLOR_ESTADO = { A: '#2E7D32', B: '#B7791F', C: '#6B7280', P: '#3B6FB6' };
+  var TEXTO_ESTADO = { A: 'verificado', B: 'parcial', C: 'bibliografía', P: 'pendiente' };
+  function plano(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, attrs, texto) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) { e.setAttribute(k, attrs[k]); }
+    if (texto !== undefined) { e.textContent = texto; }
+    return e;
+  }
+  function h(tag, clase, texto) {
+    var e = document.createElement(tag);
+    if (clase) { e.className = clase; }
+    if (texto !== undefined) { e.textContent = texto; }
+    return e;
+  }
+  function colores(cat) { return PALETA[cat] || PALETA.fundamentos; }
+
+  // ---- progreso (solo en este navegador) ----
+  function leerProgreso() {
+    try { var t = window.localStorage.getItem(CLAVE); return t ? JSON.parse(t) : {}; }
+    catch (e) { return {}; }
+  }
+  function guardarProgreso() {
+    try { window.localStorage.setItem(CLAVE, JSON.stringify(aprendidos)); } catch (e) { /* sin almacenamiento */ }
+  }
+
+  // ---- cálculo de la posición de cada caja (función pura) ----
+  function calcularLayout(lista) {
+    var porSlug = {};
+    lista.forEach(function (n) { porSlug[n.slug] = n; n.hijos = []; n.prof = 0; });
+    lista.forEach(function (n) {
+      n.pre.forEach(function (p) { if (porSlug[p]) { porSlug[p].hijos.push(n.slug); } });
+    });
+    function profundidad(n) {
+      if (n.profListo) { return n.prof; }
+      var m = -1;
+      n.pre.forEach(function (p) { if (porSlug[p]) { m = Math.max(m, profundidad(porSlug[p])); } });
+      n.prof = m + 1; n.profListo = true;
+      return n.prof;
+    }
+    lista.forEach(profundidad);
+    var maxProf = 0;
+    lista.forEach(function (n) { maxProf = Math.max(maxProf, n.prof); });
+    var orden = Object.keys(PALETA);
+    function claveCat(n) { var i = orden.indexOf(n.cat); return i < 0 ? 99 : i; }
+    var yMax = 0;
+    for (var c = 0; c <= maxProf; c++) {
+      var col = lista.filter(function (n) { return n.prof === c; });
+      col.forEach(function (n) {
+        var ys = n.pre.filter(function (p) { return porSlug[p]; }).map(function (p) { return porSlug[p].y; });
+        n.deseada = ys.length ? ys.reduce(function (a, b) { return a + b; }, 0) / ys.length : 0;
+      });
+      col.sort(function (a, b) {
+        if (c === 0) { return claveCat(a) - claveCat(b) || a.nombre.localeCompare(b.nombre, 'es'); }
+        return a.deseada - b.deseada || claveCat(a) - claveCat(b) || a.nombre.localeCompare(b.nombre, 'es');
+      });
+      var siguiente = 0;
+      col.forEach(function (n) {
+        n.y = Math.max(c === 0 ? 0 : n.deseada, siguiente);
+        siguiente = n.y + H + GY;
+        n.x = c * (W + GX);
+        yMax = Math.max(yMax, n.y);
+      });
+    }
+    return { maxProf: maxProf, ancho: (maxProf + 1) * (W + GX) - GX, alto: yMax + H };
+  }
+
+  function parteLineas(texto) {
+    var palabras = texto.split(' '), lineas = [], actual = '';
+    palabras.forEach(function (p) {
+      if (actual && (actual + ' ' + p).length > 22) { lineas.push(actual); actual = p; }
+      else { actual = actual ? actual + ' ' + p : p; }
+    });
+    if (actual) { lineas.push(actual); }
+    return lineas.slice(0, 3);
+  }
+
+  // Lleva a la página principal, directo a ese concepto en su buscador de conceptos.
+  function urlConcepto(slug) { return '/#concepto-' + encodeURIComponent(slug); }
+  function abrir(slug) { window.location.href = urlConcepto(slug); }
+
+  function aplicarZoom() {
+    var svg = $('malla');
+    svg.setAttribute('width', Math.round(base.w * zoom));
+    svg.setAttribute('height', Math.round(base.h * zoom));
+  }
+  function cambiarZoom(nuevo) {
+    zoom = Math.min(1.4, Math.max(0.35, nuevo));
+    aplicarZoom();
+  }
+
+  // ---- dibujo ----
+  function dibujar() {
+    var svg = $('malla');
+    while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+    var d = calcularLayout(nodos);
+    base = { w: d.ancho + MX * 2, h: d.alto + MY + MX };
+    svg.setAttribute('viewBox', '0 0 ' + base.w + ' ' + base.h);
+    aplicarZoom();
+
+    for (var c = 0; c <= d.maxProf; c++) {
+      svg.appendChild(el('text', { 'class': 'etapa', x: MX + c * (W + GX) + W / 2, y: 24 }, 'Etapa ' + (c + 1)));
+    }
+    var capaLineas = el('g', {}), capaNodos = el('g', {});
+    svg.appendChild(capaLineas); svg.appendChild(capaNodos);
+
+    lineas = [];
+    nodos.forEach(function (n) {
+      n.pre.forEach(function (p) {
+        var a = por[p]; if (!a) { return; }
+        var x1 = MX + a.x + W, y1 = MY + a.y + H / 2, x2 = MX + n.x, y2 = MY + n.y + H / 2, dx = (x2 - x1) / 2;
+        var path = el('path', { 'class': 'arista', d: 'M' + x1 + ',' + y1 + ' C' + (x1 + dx) + ',' + y1 + ' ' + (x2 - dx) + ',' + y2 + ' ' + x2 + ',' + y2 });
+        capaLineas.appendChild(path);
+        lineas.push({ el: path, de: p, a: n.slug });
+      });
+    });
+
+    cajas = {};
+    nodos.forEach(function (n) {
+      var k = colores(n.cat);
+      var g = el('g', { 'class': 'nodo', tabindex: '0', role: 'button', 'aria-label': n.nombre + '. Nivel ' + n.nivelNombre + '.' });
+      g.appendChild(el('title', {}, n.nombre + ' · ' + n.catNombre + ' · Nivel ' + n.nivelNombre));
+      g.appendChild(el('rect', { 'class': 'caja', x: MX + n.x, y: MY + n.y, width: W, height: H, rx: 10, fill: k[0], stroke: k[1] }));
+      var ls = parteLineas(n.nombre), y0 = MY + n.y + H / 2 - (ls.length - 1) * 7.5 + 4;
+      ls.forEach(function (t, i) {
+        g.appendChild(el('text', { x: MX + n.x + W / 2, y: y0 + i * 15, 'text-anchor': 'middle', fill: k[2] }, t));
+      });
+      var puntos = NIVEL_PUNTOS[n.nivel] || 1;
+      for (var i = 0; i < puntos; i++) {
+        g.appendChild(el('circle', { cx: MX + n.x + W - 10 - i * 8, cy: MY + n.y + 9, r: 2.8, fill: k[1] }));
+      }
+      if (n.estado) {
+        var ce = COLOR_ESTADO[n.estado] || '#6B7280';
+        g.appendChild(el('rect', { x: MX + n.x + 6, y: MY + n.y + H - 17, width: 15, height: 12, rx: 3, fill: ce }));
+        g.appendChild(el('text', { x: MX + n.x + 13.5, y: MY + n.y + H - 7.5, 'text-anchor': 'middle', fill: '#fff', style: 'font-size:9px' }, n.estado));
+      }
+      var marca = el('g', { 'class': 'marca' });
+      marca.appendChild(el('circle', { cx: MX + n.x + 12, cy: MY + n.y + 12, r: 8, fill: '#2E7D32' }));
+      marca.appendChild(el('text', { x: MX + n.x + 12, y: MY + n.y + 16, 'text-anchor': 'middle', fill: '#fff', style: 'font-size:11px' }, '\u2713'));
+      g.appendChild(marca);
+      g.addEventListener('click', function () { elegir(n.slug); });
+      g.addEventListener('dblclick', function () { abrir(n.slug); });
+      g.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          // Con teclado: Enter elige el concepto y un segundo Enter lo abre.
+          if (ev.key === 'Enter' && seleccion === n.slug) { abrir(n.slug); } else { elegir(n.slug); }
+        }
+      });
+      capaNodos.appendChild(g);
+      cajas[n.slug] = g;
+    });
+    pintar();
+  }
+
+  function clausura(slug, siguiente) {
+    var vistos = {}, pend = [slug];
+    while (pend.length) {
+      var s = pend.pop(), n = por[s]; if (!n) { continue; }
+      (siguiente === 'pre' ? n.pre : n.hijos).forEach(function (x) {
+        if (!vistos[x]) { vistos[x] = true; pend.push(x); }
+      });
+    }
+    return vistos;
+  }
+
+  function pintar() {
+    var ant = seleccion ? clausura(seleccion, 'pre') : {}, des = seleccion ? clausura(seleccion, 'hijos') : {};
+    var ocultarAjenos = $('solo-camino').checked;
+    var sugeridos = nodos.filter(function (n) {
+      return !aprendidos[n.slug] && n.pre.every(function (p) { return aprendidos[p]; });
+    });
+    var sug = {}; sugeridos.forEach(function (n) { sug[n.slug] = true; });
+    nodos.forEach(function (n) {
+      var g = cajas[n.slug], cls = ['nodo'];
+      if (seleccion) {
+        if (n.slug === seleccion) { cls.push('sel'); }
+        else if (ant[n.slug]) { cls.push('ant'); }
+        else if (des[n.slug]) { cls.push('des'); }
+        else { cls.push(ocultarAjenos ? 'oculto' : 'atenuado'); }
+      } else if (filtroCat && n.cat !== filtroCat) { cls.push('atenuado'); }
+      if (sug[n.slug]) { cls.push('sugerido'); }
+      g.setAttribute('class', cls.join(' '));
+      g.querySelector('.marca').style.display = aprendidos[n.slug] ? '' : 'none';
+    });
+    lineas.forEach(function (l) {
+      var cls = 'arista';
+      if (seleccion) {
+        if (l.a === seleccion || ant[l.a]) { cls += ' ant'; }
+        else if (l.de === seleccion || des[l.de]) { cls += ' des'; }
+        else { cls += ocultarAjenos ? ' oculto' : ' atenuado'; }
+      } else if (filtroCat && !(por[l.de].cat === filtroCat && por[l.a].cat === filtroCat)) { cls += ' atenuado'; }
+      l.el.setAttribute('class', cls);
+    });
+    var total = nodos.length, hechos = nodos.filter(function (n) { return aprendidos[n.slug]; }).length;
+    $('contador').textContent = 'Aprendidos: ' + hechos + ' de ' + total;
+    var barra = $('barra-progreso'); barra.max = total || 1; barra.value = hechos;
+    var caja = $('sugeridos');
+    if (!total || hechos === total) {
+      caja.hidden = !(total && hechos === total);
+      caja.textContent = total && hechos === total ? 'Completaste toda la malla.' : '';
+      return;
+    }
+    caja.hidden = false; caja.textContent = '';
+    caja.appendChild(document.createTextNode(hechos ? 'Siguientes pasos sugeridos: ' : 'Por dónde empezar: '));
+    sugeridos.slice(0, 6).forEach(function (n) {
+      var b = h('button', '', n.nombre); b.type = 'button';
+      b.addEventListener('click', function () { elegir(n.slug, true); });
+      caja.appendChild(b);
+    });
+    if (sugeridos.length > 6) { caja.appendChild(document.createTextNode('y ' + (sugeridos.length - 6) + ' más.')); }
+  }
+
+  // ---- panel de detalle ----
+  function centrar(slug) {
+    var n = por[slug], l = document.querySelector('.lienzo');
+    if (!n || !l || !l.scrollTo) { return; }
+    l.scrollTo({ left: Math.max(0, (MX + n.x + W / 2) * zoom - l.clientWidth / 2), top: Math.max(0, (MY + n.y + H / 2) * zoom - l.clientHeight / 2), behavior: 'smooth' });
+  }
+
+  function elegir(slug, llevarVista) {
+    seleccion = slug; pintar();
+    if (llevarVista) { centrar(slug); }
+    var panel = $('panel'), n = por[slug], k = colores(n.cat);
+    panel.style.borderLeftColor = k[1];
+    panel.textContent = '';
+    panel.appendChild(h('h2', '', n.nombre));
+    var chips = h('div', 'chips');
+    chips.appendChild(h('span', '', n.catNombre)); chips.appendChild(h('span', '', 'Nivel ' + n.nivelNombre));
+    panel.appendChild(chips);
+    var cuerpo = h('div'); cuerpo.appendChild(h('p', '', 'Cargando ficha...')); panel.appendChild(cuerpo);
+    var acciones = h('div', 'acciones'); panel.appendChild(acciones);
+    var bt = h('button', aprendidos[slug] ? '' : 'principal', aprendidos[slug] ? 'Quitar de aprendidos' : 'Marcar como aprendido');
+    bt.type = 'button';
+    bt.addEventListener('click', function () {
+      if (aprendidos[slug]) { delete aprendidos[slug]; } else { aprendidos[slug] = true; }
+      guardarProgreso(); elegir(slug);
+    });
+    acciones.appendChild(bt);
+    var ir = h('a', 'enlace', 'Ver en el buscador de conceptos');
+    ir.href = urlConcepto(slug);
+    acciones.appendChild(ir);
+
+    obtenerFicha(slug).then(function (f) {
+      if (seleccion !== slug) { return; }
+      cuerpo.textContent = '';
+      var v = f.verificacion || {};
+      var ins = h('div', 'insignia ' + (v.estado || 'C'));
+      var letra = h('b', '', v.estado || '?'); ins.appendChild(letra);
+      ins.appendChild(document.createTextNode((v.etiqueta || '') + '. ' + (v.para_el_lector || '') + (v.nota ? ' ' + v.nota : '')));
+      cuerpo.appendChild(ins);
+      cuerpo.appendChild(h('h3', '', 'Qué es'));
+      cuerpo.appendChild(h('p', '', f.definicion));
+      if (f.ejemplo) { cuerpo.appendChild(h('h3', '', 'Ejemplo')); cuerpo.appendChild(h('p', 'ejemplo', f.ejemplo)); }
+      cuerpo.appendChild(h('h3', '', 'Antes de aprenderlo'));
+      if (!f.antes_de_aprender.length) { cuerpo.appendChild(h('p', '', 'Nada: es un buen punto de partida.')); }
+      else {
+        var ol = h('ol', 'orden');
+        f.antes_de_aprender.forEach(function (a) {
+          var li = h('li'), b = h('button', 'enlace', a.nombre); b.type = 'button';
+          b.addEventListener('click', function () { elegir(a.slug, true); });
+          li.appendChild(b); li.appendChild(document.createTextNode(aprendidos[a.slug] ? ' \u2713' : ''));
+          ol.appendChild(li);
+        });
+        cuerpo.appendChild(ol);
+      }
+      cuerpo.appendChild(h('h3', '', 'Con esto se vuelve más fácil'));
+      if (!f.desbloquea.length) { cuerpo.appendChild(h('p', '', 'Es un concepto de llegada: no es prerrequisito de otros.')); }
+      else {
+        var p = h('p');
+        f.desbloquea.forEach(function (d, i) {
+          var b = h('button', 'enlace', d.nombre); b.type = 'button';
+          b.addEventListener('click', function () { elegir(d.slug, true); });
+          if (i) { p.appendChild(document.createTextNode(', ')); }
+          p.appendChild(b);
+        });
+        cuerpo.appendChild(p);
+      }
+      cuerpo.appendChild(h('h3', '', 'De dónde sale'));
+      var ul = h('ul', 'fuentes');
+      f.fuentes.forEach(function (fu) {
+        var li = h('li'); li.appendChild(document.createTextNode(fu.organizacion + ': '));
+        if (fu.url) { var a = h('a', '', fu.titulo); a.href = fu.url; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a); }
+        else { li.appendChild(document.createTextNode(fu.titulo)); }
+        ul.appendChild(li);
+      });
+      cuerpo.appendChild(ul);
+    }, function (msg) {
+      if (seleccion !== slug) { return; }
+      cuerpo.textContent = ''; cuerpo.appendChild(h('p', 'error', msg));
+    });
+  }
+
+  function obtenerFicha(slug) {
+    if (fichas[slug]) { return Promise.resolve(fichas[slug]); }
+    return fetch('/api/conceptos/' + encodeURIComponent(slug) + '/?en_vivo=0').then(function (r) {
+      return r.json().then(function (d) {
+        if (!r.ok) { return Promise.reject((d && d.error && d.error.mensaje) || 'No se pudo cargar la ficha.'); }
+        fichas[slug] = d.concepto; return d.concepto;
+      });
+    }, function () { return Promise.reject('No se pudo conectar con el servidor.'); });
+  }
+
+  // ---- inicio ----
+  function leyenda() {
+    var vistos = {}, caja = $('leyenda'); caja.textContent = '';
+    nodos.forEach(function (n) {
+      if (vistos[n.cat]) { return; } vistos[n.cat] = true;
+      var k = colores(n.cat), b = h('button', 'cat'); b.type = 'button';
+      b.setAttribute('aria-pressed', 'false'); b.title = 'Resaltar solo esta categoría';
+      var m = h('i', 'muestra'); m.style.background = k[0]; m.style.borderColor = k[1]; m.style.marginRight = '.35rem';
+      b.appendChild(m); b.appendChild(document.createTextNode(n.catNombre));
+      b.addEventListener('click', function () {
+        filtroCat = filtroCat === n.cat ? null : n.cat;
+        Array.prototype.forEach.call(caja.querySelectorAll('button.cat'), function (x) { x.setAttribute('aria-pressed', 'false'); });
+        if (filtroCat) { b.setAttribute('aria-pressed', 'true'); }
+        pintar();
+      });
+      caja.appendChild(b);
+    });
+    [['antes', 'Antes (prerrequisitos)', '#274690'], ['despues', 'Después (desbloquea)', '#D98E1F']].forEach(function (x) {
+      var s = h('span'), m = h('i', 'muestra'); m.style.background = x[2]; m.style.borderColor = x[2];
+      s.appendChild(m); s.appendChild(document.createTextNode(x[1])); caja.appendChild(s);
+    });
+  }
+
+  function iniciar(pasos, estados) {
+    nodos = pasos.map(function (p) {
+      return { slug: p.slug, nombre: p.nombre, cat: p.categoria.slug, catNombre: p.categoria.nombre,
+               nivel: p.nivel.slug, nivelNombre: p.nivel.nombre, pre: p.prerrequisitos_directos,
+               estado: estados[p.slug] || null };
+    });
+    var lista = $('lista-conceptos');
+    nodos.slice().sort(function (a, b) { return a.nombre.localeCompare(b.nombre, 'es'); }).forEach(function (n) {
+      var o = document.createElement('option'); o.value = n.nombre; lista.appendChild(o);
+    });
+    var claves = $('claves'); claves.textContent = 'Verificación:';
+    ['A', 'B', 'C', 'P'].forEach(function (e) {
+      var b = h('b', '', e); b.style.background = COLOR_ESTADO[e];
+      claves.appendChild(b); claves.appendChild(document.createTextNode(TEXTO_ESTADO[e]));
+    });
+    nodos.forEach(function (n) { por[n.slug] = n; });
+    var guardado = leerProgreso();
+    Object.keys(guardado).forEach(function (s) { if (por[s]) { aprendidos[s] = true; } });
+    $('estado').textContent = nodos.length + ' conceptos. Toca uno para empezar.';
+    leyenda(); dibujar();
+  }
+
+  $('buscar').addEventListener('change', function () {
+    var q = plano(this.value.trim()); if (!q) { return; }
+    var n = nodos.filter(function (x) { return plano(x.nombre) === q; })[0] ||
+            nodos.filter(function (x) { return plano(x.nombre).indexOf(q) === 0; })[0] ||
+            nodos.filter(function (x) { return plano(x.nombre).indexOf(q) >= 0; })[0];
+    if (n) { elegir(n.slug, true); } else { $('estado').textContent = 'No hay un concepto que coincida con "' + this.value + '".'; }
+  });
+  $('solo-camino').addEventListener('change', pintar);
+  $('zoom-menos').addEventListener('click', function () { cambiarZoom(zoom - 0.15); });
+  $('zoom-mas').addEventListener('click', function () { cambiarZoom(zoom + 0.15); });
+  $('zoom-ajustar').addEventListener('click', function () {
+    var l = document.querySelector('.lienzo');
+    if (base.w && l) { cambiarZoom((l.clientWidth - 24) / base.w); }
+  });
+
+  $('borrar').addEventListener('click', function () {
+    if (!nodos.length || !window.confirm('¿Borrar los conceptos que marcaste como aprendidos?')) { return; }
+    aprendidos = {}; guardarProgreso();
+    if (seleccion) { elegir(seleccion); } else { pintar(); }
+  });
+
+  function pedirJson(ruta) {
+    return fetch(ruta).then(function (r) {
+      return r.json().then(function (d) {
+        if (!r.ok) { throw new Error((d && d.error && d.error.mensaje) || 'Error del servidor.'); }
+        return d;
+      });
+    });
+  }
+
+  pedirJson('/api/ruta-aprendizaje/').then(function (ruta) {
+    // El estado de verificación (A, B, C o P) viene del listado; si falla, la malla igual se dibuja.
+    return pedirJson('/api/conceptos/').then(function (lista) {
+      var estados = {};
+      lista.conceptos.forEach(function (c) { estados[c.slug] = c.estado_verificacion; });
+      return estados;
+    }, function () { return {}; }).then(function (estados) { iniciar(ruta.pasos, estados); });
+  }).catch(function (e) {
+    $('estado').textContent = 'No se pudo cargar la malla: ' + (e && e.message ? e.message : 'sin conexión con el servidor.');
+    $('estado').className = 'error';
+  });
+
+  // Para pruebas fuera del navegador
+  if (typeof module !== 'undefined') { module.exports = { calcularLayout: calcularLayout, parteLineas: parteLineas, urlConcepto: urlConcepto }; }
+})();
+</script>
+{% endverbatim %}
+</body>
+</html>

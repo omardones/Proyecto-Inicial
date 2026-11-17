@@ -21,6 +21,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('economia.urls')),
+    # Malla visual de conceptos: lee la API (/api/ruta-aprendizaje/ y /api/conceptos/)
+    path('malla/', TemplateView.as_view(template_name='economia/malla.html')),
     # La raíz del sitio muestra una página básica que consume la API
     path('', TemplateView.as_view(template_name='economia/inicio.html')),
 ]

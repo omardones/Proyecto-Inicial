@@ -21,6 +21,7 @@
   <a href="#indicadores">Valores de hoy</a> |
   <a href="#conceptos">Conceptos</a> |
   <a href="#ruta">Ruta de aprendizaje</a> |
+  <a href="/malla/">Malla de conceptos</a> |
   <a href="#convertir">Convertidor</a> |
   <a href="/api/">API (JSON)</a>
 </p>
@@ -200,6 +201,18 @@ function mostrarFicha(slug) {
     $('ficha-concepto').scrollIntoView({ behavior: 'smooth' });
   });
 }
+  // Si se llega con #concepto-<slug> (por ejemplo, con doble clic en la malla), se abre la ficha de ese concepto.
+  var enlacePendiente = true;
+  function abrirConceptoDelEnlace(conceptos) {
+    if (!enlacePendiente) { return; }
+    enlacePendiente = false;
+    var m = /^#concepto-(.+)$/.exec(window.location.hash);
+    if (!m) { return; }
+    var slug;
+    try { slug = decodeURIComponent(m[1]); } catch (e) { return; }
+    if (conceptos.some(function (c) { return c.slug === slug; })) { mostrarFicha(slug); }
+  }
+
   function cargarConceptos() {
     var nivel = $('nivel').value;
     var ruta = '/api/conceptos/' + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
@@ -221,6 +234,7 @@ function mostrarFicha(slug) {
         li.appendChild(document.createTextNode(' (' + c.nivel.nombre + ', estado ' + c.estado_verificacion + '): ' + c.definicion));
         lista.appendChild(li);
       });
+      abrirConceptoDelEnlace(res.datos.conceptos);
     }, function () { $('conceptos-estado').textContent = 'No se pudo conectar con el servidor.'; });
   }
 
