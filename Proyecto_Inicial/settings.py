@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,12 +21,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_5ct90ky+7*8e90^kupai8ur_)k9qy-uwfagtc^uccx24xh+kz'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-_5ct90ky+7*8e90^kupai8ur_)k9qy-uwfagtc^uccx24xh+kz',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Por defecto DEBUG está activo (desarrollo). Con DJANGO_DEBUG=0 se desactiva y
+# Django muestra las páginas propias templates/404.html y templates/500.html.
+DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = []
+# Con DEBUG desactivado, Django solo responde a estos dominios (si la lista está
+# vacía, toda petición recibe un error 400).
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
@@ -135,7 +143,6 @@ MAILERS = {
 # API de economía (app "economia"). Todos estos ajustes son OPCIONALES:
 # si los borras, se usan los valores que se muestran aquí.
 # ---------------------------------------------------------------------------
-import os
 
 # API pública de donde salen los datos en vivo (UF, dólar, TPM, ...)
 ECONOMIA_FUENTE_URL = os.environ.get('ECONOMIA_FUENTE_URL', 'https://mindicador.cl/api')
