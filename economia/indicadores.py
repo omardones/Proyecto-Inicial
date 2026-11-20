@@ -1,7 +1,7 @@
 """
 Indicadores económicos EN VIVO: UF, dólar, TPM, desempleo, etc.
 
-Los valores vienen de una API pública gratuita, https://mindicador.cl/api, que
+Los indicadores chilenos provienen de https://indicadores.cl/api/ y Bitcoin de CoinGecko.
 no necesita clave. Este módulo se encarga de tres cosas:
 
   1. CATÁLOGO: para cada indicador, una explicación en lenguaje simple y los
@@ -46,7 +46,7 @@ class FuenteNoDisponible(Exception):
 # Ajustes (se pueden cambiar en settings.py; ver README de la app)
 # ---------------------------------------------------------------------------
 def url_fuente():
-    return getattr(settings, "ECONOMIA_FUENTE_URL", "https://mindicador.cl/api").rstrip("/")
+    return getattr(settings, "ECONOMIA_FUENTE_URL", "https://indicadores.cl/api/v1").rstrip("/")
 
 
 def _segundos_de_cache():
@@ -62,7 +62,7 @@ def _timeout():
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class Indicador:
-    codigo: str  # el mismo código que usa mindicador.cl
+    codigo: str  # identificador interno del indicador en Noesis
     nombre: str
     unidad: str  # "pesos" | "dolares" | "porcentaje"
     frecuencia: str  # "diaria" | "mensual"  (cada cuánto cambia el dato)
@@ -184,8 +184,16 @@ def hoy_chile():
 
 
 def _fecha_del_dato(iso):
-    """'2026-10-25T03:00:00.000Z' -> date(2026, 10, 25) (hora de Chile)."""
-    return datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(_zona()).date()
+    """Interpreta fechas diarias, mensuales y marcas de tiempo ISO."""
+    if len(iso) == 7:
+        iso += "-01"
+
+    fecha = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+
+    if fecha.tzinfo is None:
+        return fecha.date()
+
+    return fecha.astimezone(_zona()).date()
 
 
 # ---------------------------------------------------------------------------
@@ -249,6 +257,144 @@ def _punto_valido(p):
     return isinstance(p, dict) and _es_numero(p.get("valor")) and isinstance(p.get("fecha"), str)
 
 
+def _normalizar_resumen(datos):
+    if not isinstance(datos, dict):
+        raise FuenteNoDisponible("Respuesta de indicadores.cl no válida.")
+
+    campos = {
+        "uf": ("uf", "valor", "fecha"),
+        "dolar": ("dolar", "valor", "fecha"),
+        "euro": ("euro", "valor", "fecha"),
+        "utm": ("utm", "valor", "mes"),
+        "tpm": ("tpm", "valor", "fecha"),
+        "ipc": ("ipc", "variacionMensual", "mes"),
+        "imacec": ("imacec", "variacionAnual", "mes"),
+        "tasa_desempleo": ("desempleo", "tasa", "mes"),
+        "libra_cobre": ("cobre", "valor", "fecha"),
+    }
+
+    resultado = {}
+
+    for codigo, (clave, campo_valor, campo_fecha) in campos.items():
+        dato = datos.get(clave)
+
+        if not isinstance(dato, dict):
+            continue
+
+        punto = {
+            "valor": dato.get(campo_valor),
+            "fecha": dato.get(campo_fecha),
+        }
+
+        if _punto_valido(punto):
+            resultado[codigo] = punto
+
+    return resultado
+
+
+def _normalizar_serie(datos):
+    """Adapta las series históricas de indicadores.cl al formato de Noesis."""
+    if not isinstance(datos, dict) or not isinstance(datos.get("serie"), list):
+        raise FuenteNoDisponible("La fuente no entregó una serie histórica válida.")
+
+    puntos = []
+
+    for registro in datos["serie"]:
+        if not isinstance(registro, dict):
+            continue
+
+        fecha = registro.get("fecha") or registro.get("mes")
+        valor = registro.get("valor")
+
+        if "variacionMensual" in registro:
+            valor = registro["variacionMensual"]
+
+        punto = {"fecha": fecha, "valor": valor}
+
+        if _punto_valido(punto):
+            puntos.append(punto)
+
+    return {"serie": puntos}
+
+
+def _normalizar_tpm(datos):
+    """Adapta los cambios de TPM nominal a la serie histórica de Noesis."""
+    if not isinstance(datos, dict) or not isinstance(datos.get("cambios"), list):
+        raise FuenteNoDisponible("La fuente no entregó el historial de TPM.")
+
+    puntos = []
+
+    for cambio in datos["cambios"]:
+        if not isinstance(cambio, dict) or cambio.get("tipo") != "nominal":
+            continue
+
+        punto = {
+            "fecha": cambio.get("fecha"),
+            "valor": cambio.get("tasa"),
+        }
+
+        if _punto_valido(punto):
+            puntos.append(punto)
+
+    return {"serie": puntos}
+
+
+def _normalizar_bitcoin_actual(datos):
+    """Adapta el precio de Bitcoin en USD entregado por CoinGecko."""
+    if not isinstance(datos, dict):
+        raise FuenteNoDisponible("CoinGecko no entregó una respuesta válida.")
+
+    bitcoin = datos.get("bitcoin")
+    if not isinstance(bitcoin, dict):
+        raise FuenteNoDisponible("CoinGecko no entregó datos de Bitcoin.")
+
+    precio = bitcoin.get("usd")
+    actualizado = bitcoin.get("last_updated_at")
+
+    if (
+        not _es_numero(precio)
+        or isinstance(actualizado, bool)
+        or not isinstance(actualizado, (int, float))
+    ):
+        raise FuenteNoDisponible("CoinGecko entregó un precio o fecha inválidos.")
+
+    fecha = datetime.fromtimestamp(actualizado, tz=_zona()).date().isoformat()
+    return {"bitcoin": {"valor": precio, "fecha": fecha}}
+
+
+def _normalizar_bitcoin_serie(datos):
+    """Convierte el historial de CoinGecko a un precio diario en USD."""
+    if not isinstance(datos, dict) or not isinstance(datos.get("prices"), list):
+        raise FuenteNoDisponible("CoinGecko no entregó un historial válido.")
+
+    por_dia = {}
+
+    for registro in datos["prices"]:
+        if not isinstance(registro, (list, tuple)) or len(registro) != 2:
+            continue
+
+        marca, precio = registro
+
+        if (
+            isinstance(marca, bool)
+            or not isinstance(marca, (int, float))
+            or not _es_numero(precio)
+        ):
+            continue
+
+        try:
+            fecha = datetime.fromtimestamp(
+                marca / 1000, tz=_zona()
+            ).date().isoformat()
+        except (OverflowError, OSError, ValueError):
+            continue
+
+        # Conservar el registro más reciente de cada fecha chilena.
+        por_dia[fecha] = {"fecha": fecha, "valor": precio}
+
+    return {"serie": list(por_dia.values())}
+
+
 def _validar_resumen(datos):
     if not isinstance(datos, dict) or not any(_punto_valido(datos.get(i.codigo)) for i in CATALOGO):
         raise FuenteNoDisponible("La fuente respondió algo distinto a lo esperado (resumen de indicadores).")
@@ -260,7 +406,7 @@ def _validar_serie(datos):
         raise FuenteNoDisponible("La fuente respondió algo distinto a lo esperado (serie de un indicador).")
 
 
-def _consultar(ruta, validar):
+def _consultar(ruta, validar, normalizar=None, url_externa=None):
     """
     Devuelve (datos, info_de_cache). Orden de preferencia:
       1. caché reciente           -> no se llama a la API
@@ -268,7 +414,7 @@ def _consultar(ruta, validar):
       3. caché antigua (si la API falló) -> se marca como obsoleta
       4. nada                     -> FuenteNoDisponible
     """
-    url = f"{url_fuente()}{ruta}"
+    url = url_externa if url_externa is not None else f"{url_fuente()}{ruta}"
     clave = f"economia:{url}"
     ahora = time.time()
     guardado = cache.get(clave)
@@ -280,6 +426,8 @@ def _consultar(ruta, validar):
 
     try:
         datos = _descargar(url)
+        if normalizar is not None:
+            datos = normalizar(datos)
         validar(datos)
     except FuenteNoDisponible as e:
         log.warning("Fuente de indicadores no disponible: %s", e)
@@ -293,10 +441,17 @@ def _consultar(ruta, validar):
     return datos, {"usada": False, "antiguedad_segundos": 0, "obsoleta": False}
 
 
-def _meta(info_cache):
+def _meta(info_cache, fuente="indicadores.cl"):
     obtenidos = ahora_chile() - timedelta(seconds=info_cache["antiguedad_segundos"])
     meta = {
-        "fuente": {"nombre": "mindicador.cl", "url": url_fuente()},
+        "fuente": {
+            "nombre": fuente,
+            "url": (
+                "https://www.coingecko.com/"
+                if fuente == "CoinGecko"
+                else "https://indicadores.cl/api/"
+            ),
+        },
         "datos_obtenidos_en": obtenidos.isoformat(timespec="seconds"),
         "cache": info_cache,
     }
@@ -341,9 +496,31 @@ def _armar(ind, punto):
 # ---------------------------------------------------------------------------
 # API pública del módulo (la usan las vistas)
 # ---------------------------------------------------------------------------
+def _consultar_bitcoin_actual():
+    """Consulta Bitcoin en CoinGecko con caché independiente."""
+    url = (
+        "https://api.coingecko.com/api/v3/simple/price"
+        "?ids=bitcoin&vs_currencies=usd&include_last_updated_at=true"
+    )
+
+    return _consultar(
+        "",
+        _validar_resumen,
+        _normalizar_bitcoin_actual,
+        url_externa=url,
+    )
+
+
 def listar_actuales():
     """Último valor de todos los indicadores del catálogo."""
-    datos, info = _consultar("", _validar_resumen)
+    datos, info = _consultar("/hoy.json", _validar_resumen, _normalizar_resumen)
+    info_bitcoin = None
+
+    try:
+        datos_bitcoin, info_bitcoin = _consultar_bitcoin_actual()
+        datos.update(datos_bitcoin)
+    except FuenteNoDisponible as error:
+        log.warning("Bitcoin no disponible en CoinGecko: %s", error)
     indicadores, faltantes = [], []
     for ind in CATALOGO:
         punto = datos.get(ind.codigo)
@@ -351,13 +528,52 @@ def listar_actuales():
             indicadores.append(_armar(ind, punto))
         else:
             faltantes.append(ind.codigo)
-    return {"indicadores": indicadores, "no_entregados_por_la_fuente": faltantes, "meta": _meta(info)}
+        meta = _meta(info)
+    meta["fuentes"] = [meta["fuente"]]
+
+    if info_bitcoin is not None:
+        meta_bitcoin = _meta(info_bitcoin, fuente="CoinGecko")
+        meta["fuentes"].append(meta_bitcoin["fuente"])
+        meta["cache_bitcoin"] = info_bitcoin
+
+    return {
+        "indicadores": indicadores,
+        "no_entregados_por_la_fuente": faltantes,
+        "meta": meta,
+    }
+
+
+def _consultar_bitcoin_serie():
+    """Consulta el historial de Bitcoin con caché independiente."""
+    url = (
+        "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart"
+        "?vs_currency=usd&days=30"
+    )
+
+    return _consultar(
+        "",
+        _validar_serie,
+        _normalizar_bitcoin_serie,
+        url_externa=url,
+    )
 
 
 def detalle(codigo, ultimos=30):
     """Último valor de un indicador + sus valores anteriores y la variación."""
     ind = POR_CODIGO[codigo]
-    datos, info = _consultar(f"/{codigo}", _validar_serie)
+    ruta = {
+        "tasa_desempleo": "desempleo",
+        "libra_cobre": "cobre",
+    }.get(codigo, codigo)
+
+    if codigo == "bitcoin":
+        datos, info = _consultar_bitcoin_serie()
+    else:
+        datos, info = _consultar(
+            f"/{ruta}.json",
+            _validar_serie,
+            _normalizar_tpm if codigo == "tpm" else _normalizar_serie,
+        )
 
     # más reciente primero; se descartan fechas futuras (la UF se publica por adelantado)
     puntos = sorted(datos["serie"], key=lambda p: p["fecha"], reverse=True)
@@ -380,12 +596,18 @@ def detalle(codigo, ultimos=30):
     resultado["serie"] = [
         {"fecha": _fecha_del_dato(p["fecha"]).isoformat(), "valor": p["valor"]} for p in puntos[:ultimos]
     ]
-    return {"indicador": resultado, "meta": _meta(info)}
+    return {
+        "indicador": resultado,
+        "meta": _meta(
+            info,
+            fuente="CoinGecko" if codigo == "bitcoin" else "indicadores.cl",
+        ),
+    }
 
 
 def tasas_de_cambio():
     """Valor en pesos de CLP, UF, USD y EUR (para el conversor). Devuelve (tasas, meta)."""
-    datos, info = _consultar("", _validar_resumen)
+    datos, info = _consultar("/hoy.json", _validar_resumen, _normalizar_resumen)
     tasas = {"clp": {"pesos": 1, "fecha_dato": None, "indicador": None}}
     for moneda, codigo in MONEDAS.items():
         if codigo is None:
@@ -401,13 +623,17 @@ def tasas_de_cambio():
     return tasas, _meta(info)
 
 
+
 def probar_fuente():
     """
-    Para /api/salud/?probar_fuente=1. Llama a la fuente de verdad, SIN usar la caché
-    (si no, una caché reciente taparía una caída). Devuelve (ok, detalle).
+    Para /api/salud/?probar_fuente=1. Consulta la fuente directamente,
+    SIN usar la caché, para detectar una posible caída.
+    Devuelve (ok, detalle).
     """
     try:
-        _validar_resumen(_descargar(url_fuente()))
+        datos = _descargar(f"{url_fuente()}/hoy.json")
+        resumen = _normalizar_resumen(datos)
+        _validar_resumen(resumen)
         return True, "La fuente respondió correctamente."
     except FuenteNoDisponible as e:
         return False, str(e)

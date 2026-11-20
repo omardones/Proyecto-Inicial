@@ -55,7 +55,7 @@ El PDF pide contrastar los C antes de darlos por definitivos; el frontend puede 
 
 ## Datos en vivo
 
-- Fuente: [mindicador.cl](https://mindicador.cl/api) (pública, sin clave).
+- Fuentes: [indicadores.cl](https://indicadores.cl/api/) para indicadores económicos de Chile y [CoinGecko](https://www.coingecko.com/) para Bitcoin. Ambas se consultan mediante API, sin claves configuradas en esta integración.
 - Caché de 10 minutos. Si la fuente cae, se sigue sirviendo la última respuesta con `cache.obsoleta: true`
   y un `aviso`. Si no hay nada guardado, se responde 503.
 - Cada indicador trae `fecha_dato`, `dias_desde_el_dato` y `dato_atrasado`: algunos datos mensuales

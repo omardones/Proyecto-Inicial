@@ -28,7 +28,6 @@
 <hr>
 
 <h2 id="indicadores">Valores de hoy en Chile</h2>
-<p><code>GET /api/indicadores/</code></p>
 <p id="indicadores-estado">Cargando...</p>
 <div class="tabla">
   <table id="indicadores-tabla" hidden>
@@ -39,7 +38,6 @@
 <hr>
 
 <h2 id="conceptos">Conceptos</h2>
-<p><code>GET /api/conceptos/?nivel=</code></p>
 <p>
   <label for="nivel">Nivel:</label>
   <select id="nivel">
@@ -61,13 +59,11 @@
 <hr>
 
 <h2 id="ruta">Ruta de aprendizaje hasta Crédito hipotecario</h2>
-<p><code>GET /api/ruta-aprendizaje/?hasta=credito-hipotecario</code></p>
 <p id="ruta-estado">Cargando...</p>
 <ol id="ruta-lista"></ol>
 <hr>
 
 <h2 id="convertir">Convertidor</h2>
-<p><code>GET /api/herramientas/convertir/?de=usd&amp;a=clp&amp;monto=100</code></p>
 <form id="form">
   <p>
     <label for="monto">Monto:</label>
@@ -94,7 +90,7 @@
 <p id="convertir-resultado" aria-live="polite"></p>
 <hr>
 
-<p><small>Fuente de los datos: mindicador.cl, a través de esta API.</small></p>
+<p><small>Fuentes de los datos: indicadores.cl para indicadores económicos de Chile y CoinGecko para Bitcoin.</small></p>
 
 <script>
   // Todo el texto que viene de la API se inserta con textContent (nunca innerHTML).
