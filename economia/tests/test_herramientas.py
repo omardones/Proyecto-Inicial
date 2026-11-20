@@ -13,6 +13,7 @@ class FormatoTests(SimpleTestCase):
         self.assertEqual(formato_cl(72151), "72.151")
         self.assertEqual(formato_cl(4.5), "4,5")
         self.assertEqual(formato_cl(-0.2), "-0,2")
+        self.assertEqual(formato_cl(-0.001), "0")  # sin "-0"
         self.assertEqual(formato_cl(0), "0")
         self.assertEqual(formato_cl(100000), "100.000")
         self.assertEqual(formato_cl(1234567.891), "1.234.567,89")
