@@ -1,0 +1,15 @@
+
+{
+  "cambios": [
+    {
+      "fecha": "2026-10-23",
+      "tipo": "nominal",
+      "tasa": 4.5
+    },
+    {
+      "fecha": "2026-10-22",
+      "tipo": "nominal",
+      "tasa": 4.75
+    }
+  ]
+}

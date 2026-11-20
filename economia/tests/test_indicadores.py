@@ -15,6 +15,24 @@ def por_codigo(resultado):
 
 
 class ValoresTests(PruebaConFuenteFalsa):
+
+    def test_caida_de_coingecko_no_afecta_indicadores_chilenos(self):
+        self.fuente.caida_coingecko = True
+
+        resultado = indicadores.listar_actuales()
+        indicadores_por_codigo = por_codigo(resultado)
+
+        self.assertEqual(len(resultado["indicadores"]), 9)
+        self.assertNotIn("bitcoin", indicadores_por_codigo)
+        self.assertEqual(
+            resultado["no_entregados_por_la_fuente"],
+            ["bitcoin"],
+        )
+
+        self.assertEqual(indicadores_por_codigo["uf"]["valor"], 41215.77)
+        self.assertEqual(indicadores_por_codigo["dolar"]["valor"], 986.58)
+        self.assertEqual(indicadores_por_codigo["tpm"]["valor"], 4.5)
+
     def test_trae_los_diez_indicadores_con_los_valores_reales(self):
         r = indicadores.listar_actuales()
         ind = por_codigo(r)
@@ -46,9 +64,9 @@ class ValoresTests(PruebaConFuenteFalsa):
                 self.assertTrue(c["slug"] and c["nombre"])
 
     def test_indicador_que_la_fuente_no_entrega_se_informa_como_faltante(self):
-        resumen = cargar("mindicador_resumen.json")
+        resumen = cargar("indicadores_resumen.json")
         del resumen["euro"]
-        self.fuente.respuestas_fijas[""] = resumen
+        self.fuente.respuestas_fijas["/hoy.json"] = resumen
         r = indicadores.listar_actuales()
         self.assertEqual(r["no_entregados_por_la_fuente"], ["euro"])
         self.assertEqual(len(r["indicadores"]), 9)
@@ -83,7 +101,7 @@ class CacheTests(PruebaConFuenteFalsa):
     def test_segunda_consulta_usa_la_cache_y_no_llama_a_la_fuente(self):
         primera = self.llamar_en(1000.0)
         segunda = self.llamar_en(1100.0)
-        self.assertEqual(len(self.fuente.llamadas), 1)
+        self.assertEqual(len(self.fuente.llamadas), 2)
         self.assertFalse(primera["meta"]["cache"]["usada"])
         self.assertTrue(segunda["meta"]["cache"]["usada"])
         self.assertEqual(segunda["meta"]["cache"]["antiguedad_segundos"], 100)
@@ -91,7 +109,7 @@ class CacheTests(PruebaConFuenteFalsa):
     def test_la_cache_vence_a_los_10_minutos(self):
         self.llamar_en(1000.0)
         self.llamar_en(1000.0 + 601)
-        self.assertEqual(len(self.fuente.llamadas), 2)
+        self.assertEqual(len(self.fuente.llamadas), 4)
 
     def test_si_la_fuente_se_cae_se_sirve_la_cache_vieja_marcada_como_obsoleta(self):
         self.llamar_en(1000.0)
@@ -107,18 +125,24 @@ class CacheTests(PruebaConFuenteFalsa):
             indicadores.listar_actuales()
 
     def test_una_respuesta_rara_no_se_guarda_en_cache(self):
-        self.fuente.respuestas_fijas[""] = {"mensaje": "mantenimiento"}
+        self.fuente.respuestas_fijas["/hoy.json"] = {"mensaje": "mantenimiento"}
         with self.assertRaises(FuenteNoDisponible):
             indicadores.listar_actuales()
-        del self.fuente.respuestas_fijas[""]
+        del self.fuente.respuestas_fijas["/hoy.json"]
         self.assertEqual(len(indicadores.listar_actuales()["indicadores"]), 10)  # se recuperó
 
+
     def test_valores_no_numericos_se_rechazan(self):
-        resumen = cargar("mindicador_resumen.json")
-        for codigo in list(resumen):
-            if isinstance(resumen[codigo], dict):
-                resumen[codigo]["valor"] = "n/d"
-        self.fuente.respuestas_fijas[""] = resumen
+        resumen = cargar("indicadores_resumen.json")
+
+        for datos in resumen.values():
+            if isinstance(datos, dict):
+                for campo in ("valor", "variacionMensual", "variacionAnual", "tasa"):
+                    if campo in datos:
+                        datos[campo] = "n/d"
+
+        self.fuente.respuestas_fijas["/hoy.json"] = resumen
+
         with self.assertRaises(FuenteNoDisponible):
             indicadores.listar_actuales()
 
@@ -128,7 +152,7 @@ class DetalleTests(PruebaConFuenteFalsa):
         d = indicadores.detalle("uf", ultimos=30)["indicador"]
         self.assertEqual(d["valor"], 41215.77)  # no el de mañana (41219.54)
         self.assertEqual(d["serie"][0], {"fecha": "2026-10-25", "valor": 41215.77})
-        self.assertEqual(len(d["serie"]), 4)  # 5 puntos menos el de mañana
+        self.assertEqual(len(d["serie"]), 3)  # Excluye el futuro y el registro sin valor
         self.assertEqual(d["variacion"]["respecto_de"], "2026-10-24")
         self.assertEqual(d["variacion"]["absoluta"], 3.77)
         self.assertEqual(d["variacion"]["porcentual"], 0.0091)

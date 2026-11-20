@@ -138,7 +138,7 @@ MAILERS = {
 import os
 
 # API pública de donde salen los datos en vivo (UF, dólar, TPM, ...)
-ECONOMIA_FUENTE_URL = os.environ.get('ECONOMIA_FUENTE_URL', 'https://mindicador.cl/api')
+ECONOMIA_FUENTE_URL = os.environ.get('ECONOMIA_FUENTE_URL', 'https://indicadores.cl/api/v1')
 # Cuántos segundos se reutiliza una respuesta antes de volver a consultar la API
 ECONOMIA_CACHE_SEGUNDOS = 600
 # Tiempo máximo de espera a la API externa, en segundos

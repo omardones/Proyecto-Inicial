@@ -1,0 +1,39 @@
+
+{
+  "uf": {
+    "valor": 41215.77,
+    "fecha": "2026-10-25"
+  },
+  "dolar": {
+    "valor": 986.58,
+    "fecha": "2026-10-23"
+  },
+  "euro": {
+    "valor": 1107.27,
+    "fecha": "2026-10-23"
+  },
+  "utm": {
+    "valor": 72151,
+    "mes": "2026-10"
+  },
+  "tpm": {
+    "valor": 4.5,
+    "fecha": "2026-10-23"
+  },
+  "ipc": {
+    "variacionMensual": -0.2,
+    "mes": "2025-12"
+  },
+  "imacec": {
+    "variacionAnual": -1,
+    "mes": "2026-08"
+  },
+  "desempleo": {
+    "tasa": 9.64,
+    "mes": "2026-08"
+  },
+  "cobre": {
+    "valor": 6.56,
+    "fecha": "2026-10-23"
+  }
+}

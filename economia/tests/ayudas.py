@@ -1,11 +1,14 @@
 """
 Piezas compartidas por las pruebas.
 
-Las pruebas NUNCA llaman a internet: reemplazan indicadores._descargar por una
-"fuente falsa" que responde con los JSON de tests/fixtures/.
-  - mindicador_resumen.json      -> respuesta REAL de https://mindicador.cl/api (25-oct-2026)
-  - mindicador_uf_simulada.json  -> serie inventada, solo con la forma real
-  - mindicador_tpm_simulada.json -> idem
+Las pruebas NUNCA llaman a Internet: reemplazan indicadores._descargar
+por una fuente falsa que responde con los JSON de tests/fixtures/.
+
+Fuentes simuladas:
+- indicadores_resumen.json: resumen de indicadores.cl.
+- indicadores_uf_simulada.json: historial simulado de UF.
+- indicadores_tpm_simulada.json: historial simulado de TPM.
+- coingecko_bitcoin_actual.json: precio actual simulado de Bitcoin.
 """
 import json
 import logging
@@ -27,30 +30,50 @@ def cargar(nombre):
     return json.loads((FIXTURES / nombre).read_text(encoding="utf-8"))
 
 
+
 class FuenteFalsa:
-    """Hace de API externa: devuelve los fixtures, cuenta las llamadas y puede 'caerse'."""
+    """Simula indicadores.cl y CoinGecko sin realizar llamadas a Internet."""
 
     ARCHIVOS = {
-        "": "mindicador_resumen.json",
-        "/uf": "mindicador_uf_simulada.json",
-        "/tpm": "mindicador_tpm_simulada.json",
+        "/hoy.json": "indicadores_resumen.json",
+        "/uf.json": "indicadores_uf_simulada.json",
+        "/tpm.json": "indicadores_tpm_simulada.json",
     }
+
+    ARCHIVO_BITCOIN = "coingecko_bitcoin_actual.json"
 
     def __init__(self):
         self.llamadas = []
         self.caida = False
-        self.respuestas_fijas = {}  # ruta -> JSON a devolver (pisa al fixture)
+        self.caida_coingecko = False
+        self.respuestas_fijas = {}
 
     def __call__(self, url):
         self.llamadas.append(url)
+
         if self.caida:
             raise FuenteNoDisponible("simulado: sin conexión")
-        ruta = url[len(indicadores.url_fuente()):]
+
+        if url.startswith(indicadores.url_fuente()):
+            ruta = url[len(indicadores.url_fuente()):]
+            archivo = self.ARCHIVOS.get(ruta)
+        elif url.startswith("https://api.coingecko.com/api/v3/simple/price"):
+            if self.caida_coingecko:
+                raise FuenteNoDisponible("simulado: CoinGecko sin conexión")
+            ruta = "bitcoin_actual"
+            archivo = self.ARCHIVO_BITCOIN
+        else:
+            raise FuenteNoDisponible(f"simulado: URL desconocida '{url}'")
+
         if ruta in self.respuestas_fijas:
             return self.respuestas_fijas[ruta]
-        if ruta not in self.ARCHIVOS:
-            raise FuenteNoDisponible(f"simulado: no hay fixture para '{ruta}'")
-        return cargar(self.ARCHIVOS[ruta])
+
+        if archivo is None:
+            raise FuenteNoDisponible(
+                f"simulado: no hay fixture para '{ruta}'"
+            )
+
+        return cargar(archivo)
 
 
 class PruebaConFuenteFalsa(SimpleTestCase):

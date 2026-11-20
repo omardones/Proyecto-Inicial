@@ -182,7 +182,7 @@ class IndicadoresApiTests(ApiBase):
     def test_lista_de_indicadores(self):
         d = self.json("/api/indicadores/")
         self.assertEqual(len(d["indicadores"]), 10)
-        self.assertEqual(d["meta"]["fuente"]["nombre"], "mindicador.cl")
+        self.assertEqual(d["meta"]["fuente"]["nombre"], "indicadores.cl")
         uf = d["indicadores"][0]
         self.assertEqual((uf["codigo"], uf["valor"], uf["valor_formateado"]), ("uf", 41215.77, "$41.215,77"))
 
