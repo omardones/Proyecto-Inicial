@@ -47,12 +47,12 @@ ESTADOS = {
         "para_el_lector": "Esta definición viene de un libro de texto y aún no se contrasta con una fuente oficial.",
     },
     "P": {
-    "etiqueta": "PENDIENTE: sin verificación bibliográfica",
-    "para_el_lector": (
-        "Este concepto es una incorporación nueva y todavía "
-        "no cuenta con verificación bibliográfica."
-    ),
-},
+        "etiqueta": "PENDIENTE: sin verificación bibliográfica",
+        "para_el_lector": (
+            "Este concepto es una incorporación nueva y todavía "
+            "no cuenta con verificación bibliográfica."
+        ),
+    },
 }
 
 

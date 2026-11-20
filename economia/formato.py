@@ -12,4 +12,6 @@ def formato_cl(numero, decimales=2):
     texto = texto.replace(",", "_").replace(".", ",").replace("_", ".")  # '41.215,77'
     if "," in texto:
         texto = texto.rstrip("0").rstrip(",")
+    if texto == "-0":  # formato_cl(-0.001) -> '0', no '-0'
+        texto = "0"
     return texto

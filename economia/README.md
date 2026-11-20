@@ -12,7 +12,7 @@ No agrega dependencias: usa solo Django y la biblioteca estándar de Python.
 ```bash
 source .venv/bin/activate              # o el equivalente en tu sistema
 python manage.py runserver             # http://127.0.0.1:8000/api/
-python manage.py test economia         # 88 pruebas, no necesitan internet
+python manage.py test economia         # 92 pruebas, no necesitan internet
 ```
 
 Primera prueba real (comprueba que tu computador llega a la API de indicadores):
@@ -28,10 +28,10 @@ Abre `http://127.0.0.1:8000/api/` en el navegador: la API se describe sola, con 
 | Ruta | Para qué sirve |
 |---|---|
 | `GET /api/` | Mapa de la API con ejemplos |
-| `GET /api/conceptos/` | Los 78 conceptos. Filtros: `nivel`, `categoria`, `estado` (A/B/C), `q` (texto) |
+| `GET /api/conceptos/` | Los 78 conceptos. Filtros: `nivel`, `categoria`, `estado` (A/B/C/P), `q` (texto) |
 | `GET /api/conceptos/{slug}/` | Ficha completa: definición, ejemplo, prerrequisitos, qué desbloquea, fuentes y datos en vivo relacionados (`?en_vivo=0` para omitirlos) |
 | `GET /api/ruta-aprendizaje/` | En qué orden estudiar. `?hasta={slug}` entrega solo lo necesario para llegar a ese concepto |
-| `GET /api/fuentes/` | Fuentes consultadas y significado de A, B y C |
+| `GET /api/fuentes/` | Fuentes consultadas y significado de A, B, C y P |
 | `GET /api/indicadores/` | UF, dólar, euro, TPM, IPC, Imacec, desempleo, UTM, bitcoin y cobre, con explicación simple |
 | `GET /api/indicadores/{codigo}/` | Un indicador con su variación y valores anteriores (`?ultimos=30`) |
 | `GET /api/herramientas/convertir/` | `?de=usd&a=clp&monto=100` (monedas: `clp`, `uf`, `usd`, `eur`) con valores en vivo |
@@ -46,10 +46,11 @@ Reglas generales:
   Un valor como `100.000` se rechaza a propósito (en Chile significa cien mil, pero aquí valdría 100).
 - Para el frontend: todas las rutas del `/api/` envían cabeceras CORS (`ECONOMIA_CORS_ORIGEN`).
 
-## Verificación del contenido (A, B, C)
+## Verificación del contenido (A, B, C, P)
 
 Cada concepto conserva el estado del PDF, y la API lo entrega junto a una frase para el lector:
-**A** verificado en fuente oficial, **B** parcialmente, **C** solo bibliografía (Mankiw, sin contrastar en línea).
+**A** verificado en fuente oficial, **B** parcialmente, **C** solo bibliografía (Mankiw, sin contrastar en línea)
+y **P** pendiente (incorporación nueva, aún sin verificación bibliográfica).
 El PDF pide contrastar los C antes de darlos por definitivos; el frontend puede mostrar la insignia.
 
 ## Datos en vivo
@@ -77,4 +78,4 @@ El PDF pide contrastar los C antes de darlos por definitivos; el frontend puede 
 | `herramientas.py` | Calculadoras (funciones puras, con `Decimal`) |
 | `views.py` / `urls.py` | Rutas, validación de parámetros y respuestas |
 | `respuestas.py`, `middleware.py`, `formato.py` | JSON y errores, CORS, formato chileno de números |
-| `tests/` | 88 pruebas; los datos de internet se simulan con `tests/fixtures/` |
+| `tests/` | 92 pruebas; los datos de internet se simulan con `tests/fixtures/` |
