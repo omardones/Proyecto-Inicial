@@ -9,7 +9,7 @@ from decimal import Decimal
 from django.http import HttpResponsePermanentRedirect
 from django.urls import Resolver404, resolve
 
-from . import conceptos, herramientas, indicadores
+from . import conceptos, herramientas, indicadores, quiz
 from .indicadores import FuenteNoDisponible
 from .respuestas import error, ok, solo_lectura
 
@@ -122,6 +122,8 @@ def indice(request):
                    "estado": "A | B | C | P (qué tan respaldado está)", "q": "texto a buscar"}),
                 e("/api/conceptos/{slug}/", "Ficha completa: definición, ejemplo, prerrequisitos, fuentes y datos en vivo relacionados.",
                   "/api/conceptos/uf/", {"en_vivo": "0 para no incluir datos en vivo (por defecto 1)"}),
+                e("/api/conceptos/{slug}/quiz/", "Mini quiz de 2 o 3 preguntas armadas con el contenido del concepto.",
+                  "/api/conceptos/uf/quiz/", {"semilla": "entero opcional: otro número cambia las alternativas"}),
                 e("/api/ruta-aprendizaje/", "En qué orden estudiar los conceptos (todos, o solo lo necesario para llegar a uno).",
                   "/api/ruta-aprendizaje/?hasta=credito-hipotecario", {"hasta": "slug del concepto al que quieres llegar"}),
                 e("/api/fuentes/", "Fuentes consultadas y significado de los estados de verificación A, B, C y P."),
@@ -140,6 +142,11 @@ def indice(request):
                   {"capital": "pesos", "tasa": "% anual", "anios": "entero"}),
                 e("/api/herramientas/tasa-real/", "Cuánto crece de verdad tu poder de compra: tasa nominal vs. inflación.",
                   "/api/herramientas/tasa-real/?nominal=5&inflacion=4", {"nominal": "% anual", "inflacion": "% anual"}),
+                e("/api/herramientas/credito/", "Cuota mensual, total pagado e intereses de un crédito en cuotas fijas.",
+                  "/api/herramientas/credito/?monto=1000000&tasa=24&meses=24",
+                  {"monto": "monto pedido", "tasa": "% anual (0 a 100)", "meses": "entero, 1 a 480"}),
+                e("/api/herramientas/presupuesto/", "Reparte un ingreso mensual con la regla 50/30/20.",
+                  "/api/herramientas/presupuesto/?ingreso=700000", {"ingreso": "pesos al mes"}),
             ],
             "sistema": [
                 e("/api/salud/", "¿El servidor está funcionando?", "/api/salud/?probar_fuente=1",
@@ -224,6 +231,19 @@ def concepto_detalle(request, slug):
                 "detalle": str(e),
             }
     return ok({"concepto": ficha})
+
+
+@solo_lectura
+def concepto_quiz(request, slug):
+    if conceptos.obtener(slug) is None:
+        return error(
+            "no_encontrado", f"No existe el concepto '{slug}'. Mira /api/conceptos/ para ver todos.", 404,
+        )
+    try:
+        semilla = _entero(request, "semilla", 0, 999999, defecto=0)
+    except ParametroInvalido as e:
+        return _parametro_invalido(e)
+    return ok({"quiz": quiz.generar(slug, semilla)})
 
 
 @solo_lectura
@@ -356,3 +376,23 @@ def no_encontrado(request, ruta=""):
     return error(
         "no_encontrado", "Esa ruta no existe. Mira /api/ para ver todo lo que ofrece la API.", 404,
     )
+
+
+@solo_lectura
+def credito(request):
+    try:
+        monto = _numero(request, "monto", Decimal("1"), Decimal("1000000000000"), "1000000")
+        tasa = _numero(request, "tasa", Decimal(0), Decimal(100), "24")
+        meses = _entero(request, "meses", 1, 480)
+    except ParametroInvalido as e:
+        return _parametro_invalido(e)
+    return ok({"credito": herramientas.credito(monto, tasa, meses)})
+
+
+@solo_lectura
+def presupuesto(request):
+    try:
+        ingreso = _numero(request, "ingreso", Decimal("1"), Decimal("1000000000000"), "700000")
+    except ParametroInvalido as e:
+        return _parametro_invalido(e)
+    return ok({"presupuesto": herramientas.presupuesto(ingreso)})

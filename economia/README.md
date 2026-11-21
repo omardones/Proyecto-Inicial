@@ -12,7 +12,7 @@ No agrega dependencias: usa solo Django y la biblioteca estándar de Python.
 ```bash
 source .venv/bin/activate              # o el equivalente en tu sistema
 python manage.py runserver             # http://127.0.0.1:8000/api/
-python manage.py test economia         # 92 pruebas, no necesitan internet
+python manage.py test economia         # 109 pruebas, no necesitan internet
 ```
 
 Primera prueba real (comprueba que tu computador llega a la API de indicadores):
@@ -30,6 +30,7 @@ Abre `http://127.0.0.1:8000/api/` en el navegador: la API se describe sola, con 
 | `GET /api/` | Mapa de la API con ejemplos |
 | `GET /api/conceptos/` | Los 78 conceptos. Filtros: `nivel`, `categoria`, `estado` (A/B/C/P), `q` (texto) |
 | `GET /api/conceptos/{slug}/` | Ficha completa: definición, ejemplo, prerrequisitos, qué desbloquea, fuentes y datos en vivo relacionados (`?en_vivo=0` para omitirlos) |
+| `GET /api/conceptos/{slug}/quiz/` | Mini quiz de 2 o 3 preguntas armadas con la definición, el ejemplo y los prerrequisitos del concepto (`?semilla=N` cambia las alternativas) |
 | `GET /api/ruta-aprendizaje/` | En qué orden estudiar. `?hasta={slug}` entrega solo lo necesario para llegar a ese concepto |
 | `GET /api/fuentes/` | Fuentes consultadas y significado de A, B, C y P |
 | `GET /api/indicadores/` | UF, dólar, euro, TPM, IPC, Imacec, desempleo, UTM, bitcoin y cobre, con explicación simple |
@@ -37,6 +38,8 @@ Abre `http://127.0.0.1:8000/api/` en el navegador: la API se describe sola, con 
 | `GET /api/herramientas/convertir/` | `?de=usd&a=clp&monto=100` (monedas: `clp`, `uf`, `usd`, `eur`) con valores en vivo |
 | `GET /api/herramientas/interes-compuesto/` | `?capital=100000&tasa=10&anios=2` |
 | `GET /api/herramientas/tasa-real/` | `?nominal=5&inflacion=4` |
+| `GET /api/herramientas/credito/` | `?monto=1000000&tasa=24&meses=24`: cuota fija, total pagado, intereses y tasa efectiva |
+| `GET /api/herramientas/presupuesto/` | `?ingreso=700000`: reparte el ingreso con la regla 50/30/20 |
 | `GET /api/salud/` | Estado del servidor (`?probar_fuente=1` prueba también la API externa) |
 
 Reglas generales:
@@ -76,6 +79,7 @@ El PDF pide contrastar los C antes de darlos por definitivos; el frontend puede 
 | `conceptos.py` | Carga, búsqueda, prerrequisitos y ruta de aprendizaje |
 | `indicadores.py` | Catálogo de indicadores, cliente de la API externa y caché |
 | `herramientas.py` | Calculadoras (funciones puras, con `Decimal`) |
+| `quiz.py` | Arma el mini quiz de cada concepto con el contenido del PDF |
 | `views.py` / `urls.py` | Rutas, validación de parámetros y respuestas |
 | `respuestas.py`, `middleware.py`, `formato.py` | JSON y errores, CORS, formato chileno de números |
-| `tests/` | 92 pruebas; los datos de internet se simulan con `tests/fixtures/` |
+| `tests/` | 109 pruebas; los datos de internet se simulan con `tests/fixtures/` |

@@ -103,3 +103,95 @@ def convertir(monto, de, a, tasas):
             f"{formato_cl(float(resultado.quantize(DOS_DECIMALES, rounding=ROUND_HALF_UP)))} {a.upper()}"
         ),
     }
+
+
+def credito(monto, tasa_anual_pct, meses):
+    """
+    Conceptos: Deuda, Interés, CAE y Crédito hipotecario.
+    Cuota fija mensual (sistema francés, el más usado en Chile): todas las cuotas son iguales;
+    al principio casi todo es interés y al final casi todo es capital.
+
+    La tasa anual se pasa a mensual dividiendo por 12 (como la informan los bancos).
+    No incluye seguros ni comisiones: por eso el CAE real de un crédito es más alto.
+    """
+    i = tasa_anual_pct / CIEN / 12
+    if i == 0:
+        cuota = monto / meses
+    else:
+        cuota = monto * i / (1 - (1 + i) ** -meses)
+
+    saldo = monto
+    por_anio = []
+    interes_anio = capital_anio = Decimal(0)
+    for mes in range(1, meses + 1):
+        interes = saldo * i
+        amortizacion = cuota - interes
+        saldo -= amortizacion
+        interes_anio += interes
+        capital_anio += amortizacion
+        if mes % 12 == 0 or mes == meses:
+            por_anio.append({
+                "anio": (mes + 11) // 12,
+                "intereses_pagados": _r(interes_anio),
+                "capital_pagado": _r(capital_anio),
+                "saldo_pendiente": _r(max(saldo, Decimal(0))),
+            })
+            interes_anio = capital_anio = Decimal(0)
+
+    total = cuota * meses
+    intereses = total - monto
+    tasa_efectiva = ((1 + i) ** 12 - 1) * CIEN
+    return {
+        "monto": _r(monto),
+        "tasa_anual_pct": float(tasa_anual_pct),
+        "meses": meses,
+        "cuota_mensual": _r(cuota),
+        "total_pagado": _r(total),
+        "total_intereses": _r(intereses),
+        "intereses_sobre_monto_pct": _r(intereses / monto * CIEN),
+        "tasa_efectiva_anual_pct": _r(tasa_efectiva),
+        "detalle_por_anio": por_anio,
+        "advertencia": "No incluye seguros, comisiones ni impuestos: el CAE que informa el banco será mayor.",
+        "lectura_simple": (
+            f"Pides {formato_cl(_r(monto))} a {meses} {'mes' if meses == 1 else 'meses'} al "
+            f"{formato_cl(float(tasa_anual_pct))} % anual: pagas {meses} cuotas de "
+            f"{formato_cl(_r(cuota))}. En total devuelves {formato_cl(_r(total))}, "
+            f"o sea {formato_cl(_r(intereses))} en intereses."
+        ),
+    }
+
+
+# Regla 50/30/20: una guía común de educación financiera (no es una norma oficial).
+REGLA_PRESUPUESTO = (
+    ("necesidades", "Necesidades", 50, "Arriendo, comida, transporte, cuentas básicas y deudas mínimas."),
+    ("deseos", "Gustos", 30, "Salidas, ropa que no es urgente, suscripciones, viajes."),
+    ("ahorro", "Ahorro e inversión", 20, "Fondo de emergencia, metas y pagar deudas antes de tiempo."),
+)
+
+
+def presupuesto(ingreso):
+    """
+    Conceptos: Presupuesto, Ahorro y Capacidad de ahorro.
+    Reparte un ingreso mensual con la regla 50/30/20.
+    """
+    partes = []
+    for clave, nombre, pct, ejemplos in REGLA_PRESUPUESTO:
+        partes.append({
+            "clave": clave,
+            "nombre": nombre,
+            "porcentaje": pct,
+            "monto": _r(ingreso * pct / CIEN),
+            "ejemplos": ejemplos,
+        })
+    ahorro = partes[2]["monto"]
+    return {
+        "ingreso_mensual": _r(ingreso),
+        "partes": partes,
+        "ahorro_en_un_anio": _r(Decimal(str(ahorro)) * 12),
+        "lectura_simple": (
+            f"Con {_pesos(ingreso)} al mes: {_pesos(Decimal(str(partes[0]['monto'])))} para necesidades, "
+            f"{_pesos(Decimal(str(partes[1]['monto'])))} para gustos y {_pesos(Decimal(str(ahorro)))} para ahorrar. "
+            f"Ahorrando eso cada mes juntas {_pesos(Decimal(str(ahorro)) * 12)} en un año."
+        ),
+        "nota": "La regla 50/30/20 es una guía de referencia, no una norma: ajústala a tu realidad.",
+    }

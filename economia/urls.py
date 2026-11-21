@@ -8,6 +8,7 @@ urlpatterns = [
     # Conceptos
     path("conceptos/", views.conceptos_lista),
     path("conceptos/<slug:slug>/", views.concepto_detalle),
+    path("conceptos/<slug:slug>/quiz/", views.concepto_quiz),
     path("ruta-aprendizaje/", views.ruta_aprendizaje),
     path("fuentes/", views.fuentes),
     # Datos en vivo
@@ -17,6 +18,8 @@ urlpatterns = [
     path("herramientas/convertir/", views.convertir),
     path("herramientas/interes-compuesto/", views.interes_compuesto),
     path("herramientas/tasa-real/", views.tasa_real),
+    path("herramientas/credito/", views.credito),
+    path("herramientas/presupuesto/", views.presupuesto),
     # Cualquier otra cosa bajo /api/ -> 404 en JSON (siempre al final)
     re_path(r"^.*$", views.no_encontrado),
 ]
