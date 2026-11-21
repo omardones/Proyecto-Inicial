@@ -3,268 +3,1127 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Conceptos de economía y finanzas personales explicados en simple, con datos de Chile en vivo.">
 <title>Economía para jóvenes</title>
+{% verbatim %}
 <style>
-  /* Página deliberadamente básica: casi todo es estilo por defecto del navegador. */
-  body { font-family: "Times New Roman", Times, serif; max-width: 760px; margin: 8px auto; padding: 0 12px; }
-  table { border-collapse: collapse; }
-  th, td { border: 1px solid gray; padding: 4px 8px; text-align: left; }
-  .tabla { overflow-x: auto; }
-  .aviso { background: #fff3b0; color: #000; border: 1px solid gray; padding: 4px 8px; }
-  code { font-family: "Courier New", monospace; }
+  :root {
+    --fondo: #f4f6fb;
+    --superficie: #ffffff;
+    --superficie-2: #eef2f9;
+    --texto: #15203b;
+    --texto-suave: #55617d;
+    --borde: #dde3ef;
+    --marino: #0d1735;
+    --marino-2: #16254f;
+    --acento: #ffc629;
+    --acento-texto: #1b1400;
+    --enlace: #1b5fd1;
+    --exito: #0f8a55;
+    --alerta-fondo: #fff4d1;
+    --alerta-texto: #6b4b00;
+    --error: #c62f2f;
+    --sombra: 0 1px 2px rgba(13,23,53,.06), 0 6px 20px rgba(13,23,53,.06);
+    --radio: 14px;
+    /* Colores por categoría (los mismos tonos que la malla) */
+    --cat-fundamentos: #0a7fe0;
+    --cat-ahorro-e-inversion: #06a85f;
+    --cat-deudas-y-creditos: #e0352a;
+    --cat-macroeconomia: #7336ee;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0b1229;
+      --superficie: #121c3a;
+      --superficie-2: #1a2649;
+      --texto: #e8edf8;
+      --texto-suave: #a5b1cc;
+      --borde: #26345e;
+      --enlace: #8cc4ff;
+      --exito: #4fe89d;
+      --alerta-fondo: #3a2f0b;
+      --alerta-texto: #ffd97a;
+      --error: #ff8a8a;
+      --sombra: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+      --cat-fundamentos: #62c4ff;
+      --cat-ahorro-e-inversion: #4fe89d;
+      --cat-deudas-y-creditos: #ff8676;
+      --cat-macroeconomia: #b88dff;
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+  body {
+    margin: 0; background: var(--fondo); color: var(--texto);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--enlace); }
+  h1, h2, h3 { line-height: 1.2; margin: 0; }
+  .contenedor { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Barra de navegación ---------- */
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(13,23,53,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .nav .contenedor { display: flex; align-items: center; gap: 16px; height: 60px; }
+  .marca { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 800; letter-spacing: .01em; white-space: nowrap; }
+  .marca-logo { width: 32px; height: 32px; border-radius: 9px; background: var(--acento); color: var(--acento-texto); display: grid; place-items: center; font-size: 18px; }
+  .nav-enlaces { display: flex; gap: 4px; margin-left: auto; list-style: none; padding: 0; margin-top: 0; margin-bottom: 0; }
+  .nav-enlaces a { display: block; padding: 8px 12px; border-radius: 8px; color: #cfd8ea; text-decoration: none; font-size: .94rem; }
+  .nav-enlaces a:hover, .nav-enlaces a:focus-visible { color: #fff; background: rgba(255,255,255,.08); }
+  .nav-enlaces a.destacado { background: var(--acento); color: var(--acento-texto); font-weight: 700; }
+  .nav-enlaces a.destacado:hover { background: #ffd34f; }
+  .menu-boton { display: none; margin-left: auto; background: none; border: 1px solid rgba(255,255,255,.25); color: #fff; border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
+  @media (max-width: 860px) {
+    .menu-boton { display: block; }
+    .nav-enlaces { display: none; position: absolute; top: 60px; left: 0; right: 0; flex-direction: column; padding: 8px 16px 16px; background: var(--marino); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .nav-enlaces.abierto { display: flex; }
+  }
+
+  /* ---------- Portada ---------- */
+  .portada {
+    color: #fff; padding: 64px 0 88px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 80% 10%, rgba(255,198,41,.16), transparent 55%),
+      radial-gradient(ellipse at 15% 90%, rgba(70,120,215,.35), transparent 60%),
+      linear-gradient(165deg, var(--marino) 0%, var(--marino-2) 100%);
+  }
+  .portada-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; }
+  @media (max-width: 860px) { .portada-grid { grid-template-columns: 1fr; } .portada { padding: 44px 0 72px; } }
+  .etiqueta-portada { display: inline-block; font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--acento); margin-bottom: 14px; }
+  .portada h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -.02em; }
+  .portada h1 span { color: var(--acento); }
+  .portada p.bajada { font-size: 1.12rem; color: #cfd8ea; max-width: 34em; margin: 18px 0 28px; }
+  .acciones { display: flex; gap: 12px; flex-wrap: wrap; }
+  .boton {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 700; cursor: pointer; text-decoration: none;
+    padding: 11px 20px; border-radius: 10px; border: 1px solid transparent; transition: background .15s, transform .15s;
+  }
+  .boton:active { transform: translateY(1px); }
+  .boton-principal { background: var(--acento); color: var(--acento-texto); }
+  .boton-principal:hover { background: #ffd34f; }
+  .boton-fantasma { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.06); }
+  .boton-fantasma:hover { background: rgba(255,255,255,.14); }
+  .cifras { display: flex; gap: 28px; margin-top: 32px; flex-wrap: wrap; }
+  .cifras div { font-size: .88rem; color: #a9b6d3; }
+  .cifras strong { display: block; font-size: 1.6rem; color: #fff; }
+
+  .panel-vivo {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 18px;
+    padding: 20px; backdrop-filter: blur(4px);
+  }
+  .panel-vivo h2 { font-size: .9rem; font-weight: 700; color: #cfd8ea; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .punto-vivo { width: 8px; height: 8px; border-radius: 50%; background: #4fe89d; box-shadow: 0 0 0 4px rgba(79,232,157,.2); }
+  .vivo-lista { display: grid; gap: 10px; }
+  .vivo-fila { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.05); }
+  .vivo-fila span { color: #cfd8ea; font-size: .95rem; }
+  .vivo-fila strong { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+  .vivo-pie { font-size: .78rem; color: #8e9bbb; margin-top: 12px; }
+
+  /* ---------- Secciones ---------- */
+  section.bloque { padding: 72px 0; }
+  section.bloque.alterno { background: var(--superficie); border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); }
+  .encabezado { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+  .encabezado h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -.01em; }
+  .encabezado p { margin: 6px 0 0; color: var(--texto-suave); max-width: 40em; }
+  .solapa { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--enlace); margin-bottom: 6px; }
+
+  .estado { color: var(--texto-suave); }
+  .estado.error { color: var(--error); }
+  .tarjeta {
+    background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio);
+    box-shadow: var(--sombra);
+  }
+  section.alterno .tarjeta { background: var(--fondo); box-shadow: none; }
+
+  /* Indicadores */
+  .grilla-ind { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+  .ind { padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .ind-cabeza { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .ind-nombre { font-weight: 700; font-size: .95rem; color: var(--texto-suave); }
+  .ind-valor { font-size: 1.7rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .ind-lectura { font-size: .9rem; color: var(--texto-suave); margin: 0; }
+  .ind-pie { margin-top: auto; padding-top: 10px; font-size: .8rem; color: var(--texto-suave); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .ind details { font-size: .88rem; }
+  .ind summary { cursor: pointer; color: var(--enlace); }
+  .ind details p { margin: 6px 0 0; color: var(--texto-suave); }
+  .insignia { display: inline-flex; align-items: center; gap: 4px; font-size: .74rem; font-weight: 700; padding: 3px 8px; border-radius: 99px; white-space: nowrap; }
+  .insignia-alerta { background: var(--alerta-fondo); color: var(--alerta-texto); }
+  .aviso { background: var(--alerta-fondo); color: var(--alerta-texto); padding: 10px 14px; border-radius: 10px; margin: 0 0 16px; font-size: .92rem; }
+
+  /* Conceptos */
+  .filtros { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .buscador { flex: 1 1 260px; position: relative; }
+  .buscador input[type="search"] { padding-left: 40px; }
+  .buscador svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--texto-suave); }
+  input[type="text"], input[type="number"], input[type="search"], select {
+    font: inherit; color: var(--texto); background: var(--superficie); border: 1px solid var(--borde);
+    border-radius: 10px; padding: 10px 12px; min-height: 44px; width: 100%;
+  }
+  select { width: auto; cursor: pointer; }
+  input:focus, select:focus, button:focus-visible, a:focus-visible, .concepto:focus-visible { outline: 3px solid rgba(255,198,41,.7); outline-offset: 2px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .chip {
+    font: inherit; font-size: .88rem; cursor: pointer; padding: 7px 14px; border-radius: 99px;
+    border: 1px solid var(--borde); background: var(--superficie); color: var(--texto);
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .chip[aria-pressed="true"] { background: var(--texto); color: var(--fondo); border-color: var(--texto); }
+  .chip .punto { width: 9px; height: 9px; border-radius: 50%; }
+  .grilla-conceptos { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .concepto {
+    text-align: left; font: inherit; color: inherit; cursor: pointer; width: 100%;
+    padding: 16px 16px 16px 20px; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; gap: 8px; transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .concepto::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--color-cat, var(--enlace)); }
+  .concepto:hover { transform: translateY(-2px); border-color: var(--color-cat, var(--enlace)); }
+  .concepto h3 { font-size: 1.05rem; }
+  .concepto p { margin: 0; font-size: .9rem; color: var(--texto-suave); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .meta { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pastilla { font-size: .74rem; font-weight: 700; padding: 3px 9px; border-radius: 99px; background: var(--superficie-2); color: var(--texto-suave); }
+  .pastilla.cat { color: var(--color-cat); }
+  .verif { font-size: .72rem; font-weight: 800; width: 22px; height: 22px; border-radius: 6px; display: inline-grid; place-items: center; }
+  .verif-A { background: rgba(15,138,85,.14); color: var(--exito); }
+  .verif-B { background: rgba(27,95,209,.12); color: var(--enlace); }
+  .verif-C { background: var(--alerta-fondo); color: var(--alerta-texto); }
+  .verif-P { background: var(--superficie-2); color: var(--texto-suave); }
+  .leyenda-verif { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 22px; font-size: .85rem; color: var(--texto-suave); }
+  .leyenda-verif span { display: inline-flex; align-items: center; gap: 7px; }
+  .mas { display: flex; justify-content: center; margin-top: 20px; }
+  .mas[hidden] { display: none; }
+  .boton-secundario { background: var(--superficie); color: var(--texto); border-color: var(--borde); }
+  .boton-secundario:hover { background: var(--superficie-2); }
+  .vacio { padding: 40px; text-align: center; color: var(--texto-suave); grid-column: 1 / -1; }
+
+  /* Ruta de aprendizaje */
+  .ruta-controles { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+  .ruta-controles label { font-weight: 600; }
+  .ruta-controles select { max-width: 100%; }
+  .ruta { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; counter-reset: paso; }
+  .paso { padding: 14px 14px 14px 56px; position: relative; min-height: 64px; display: flex; flex-direction: column; justify-content: center; }
+  .paso::before {
+    counter-increment: paso; content: counter(paso);
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 800; font-size: .85rem; background: var(--superficie-2); color: var(--texto);
+  }
+  .paso:last-child::before { background: var(--acento); color: var(--acento-texto); }
+  .paso.hecho::before { content: "✓"; background: var(--exito); color: #fff; }
+  .paso.hecho button { color: var(--texto-suave); }
+  .paso.siguiente { border-color: var(--acento); box-shadow: 0 0 0 1px var(--acento) inset; }
+  .paso.siguiente small::after { content: " · Sigue aquí"; color: var(--alerta-texto); font-weight: 700; }
+  .ruta-progreso { display: flex; align-items: center; gap: 14px 18px; flex-wrap: wrap; margin-bottom: 20px; padding: 16px 18px; }
+  .ruta-progreso .texto { font-weight: 700; }
+  .ruta-progreso .texto small { display: block; font-weight: 400; color: var(--texto-suave); }
+  .barra-progreso { flex: 1 1 160px; height: 10px; border-radius: 99px; background: var(--superficie-2); overflow: hidden; }
+  .barra-progreso div { height: 100%; width: 0; background: linear-gradient(90deg, #ffd54a, #ffb300); transition: width .3s; }
+  .ruta-progreso .acciones-ruta { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .ruta-progreso a { font-size: .9rem; }
+  .check-aprendido { display: none; font-size: .74rem; font-weight: 800; padding: 3px 9px; border-radius: 99px; background: rgba(15,138,85,.14); color: var(--exito); }
+  .concepto.aprendido .check-aprendido { display: inline-block; }
+  .paso button { all: unset; cursor: pointer; font-weight: 700; color: var(--texto); }
+  .paso button:hover { color: var(--enlace); text-decoration: underline; }
+  .paso button:focus-visible { outline: 3px solid rgba(255,198,41,.7); outline-offset: 2px; border-radius: 4px; }
+  .paso small { color: var(--texto-suave); }
+
+  /* Herramientas */
+  .grilla-herr { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .herr { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .herr-icono { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--superficie-2); font-size: 20px; }
+  .herr h3 { font-size: 1.15rem; }
+  .herr > p { margin: 0; color: var(--texto-suave); font-size: .92rem; }
+  .campos { display: grid; gap: 10px; }
+  .campos.dos { grid-template-columns: 1fr 1fr; }
+  .campo label { display: block; font-size: .84rem; font-weight: 600; margin-bottom: 4px; color: var(--texto-suave); }
+  .campo select { width: 100%; }
+  .resultado { min-height: 3.2em; padding: 12px 14px; border-radius: 10px; background: var(--superficie-2); font-size: .95rem; }
+  .resultado strong.grande { display: block; font-size: 1.5rem; font-variant-numeric: tabular-nums; margin-bottom: 2px; }
+  .resultado.error { color: var(--error); }
+  .ayuda { font-size: .8rem; color: var(--texto-suave); margin: 0; }
+  .barras { display: flex; align-items: end; gap: 3px; height: 70px; margin-top: 10px; }
+  .barras div { flex: 1; background: var(--enlace); border-radius: 3px 3px 0 0; opacity: .75; min-height: 2px; }
+  .barras div:last-child { background: var(--acento); opacity: 1; }
+  .herr .boton-principal { align-self: start; }
+
+  /* Ficha del concepto (panel lateral) */
+  .velo { position: fixed; inset: 0; background: rgba(5,9,22,.55); z-index: 40; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .velo.visible { opacity: 1; pointer-events: auto; }
+  .ficha {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%); z-index: 41;
+    background: var(--superficie); color: var(--texto); box-shadow: -10px 0 40px rgba(0,0,0,.25);
+    transform: translateX(100%); transition: transform .25s ease; display: flex; flex-direction: column;
+  }
+  .ficha.visible { transform: none; }
+  .ficha-cabeza { padding: 20px 22px 16px; border-bottom: 1px solid var(--borde); position: relative; }
+  .ficha-cabeza::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 5px; background: var(--color-cat, var(--enlace)); }
+  .ficha-cabeza h2 { font-size: 1.5rem; margin: 10px 40px 0 0; }
+  .cerrar { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--borde); background: var(--superficie); color: var(--texto); font-size: 1.3rem; cursor: pointer; }
+  .cerrar:hover { background: var(--superficie-2); }
+  .ficha-ruta { padding: 12px 22px; border-bottom: 1px solid var(--borde); background: var(--superficie-2); font-size: .88rem; }
+  .ficha-ruta[hidden] { display: none; }
+  .ficha-ruta-texto { display: flex; justify-content: space-between; gap: 10px; color: var(--texto-suave); margin-bottom: 8px; }
+  .ficha-ruta-texto strong { color: var(--texto); }
+  .puntos-ruta { display: flex; gap: 4px; }
+  .puntos-ruta button { flex: 1; height: 8px; min-width: 6px; padding: 0; border: 0; border-radius: 99px; background: var(--borde); cursor: pointer; }
+  .puntos-ruta button.hecho { background: var(--exito); }
+  .puntos-ruta button.actual { background: var(--acento); outline: 2px solid var(--acento); outline-offset: 1px; }
+  .ficha-pie { flex: none; padding: 14px 22px; border-top: 1px solid var(--borde); background: var(--superficie); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .ficha-pie .boton { padding: 10px 14px; }
+  .ficha-pie .crece { flex: 1 1 auto; }
+  .ficha-pie .boton[disabled] { opacity: .4; cursor: default; }
+  .boton-exito { background: rgba(15,138,85,.14); color: var(--exito); border-color: transparent; }
+  .boton-exito:hover { background: rgba(15,138,85,.22); }
+  .felicitacion { width: 100%; padding: 12px 14px; border-radius: 10px; background: rgba(15,138,85,.12); color: var(--exito); font-weight: 700; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .felicitacion a { color: inherit; }
+  .pista-previos { font-size: .85rem; color: var(--texto-suave); }
+  .ficha-cuerpo { flex: 1; padding: 20px 22px 32px; overflow-y: auto; display: grid; gap: 22px; align-content: start; }
+  .ficha-cuerpo h3 { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--texto-suave); margin-bottom: 8px; }
+  .ficha-cuerpo p { margin: 0; }
+  .definicion { font-size: 1.08rem; }
+  .ejemplo { padding: 14px 16px; border-radius: 12px; background: var(--superficie-2); border-left: 4px solid var(--acento); }
+  .lista-enlaces { display: flex; flex-wrap: wrap; gap: 8px; }
+  .lista-enlaces button { font: inherit; font-size: .88rem; cursor: pointer; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--borde); background: var(--superficie); color: var(--enlace); }
+  .lista-enlaces button:hover { background: var(--superficie-2); }
+  .fuentes-lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: .92rem; }
+  .fuentes-lista li small { display: block; color: var(--texto-suave); }
+  .verif-caja { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--borde); border-radius: 12px; font-size: .92rem; }
+  .verif-caja .verif { flex: none; width: 28px; height: 28px; font-size: .85rem; }
+  .verif-caja small { display: block; color: var(--texto-suave); margin-top: 2px; }
+  .vivo-mini { display: grid; gap: 8px; }
+  .vivo-mini div { display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--superficie-2); }
+  .vivo-mini strong { font-variant-numeric: tabular-nums; }
+  body.sin-scroll { overflow: hidden; }
+
+  /* Pie */
+  footer { background: var(--marino); color: #a9b6d3; padding: 44px 0; font-size: .9rem; }
+  footer .contenedor { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+  @media (max-width: 700px) { footer .contenedor { grid-template-columns: 1fr; } }
+  footer a { color: #cfe3ff; }
+  footer strong { color: #fff; }
+  footer p { margin: 8px 0 0; }
+
+  .esqueleto { background: linear-gradient(90deg, var(--superficie-2), var(--borde), var(--superficie-2)); background-size: 200% 100%; animation: brillo 1.3s infinite; border-radius: var(--radio); min-height: 140px; }
+  @keyframes brillo { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 </style>
+{% endverbatim %}
 </head>
 <body>
 
-<h1>Economía para jóvenes</h1>
-<p>
-  <a href="#indicadores">Valores de hoy</a> |
-  <a href="#conceptos">Conceptos</a> |
-  <a href="#ruta">Ruta de aprendizaje</a> |
-  <a href="/malla/">Malla de conceptos</a> |
-  <a href="#convertir">Convertidor</a> |
-  <a href="/api/">API (JSON)</a>
-</p>
-<hr>
+<nav class="nav" aria-label="Principal">
+  <div class="contenedor">
+    <a class="marca" href="#inicio"><span class="marca-logo" aria-hidden="true">$</span>Economía para jóvenes</a>
+    <button class="menu-boton" id="menu-boton" aria-expanded="false" aria-controls="nav-enlaces">Menú</button>
+    <ul class="nav-enlaces" id="nav-enlaces">
+      <li><a href="#indicadores">Valores de hoy</a></li>
+      <li><a href="#conceptos">Conceptos</a></li>
+      <li><a href="#ruta">Ruta</a></li>
+      <li><a href="#herramientas">Herramientas</a></li>
+      <li><a class="destacado" href="/malla/">Malla de conceptos</a></li>
+    </ul>
+  </div>
+</nav>
 
-<h2 id="indicadores">Valores de hoy en Chile</h2>
-<p id="indicadores-estado">Cargando...</p>
-<div class="tabla">
-  <table id="indicadores-tabla" hidden>
-    <thead><tr><th>Indicador</th><th>Valor</th><th>Fecha del dato</th><th>Aviso</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
-<hr>
+<header class="portada" id="inicio">
+  <div class="contenedor portada-grid">
+    <div>
+      <span class="etiqueta-portada">Finanzas personales en simple</span>
+      <h1>Entiende la economía <span>que te rodea</span></h1>
+      <p class="bajada">Conceptos de economía y finanzas explicados sin enredos, conectados con los valores reales de Chile: UF, dólar, inflación y más.</p>
+      <div class="acciones">
+        <a class="boton boton-principal" href="#conceptos">Explorar conceptos</a>
+        <a class="boton boton-fantasma" href="/malla/">Ver la malla →</a>
+      </div>
+      <div class="cifras">
+        <div><strong id="cifra-conceptos">78</strong>conceptos</div>
+        <div><strong>3</strong>niveles</div>
+        <div><strong>3</strong>calculadoras</div>
+      </div>
+    </div>
+    <aside class="panel-vivo" aria-labelledby="vivo-titulo">
+      <h2 id="vivo-titulo"><span class="punto-vivo" aria-hidden="true"></span>Hoy en Chile</h2>
+      <div class="vivo-lista" id="vivo-lista"><p class="vivo-pie">Cargando valores...</p></div>
+      <p class="vivo-pie" id="vivo-pie"></p>
+    </aside>
+  </div>
+</header>
 
-<h2 id="conceptos">Conceptos</h2>
-<p>
-  <label for="nivel">Nivel:</label>
-  <select id="nivel">
-    <option value="">Todos</option>
-    <option value="basico">Básico</option>
-    <option value="intermedio">Intermedio</option>
-    <option value="avanzado">Avanzado</option>
-  </select>
-</p>
-<p id="conceptos-estado">Cargando...</p>
-<ul id="conceptos-lista"></ul>
-<section id="ficha-concepto" hidden>
-  <h3 id="ficha-titulo"></h3>
-  <p id="ficha-definicion"></p>
-  <p id="ficha-ejemplo"></p>
-  <p id="ficha-fuente"></p>
-</section>
-<p><small>Estado: A = verificado en fuente oficial, B = fuente secundaria, C = por verificar.</small></p>
-<hr>
+<main>
+  <section class="bloque" id="indicadores" aria-labelledby="ind-titulo">
+    <div class="contenedor">
+      <div class="encabezado">
+        <div>
+          <div class="solapa">Datos en vivo</div>
+          <h2 id="ind-titulo">Valores de hoy en Chile</h2>
+          <p>Cada indicador viene con una explicación de qué es y por qué te importa.</p>
+        </div>
+      </div>
+      <p class="aviso" id="ind-aviso" hidden></p>
+      <p class="estado" id="ind-estado" aria-live="polite"></p>
+      <div class="grilla-ind" id="ind-grilla">
+        <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
+      </div>
+    </div>
+  </section>
 
-<h2 id="ruta">Ruta de aprendizaje hasta Crédito hipotecario</h2>
-<p id="ruta-estado">Cargando...</p>
-<ol id="ruta-lista"></ol>
-<hr>
+  <section class="bloque alterno" id="conceptos" aria-labelledby="con-titulo">
+    <div class="contenedor">
+      <div class="encabezado">
+        <div>
+          <div class="solapa">Aprende</div>
+          <h2 id="con-titulo">Conceptos</h2>
+          <p>Busca un concepto o filtra por nivel y tema. Toca una tarjeta para ver la ficha completa.</p>
+        </div>
+      </div>
+      <div class="filtros">
+        <div class="buscador">
+          <label for="buscar" class="visualmente-oculto">Buscar concepto</label>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="buscar" type="search" placeholder="Buscar: ahorro, inflación, crédito..." maxlength="100" autocomplete="off">
+        </div>
+        <label for="nivel" class="visualmente-oculto">Nivel</label>
+        <select id="nivel">
+          <option value="">Todos los niveles</option>
+          <option value="basico">Básico</option>
+          <option value="intermedio">Intermedio</option>
+          <option value="avanzado">Avanzado</option>
+        </select>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por tema"></div>
+      <p class="estado" id="con-estado" aria-live="polite">Cargando conceptos...</p>
+      <div class="grilla-conceptos" id="con-grilla"></div>
+      <div class="mas" id="con-mas" hidden><button type="button" class="boton boton-secundario" id="con-mas-boton">Mostrar más</button></div>
+      <div class="leyenda-verif" aria-label="Qué significa la letra de cada concepto">
+        <span><b class="verif verif-A">A</b>Verificado en fuente oficial</span>
+        <span><b class="verif verif-B">B</b>Parcialmente verificado</span>
+        <span><b class="verif verif-C">C</b>Solo bibliografía, por contrastar</span>
+        <span><b class="verif verif-P">P</b>Pendiente de verificación</span>
+      </div>
+    </div>
+  </section>
 
-<h2 id="convertir">Convertidor</h2>
-<form id="form">
-  <p>
-    <label for="monto">Monto:</label>
-    <input id="monto" type="text" value="100" size="10">
-  </p>
-  <p>
-    <label for="de">De:</label>
-    <select id="de">
-      <option value="clp">CLP</option>
-      <option value="uf">UF</option>
-      <option value="usd" selected>USD</option>
-      <option value="eur">EUR</option>
-    </select>
-    <label for="a">a:</label>
-    <select id="a">
-      <option value="clp" selected>CLP</option>
-      <option value="uf">UF</option>
-      <option value="usd">USD</option>
-      <option value="eur">EUR</option>
-    </select>
-    <button type="submit">Convertir</button>
-  </p>
-</form>
-<p id="convertir-resultado" aria-live="polite"></p>
-<hr>
+  <section class="bloque" id="ruta" aria-labelledby="ruta-titulo">
+    <div class="contenedor">
+      <div class="encabezado">
+        <div>
+          <div class="solapa">Paso a paso</div>
+          <h2 id="ruta-titulo">Ruta de aprendizaje</h2>
+          <p>Elige a qué concepto quieres llegar y te mostramos todo lo que conviene aprender antes, en orden.</p>
+        </div>
+      </div>
+      <div class="ruta-controles">
+        <label for="ruta-meta">Quiero entender:</label>
+        <select id="ruta-meta"><option value="credito-hipotecario">Crédito hipotecario</option></select>
+        <span class="estado" id="ruta-estado" aria-live="polite"></span>
+      </div>
+      <div class="tarjeta ruta-progreso" id="ruta-progreso" hidden>
+        <div class="texto"><span id="ruta-cuenta">0 de 0 aprendidos</span><small id="ruta-sub">Avanza paso a paso y marca lo que ya entiendes.</small></div>
+        <div class="barra-progreso" aria-hidden="true"><div id="ruta-barra"></div></div>
+        <div class="acciones-ruta">
+          <button type="button" class="boton boton-principal" id="ruta-empezar">Empezar ruta</button>
+          <a href="/malla/">Ver mi avance en la malla →</a>
+        </div>
+      </div>
+      <ol class="ruta" id="ruta-lista"></ol>
+    </div>
+  </section>
 
-<p><small>Fuentes de los datos: indicadores.cl para indicadores económicos de Chile y CoinGecko para Bitcoin.</small></p>
+  <section class="bloque alterno" id="herramientas" aria-labelledby="herr-titulo">
+    <div class="contenedor">
+      <div class="encabezado">
+        <div>
+          <div class="solapa">Calcula</div>
+          <h2 id="herr-titulo">Herramientas</h2>
+          <p>Escribe los números sin puntos de miles: 100000, no 100.000. Usa punto para decimales (1.5).</p>
+        </div>
+      </div>
+      <div class="grilla-herr">
+        <form class="tarjeta herr" id="f-convertir" novalidate>
+          <div class="herr-icono" aria-hidden="true">💱</div>
+          <h3>Convertidor de monedas</h3>
+          <p>Pesos, UF, dólares y euros con el valor de hoy.</p>
+          <div class="campos">
+            <div class="campo"><label for="c-monto">Monto</label><input id="c-monto" type="text" inputmode="decimal" value="100"></div>
+            <div class="campos dos">
+              <div class="campo"><label for="c-de">De</label>
+                <select id="c-de"><option value="clp">Pesos (CLP)</option><option value="uf">UF</option><option value="usd" selected>Dólar (USD)</option><option value="eur">Euro (EUR)</option></select></div>
+              <div class="campo"><label for="c-a">A</label>
+                <select id="c-a"><option value="clp" selected>Pesos (CLP)</option><option value="uf">UF</option><option value="usd">Dólar (USD)</option><option value="eur">Euro (EUR)</option></select></div>
+            </div>
+          </div>
+          <button class="boton boton-principal" type="submit">Convertir</button>
+          <div class="resultado" id="r-convertir" aria-live="polite"></div>
+        </form>
 
+        <form class="tarjeta herr" id="f-interes" novalidate>
+          <div class="herr-icono" aria-hidden="true">📈</div>
+          <h3>Interés compuesto</h3>
+          <p>Cuánto crece tu ahorro si reinviertes los intereses.</p>
+          <div class="campos">
+            <div class="campo"><label for="i-capital">Ahorro inicial ($)</label><input id="i-capital" type="text" inputmode="decimal" value="100000"></div>
+            <div class="campos dos">
+              <div class="campo"><label for="i-tasa">Tasa anual (%)</label><input id="i-tasa" type="text" inputmode="decimal" value="6"></div>
+              <div class="campo"><label for="i-anios">Años</label><input id="i-anios" type="text" inputmode="numeric" value="10"></div>
+            </div>
+          </div>
+          <button class="boton boton-principal" type="submit">Calcular</button>
+          <div class="resultado" id="r-interes" aria-live="polite"></div>
+        </form>
+
+        <form class="tarjeta herr" id="f-real" novalidate>
+          <div class="herr-icono" aria-hidden="true">🧮</div>
+          <h3>Tasa real</h3>
+          <p>¿Tu dinero gana de verdad, o la inflación se lo come?</p>
+          <div class="campos dos">
+            <div class="campo"><label for="t-nominal">Tasa que te ofrecen (%)</label><input id="t-nominal" type="text" inputmode="decimal" value="5"></div>
+            <div class="campo"><label for="t-inflacion">Inflación (%)</label><input id="t-inflacion" type="text" inputmode="decimal" value="4"></div>
+          </div>
+          <button class="boton boton-principal" type="submit">Calcular</button>
+          <div class="resultado" id="r-real" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="contenedor">
+    <div>
+      <strong>Economía para jóvenes</strong>
+      <p>Proyecto Inicial IWG400 · USM. Los contenidos vienen del documento <em>“Conceptos financieros: prerrequisitos y fuentes”</em>. Esta página es educativa y no constituye asesoría financiera.</p>
+    </div>
+    <div>
+      <strong>Fuentes de datos</strong>
+      <p>Indicadores de Chile: <a href="https://indicadores.cl/" rel="noopener noreferrer" target="_blank">indicadores.cl</a> · Bitcoin: <a href="https://www.coingecko.com/" rel="noopener noreferrer" target="_blank">CoinGecko</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="velo" id="velo" aria-hidden="true"></div>
+<aside class="ficha" id="ficha" role="dialog" aria-modal="true" aria-labelledby="ficha-titulo" aria-hidden="true" tabindex="-1">
+  <div class="ficha-cabeza">
+    <div class="meta" id="ficha-meta"></div>
+    <h2 id="ficha-titulo"></h2>
+    <button class="cerrar" id="ficha-cerrar" type="button" aria-label="Cerrar ficha">×</button>
+  </div>
+  <div class="ficha-ruta" id="ficha-ruta" hidden>
+    <div class="ficha-ruta-texto"><span id="ficha-ruta-meta"></span><strong id="ficha-ruta-paso"></strong></div>
+    <div class="puntos-ruta" id="ficha-ruta-puntos"></div>
+  </div>
+  <div class="ficha-cuerpo" id="ficha-cuerpo"></div>
+  <div class="ficha-pie" id="ficha-pie" hidden></div>
+</aside>
+
+{% verbatim %}
 <script>
+(function () {
+  'use strict';
   // Todo el texto que viene de la API se inserta con textContent (nunca innerHTML).
+
   function $(id) { return document.getElementById(id); }
 
+  // Crea un elemento: el('p', {className: 'x'}, ['texto', otroNodo])
+  function el(etiqueta, props, hijos) {
+    var n = document.createElement(etiqueta);
+    if (props) {
+      Object.keys(props).forEach(function (k) {
+        if (k === 'style') { Object.keys(props.style).forEach(function (s) { n.style.setProperty(s, props.style[s]); }); }
+        else if (k.indexOf('data-') === 0 || k.indexOf('aria-') === 0 || k === 'role') { n.setAttribute(k, props[k]); }
+        else { n[k] = props[k]; }
+      });
+    }
+    (hijos || []).forEach(function (h) {
+      if (h === null || h === undefined || h === false) { return; }
+      n.appendChild(typeof h === 'string' ? document.createTextNode(h) : h);
+    });
+    return n;
+  }
+
   function pedir(ruta) {
-    return fetch(ruta).then(function (r) {
+    return fetch(ruta, { headers: { Accept: 'application/json' } }).then(function (r) {
       return r.json().then(
         function (datos) { return { ok: r.ok, datos: datos }; },
         function () { return { ok: false, datos: null }; }
       );
-    });
+    }, function () { return { ok: false, datos: null, red: true }; });
   }
 
   function mensajeDeError(res) {
     if (res && res.datos && res.datos.error) { return res.datos.error.mensaje; }
-    return 'No se pudo obtener la respuesta del servidor.';
+    return 'No se pudo conectar con el servidor. Intenta de nuevo en un momento.';
   }
 
-  function celda(fila, texto) {
-    var td = document.createElement('td');
-    td.textContent = texto;
-    fila.appendChild(td);
+  var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  function fechaCorta(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+    if (!m) { return iso || ''; }
+    return parseInt(m[3], 10) + ' ' + MESES[parseInt(m[2], 10) - 1] + ' ' + m[1];
   }
+
+  function urlSegura(texto) {
+    try {
+      var u = new URL(texto);
+      return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : null;
+    } catch (e) { return null; }
+  }
+
+  function colorCategoria(slug) { return 'var(--cat-' + slug + ', var(--enlace))'; }
+
+  function insigniaVerif(letra) {
+    return el('b', { className: 'verif verif-' + letra, title: 'Estado de verificación ' + letra }, [letra]);
+  }
+
+  // ---------------- Progreso (el mismo que usa la malla) ----------------
+  var CLAVE_PROGRESO = 'malla-aprendidos-v1';
+  var aprendidos = leerProgreso();
+
+  function leerProgreso() {
+    try {
+      var t = window.localStorage.getItem(CLAVE_PROGRESO);
+      var d = t ? JSON.parse(t) : {};
+      return (d && typeof d === 'object') ? d : {};
+    } catch (e) { return {}; }
+  }
+  function guardarProgreso() {
+    try { window.localStorage.setItem(CLAVE_PROGRESO, JSON.stringify(aprendidos)); } catch (e) { /* sin almacenamiento */ }
+  }
+  function estaAprendido(slug) { return !!aprendidos[slug]; }
+  function cambiarAprendido(slug, valor) {
+    if (valor) { aprendidos[slug] = true; } else { delete aprendidos[slug]; }
+    guardarProgreso();
+    refrescarProgreso();
+  }
+  function refrescarProgreso() {
+    document.querySelectorAll('.concepto[data-slug]').forEach(function (t) {
+      t.classList.toggle('aprendido', estaAprendido(t.getAttribute('data-slug')));
+    });
+    pintarRuta();
+  }
+  // Si se marca algo en la malla (en otra pestaña), esta página se entera.
+  window.addEventListener('storage', function (e) {
+    if (e.key !== CLAVE_PROGRESO) { return; }
+    aprendidos = leerProgreso();
+    refrescarProgreso();
+    if (fichaActual) { pintarControlesFicha(); }
+  });
+
+  // ---------------- Menú móvil ----------------
+  $('menu-boton').addEventListener('click', function () {
+    var abierto = $('nav-enlaces').classList.toggle('abierto');
+    this.setAttribute('aria-expanded', String(abierto));
+  });
+  $('nav-enlaces').addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') { $('nav-enlaces').classList.remove('abierto'); $('menu-boton').setAttribute('aria-expanded', 'false'); }
+  });
+
+  // ---------------- Indicadores ----------------
+  var DESTACADOS = ['uf', 'dolar', 'euro', 'tpm'];
 
   function cargarIndicadores() {
     pedir('/api/indicadores/').then(function (res) {
-      var estado = $('indicadores-estado');
-      if (!res.ok) { estado.textContent = mensajeDeError(res); return; }
-      var cuerpo = $('indicadores-tabla').querySelector('tbody');
-      res.datos.indicadores.forEach(function (i) {
-        var fila = document.createElement('tr');
-        celda(fila, i.nombre);
-        celda(fila, i.valor_formateado);
-        celda(fila, i.fecha_dato);
-        celda(fila, i.dato_atrasado ? 'Dato atrasado' : '');
-        cuerpo.appendChild(fila);
+      var grilla = $('ind-grilla');
+      grilla.replaceChildren();
+      if (!res.ok) {
+        $('ind-estado').textContent = mensajeDeError(res);
+        $('ind-estado').classList.add('error');
+        $('vivo-lista').replaceChildren(el('p', { className: 'vivo-pie' }, ['Valores no disponibles en este momento.']));
+        return;
+      }
+      var lista = res.datos.indicadores || [];
+      var meta = res.datos.meta || {};
+
+      lista.forEach(function (i) {
+        var detalles = el('details', null, [
+          el('summary', null, ['¿Qué es y por qué importa?']),
+          i.que_es ? el('p', null, [i.que_es]) : null,
+          i.por_que_importa ? el('p', null, [i.por_que_importa]) : null
+        ]);
+        grilla.appendChild(el('article', { className: 'tarjeta ind' }, [
+          el('div', { className: 'ind-cabeza' }, [
+            el('span', { className: 'ind-nombre' }, [i.nombre]),
+            i.dato_atrasado ? el('span', { className: 'insignia insignia-alerta', title: 'Este dato se publica con retraso' }, ['Dato atrasado']) : null
+          ]),
+          el('div', { className: 'ind-valor' }, [i.valor_formateado]),
+          i.lectura_simple ? el('p', { className: 'ind-lectura' }, [i.lectura_simple]) : null,
+          (i.que_es || i.por_que_importa) ? detalles : null,
+          el('div', { className: 'ind-pie' }, [el('span', null, ['Dato del ' + fechaCorta(i.fecha_dato)])])
+        ]));
       });
-      $('indicadores-tabla').hidden = false;
-      var cache = res.datos.meta.cache;
-      estado.textContent = 'Datos de ' + res.datos.meta.fuente.nombre +
-        (cache.obsoleta ? ' (copia guardada: la fuente no respondió)' : '') + '.';
-    }, function () { $('indicadores-estado').textContent = 'No se pudo conectar con el servidor.'; });
+
+      // Panel de la portada
+      var vivo = $('vivo-lista');
+      vivo.replaceChildren();
+      DESTACADOS.forEach(function (codigo) {
+        var i = lista.filter(function (x) { return x.codigo === codigo; })[0];
+        if (i) { vivo.appendChild(el('div', { className: 'vivo-fila' }, [el('span', null, [i.nombre]), el('strong', null, [i.valor_formateado])])); }
+      });
+      if (!vivo.children.length) { vivo.appendChild(el('p', { className: 'vivo-pie' }, ['Sin datos por ahora.'])); }
+
+      var fuentes = (meta.fuentes || (meta.fuente ? [meta.fuente] : [])).map(function (f) { return f.nombre; }).filter(Boolean);
+      var obsoleta = meta.cache && meta.cache.obsoleta;
+      $('vivo-pie').textContent = fuentes.length ? 'Fuente: ' + fuentes.join(' y ') : '';
+      $('ind-estado').textContent = lista.length + ' indicadores' + (fuentes.length ? ' · Fuente: ' + fuentes.join(' y ') : '') + '.';
+      if (obsoleta || meta.aviso) {
+        $('ind-aviso').textContent = meta.aviso || 'La fuente no respondió: mostramos la última copia guardada.';
+        $('ind-aviso').hidden = false;
+      }
+    });
   }
 
-function mostrarFicha(slug) {
-  pedir('/api/conceptos/' + encodeURIComponent(slug) + '/').then(function (res) {
-    if (!res.ok) {
-      alert(mensajeDeError(res));
-      return;
+  // ---------------- Conceptos ----------------
+  var todos = [];          // lista completa (para el selector de la ruta)
+  var categoriaActiva = '';
+  var temporizador = null;
+
+  function dibujarChips(categorias) {
+    var cont = $('chips');
+    cont.replaceChildren();
+    var opciones = [{ slug: '', nombre: 'Todos los temas' }].concat(categorias);
+    opciones.forEach(function (c) {
+      var chip = el('button', { type: 'button', className: 'chip', 'aria-pressed': String(c.slug === categoriaActiva) }, [
+        c.slug ? el('span', { className: 'punto', style: { background: colorCategoria(c.slug) } }) : null,
+        c.nombre
+      ]);
+      chip.addEventListener('click', function () { categoriaActiva = c.slug; dibujarChips(categorias); cargarConceptos(); });
+      cont.appendChild(chip);
+    });
+  }
+
+  function tarjetaConcepto(c) {
+    var b = el('button', { type: 'button', className: 'tarjeta concepto' + (estaAprendido(c.slug) ? ' aprendido' : ''), 'data-slug': c.slug, style: { '--color-cat': colorCategoria(c.categoria.slug) } }, [
+      el('div', { className: 'meta' }, [
+        el('span', { className: 'pastilla cat' }, [c.categoria.nombre]),
+        el('span', { className: 'pastilla' }, [c.nivel.nombre]),
+        insigniaVerif(c.estado_verificacion),
+        el('span', { className: 'check-aprendido' }, ['✓ Aprendido'])
+      ]),
+      el('h3', null, [c.nombre]),
+      el('p', null, [c.definicion])
+    ]);
+    b.addEventListener('click', function () { abrirFicha(c.slug, b); });
+    return b;
+  }
+
+  var POR_PAGINA = 12;
+  var resultados = [];
+  var mostrados = 0;
+
+  function mostrarMas() {
+    var grilla = $('con-grilla');
+    var hasta = Math.min(resultados.length, mostrados + POR_PAGINA);
+    var primeraNueva = null;
+    for (var i = mostrados; i < hasta; i++) {
+      var t = tarjetaConcepto(resultados[i]);
+      if (!primeraNueva) { primeraNueva = t; }
+      grilla.appendChild(t);
     }
+    var eraPrimeraPagina = mostrados === 0;
+    mostrados = hasta;
+    var quedan = resultados.length - mostrados;
+    $('con-mas').hidden = quedan <= 0;
+    $('con-mas-boton').textContent = 'Mostrar más (' + quedan + ' restantes)';
+    if (!eraPrimeraPagina && primeraNueva) { primeraNueva.focus({ preventScroll: true }); }
+  }
+  $('con-mas-boton').addEventListener('click', mostrarMas);
 
-    var c = res.datos.concepto;
-    $('ficha-titulo').textContent = c.nombre;
-    $('ficha-definicion').textContent = c.definicion;
-    $('ficha-ejemplo').textContent = 'Ejemplo: ' + (c.ejemplo || 'No disponible');
-    var contenedorFuentes = $('ficha-fuente');
-    contenedorFuentes.replaceChildren();
+  var categoriasCargadas = false;
+  var peticionActual = 0;
 
-    var fuentes = c.fuentes || [];
+  function cargarConceptos() {
+    var params = new URLSearchParams();
+    if ($('nivel').value) { params.set('nivel', $('nivel').value); }
+    if (categoriaActiva) { params.set('categoria', categoriaActiva); }
+    var q = $('buscar').value.trim();
+    if (q) { params.set('q', q); }
+    var qs = params.toString();
+    var mia = ++peticionActual;
+    $('con-estado').textContent = 'Cargando...';
+    $('con-estado').classList.remove('error');
+    pedir('/api/conceptos/' + (qs ? '?' + qs : '')).then(function (res) {
+      if (mia !== peticionActual) { return; }  // llegó una respuesta más nueva
+      var grilla = $('con-grilla');
+      grilla.replaceChildren();
+      $('con-mas').hidden = true;
+      if (!res.ok) { $('con-estado').textContent = mensajeDeError(res); $('con-estado').classList.add('error'); return; }
+      var d = res.datos;
+      if (!categoriasCargadas) { categoriasCargadas = true; dibujarChips(d.categorias_disponibles || []); }
+      if (!qs) { todos = d.conceptos; $('cifra-conceptos').textContent = String(d.total); llenarSelectorRuta(); abrirConceptoDelEnlace(); }
+      $('con-estado').textContent = d.total === 1 ? '1 concepto' : d.total + ' conceptos';
+      if (!d.conceptos.length) {
+        grilla.appendChild(el('div', { className: 'vacio' }, ['No encontramos conceptos con esos filtros. Prueba con otra palabra.']));
+        return;
+      }
+      resultados = d.conceptos;
+      mostrados = 0;
+      mostrarMas();
+    });
+  }
 
-    if (fuentes.length === 0) {
-      contenedorFuentes.textContent = 'Fuentes: No registradas';
-    } else {
-      var tituloFuentes = document.createElement('strong');
-      tituloFuentes.textContent = 'Fuentes:';
-      contenedorFuentes.appendChild(tituloFuentes);
-
-      fuentes.forEach(function (fuente, indice) {
-        var texto = fuente.titulo || fuente.organizacion || 'Fuente sin título';
-        var elemento = document.createElement('span');
-
-        if (indice > 0) {
-          contenedorFuentes.appendChild(document.createTextNode(' | '));
-        } else {
-          contenedorFuentes.appendChild(document.createTextNode(' '));
-        }
-
-        if (fuente.url) {
-          try {
-            var direccion = new URL(fuente.url);
-
-            if (direccion.protocol === 'https:' || direccion.protocol === 'http:') {
-              var enlace = document.createElement('a');
-              enlace.href = direccion.href;
-              enlace.target = '_blank';
-              enlace.rel = 'noopener noreferrer';
-              enlace.textContent = texto;
-              elemento.appendChild(enlace);
-            } else {
-              elemento.textContent = texto;
-            }
-          } catch (error) {
-            elemento.textContent = texto;
-          }
-        } else {
-          elemento.textContent = texto;
-        }
-
-        contenedorFuentes.appendChild(elemento);
-      });
-    }
-    $('ficha-concepto').hidden = false;
-    $('ficha-concepto').scrollIntoView({ behavior: 'smooth' });
+  $('nivel').addEventListener('change', cargarConceptos);
+  $('buscar').addEventListener('input', function () {
+    clearTimeout(temporizador);
+    temporizador = setTimeout(cargarConceptos, 250);
   });
-}
-  // Si se llega con #concepto-<slug> (por ejemplo, con doble clic en la malla), se abre la ficha de ese concepto.
+
+  // ---------------- Ficha del concepto ----------------
+  var origenFoco = null;
+
+  function abrirPanel() {
+    $('ficha').classList.add('visible');
+    $('velo').classList.add('visible');
+    $('ficha').setAttribute('aria-hidden', 'false');
+    document.body.classList.add('sin-scroll');
+    $('ficha-cerrar').focus();
+  }
+
+  function cerrarFicha() {
+    if (!$('ficha').classList.contains('visible')) { return; }
+    $('ficha').classList.remove('visible');
+    $('velo').classList.remove('visible');
+    $('ficha').setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('sin-scroll');
+    fichaActual = null;
+    enRuta = false;
+    if (/^#concepto-/.test(window.location.hash)) { history.replaceState(null, '', window.location.pathname + window.location.search); }
+    if (origenFoco && document.body.contains(origenFoco)) { origenFoco.focus(); }
+  }
+
+  $('ficha-cerrar').addEventListener('click', cerrarFicha);
+  $('velo').addEventListener('click', cerrarFicha);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { cerrarFicha(); }
+    if (enRuta && fichaActual && $('ficha').classList.contains('visible') && !e.altKey && !e.ctrlKey && !e.metaKey) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); irAPaso(indiceEnRuta() + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); irAPaso(indiceEnRuta() - 1); }
+    }
+    // Mantener el foco dentro de la ficha abierta
+    if (e.key === 'Tab' && $('ficha').classList.contains('visible')) {
+      var focos = $('ficha').querySelectorAll('button:not([disabled]), a[href]');
+      if (!focos.length) { return; }
+      var primero = focos[0], ultimo = focos[focos.length - 1];
+      if (e.shiftKey && document.activeElement === primero) { e.preventDefault(); ultimo.focus(); }
+      else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primero.focus(); }
+    }
+  });
+
+  function botonesConceptos(lista) {
+    return el('div', { className: 'lista-enlaces' }, lista.map(function (r) {
+      var b = el('button', { type: 'button' }, [r.nombre]);
+      b.addEventListener('click', function () { abrirFicha(r.slug, null, enRuta && indiceDe(r.slug) >= 0); });
+      return b;
+    }));
+  }
+
+  function seccion(titulo, contenido) { return el('section', null, [el('h3', null, [titulo]), contenido]); }
+
+  var fichaActual = null;   // concepto que muestra la ficha: {slug, nombre, prerrequisitos}
+  var enRuta = false;       // true cuando se recorre la ruta paso a paso
+  var cargaFicha = 0;
+
+  function abrirFicha(slug, origen, modoRuta) {
+    if (origen) { origenFoco = origen; }
+    enRuta = !!modoRuta && indiceDe(slug) >= 0;
+    fichaActual = { slug: slug, nombre: '', antes: [] };
+    var yaAbierta = $('ficha').classList.contains('visible');
+    $('ficha-titulo').textContent = 'Cargando...';
+    $('ficha-meta').replaceChildren();
+    $('ficha-cuerpo').replaceChildren();
+    pintarControlesFicha();
+    if (!yaAbierta) { abrirPanel(); }
+    var mia = ++cargaFicha;
+    pedir('/api/conceptos/' + encodeURIComponent(slug) + '/').then(function (res) {
+      if (mia !== cargaFicha) { return; }  // ya se pidió otro concepto
+      if (!res.ok) {
+        $('ficha-titulo').textContent = 'No pudimos abrir este concepto';
+        $('ficha-cuerpo').replaceChildren(el('p', { className: 'estado error' }, [mensajeDeError(res)]));
+        return;
+      }
+      var c = res.datos.concepto;
+      fichaActual = { slug: c.slug, nombre: c.nombre, antes: c.antes_de_aprender || [] };
+      pintarControlesFicha();
+      $('ficha').style.setProperty('--color-cat', colorCategoria(c.categoria.slug));
+      $('ficha-titulo').textContent = c.nombre;
+      $('ficha-meta').replaceChildren(
+        el('span', { className: 'pastilla cat', style: { '--color-cat': colorCategoria(c.categoria.slug) } }, [c.categoria.nombre]),
+        el('span', { className: 'pastilla' }, [c.nivel.nombre])
+      );
+      var cuerpo = $('ficha-cuerpo');
+      cuerpo.appendChild(el('p', { className: 'definicion' }, [c.definicion]));
+      if (c.ejemplo) { cuerpo.appendChild(el('div', { className: 'ejemplo' }, [el('strong', null, ['Ejemplo: ']), c.ejemplo])); }
+
+      // Datos en vivo relacionados
+      if (c.en_vivo && c.en_vivo.disponible && c.en_vivo.indicadores.length) {
+        cuerpo.appendChild(seccion('En Chile hoy', el('div', { className: 'vivo-mini' }, c.en_vivo.indicadores.map(function (i) {
+          return el('div', null, [el('span', null, [i.nombre]), el('strong', null, [i.valor_formateado])]);
+        }))));
+      } else if (c.en_vivo && !c.en_vivo.disponible) {
+        cuerpo.appendChild(el('p', { className: 'aviso' }, [c.en_vivo.mensaje]));
+      }
+
+      if (c.antes_de_aprender && c.antes_de_aprender.length) {
+        cuerpo.appendChild(seccion('Conviene saber antes', botonesConceptos(c.antes_de_aprender)));
+      }
+      if (c.desbloquea && c.desbloquea.length) {
+        cuerpo.appendChild(seccion('Después puedes aprender', botonesConceptos(c.desbloquea)));
+      }
+
+      var v = c.verificacion;
+      cuerpo.appendChild(seccion('Qué tan respaldado está', el('div', { className: 'verif-caja' }, [
+        insigniaVerif(v.estado),
+        el('div', null, [el('strong', null, [v.para_el_lector]), v.nota ? el('small', null, [v.nota]) : null])
+      ])));
+
+      var fuentes = c.fuentes || [];
+      if (fuentes.length) {
+        cuerpo.appendChild(seccion('Fuentes', el('ul', { className: 'fuentes-lista' }, fuentes.map(function (f) {
+          var texto = f.titulo || f.organizacion || 'Fuente sin título';
+          var href = f.url ? urlSegura(f.url) : null;
+          return el('li', null, [
+            href ? el('a', { href: href, target: '_blank', rel: 'noopener noreferrer' }, [texto]) : texto,
+            f.organizacion && f.titulo ? el('small', null, [f.organizacion]) : null
+          ]);
+        }))));
+      }
+
+      if (!enRuta && c.antes_de_aprender && c.antes_de_aprender.length) {
+        var verRuta = el('button', { type: 'button', className: 'boton boton-secundario' }, ['Aprender este concepto paso a paso']);
+        verRuta.addEventListener('click', function () {
+          $('ruta-meta').value = c.slug;
+          cargarRuta(function () { irAPaso(primerPendiente()); });
+        });
+        cuerpo.appendChild(el('div', null, [verRuta]));
+      }
+      cuerpo.scrollTop = 0;
+    });
+  }
+
+  // Si se llega con #concepto-<slug> (por ejemplo, desde la malla), se abre la ficha de ese concepto.
   var enlacePendiente = true;
-  function abrirConceptoDelEnlace(conceptos) {
+  function abrirConceptoDelEnlace() {
     if (!enlacePendiente) { return; }
     enlacePendiente = false;
     var m = /^#concepto-(.+)$/.exec(window.location.hash);
     if (!m) { return; }
     var slug;
     try { slug = decodeURIComponent(m[1]); } catch (e) { return; }
-    if (conceptos.some(function (c) { return c.slug === slug; })) { mostrarFicha(slug); }
+    if (todos.some(function (c) { return c.slug === slug; })) { abrirFicha(slug); }
   }
 
-  function cargarConceptos() {
-    var nivel = $('nivel').value;
-    var ruta = '/api/conceptos/' + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
-    $('conceptos-estado').textContent = 'Cargando...';
-    pedir(ruta).then(function (res) {
-      var lista = $('conceptos-lista');
-      lista.textContent = '';
-      if (!res.ok) { $('conceptos-estado').textContent = mensajeDeError(res); return; }
-      $('conceptos-estado').textContent = res.datos.total + ' conceptos.';
-      res.datos.conceptos.forEach(function (c) {
-        var li = document.createElement('li');
-        var a = document.createElement('a');
-        a.href = '#ficha-concepto';
-        a.addEventListener('click', function () {
-          mostrarFicha(c.slug);
+  // ---------------- Ruta de aprendizaje ----------------
+  function llenarSelectorRuta() {
+    var sel = $('ruta-meta');
+    var actual = sel.value || 'credito-hipotecario';
+    sel.replaceChildren();
+    var grupos = {};
+    todos.forEach(function (c) {
+      if (!grupos[c.nivel.slug]) { grupos[c.nivel.slug] = el('optgroup', { label: c.nivel.nombre }); }
+      grupos[c.nivel.slug].appendChild(el('option', { value: c.slug }, [c.nombre]));
+    });
+    ['basico', 'intermedio', 'avanzado'].forEach(function (n) { if (grupos[n]) { sel.appendChild(grupos[n]); } });
+    sel.value = actual;
+    if (sel.value !== actual && sel.options.length) { sel.selectedIndex = 0; }
+  }
+
+  var rutaPasos = [];       // pasos de la ruta elegida, en orden
+  var rutaMetaNombre = '';
+
+  function indiceDe(slug) {
+    for (var i = 0; i < rutaPasos.length; i++) { if (rutaPasos[i].slug === slug) { return i; } }
+    return -1;
+  }
+  function indiceEnRuta() { return fichaActual ? indiceDe(fichaActual.slug) : -1; }
+  function primerPendiente() {
+    for (var i = 0; i < rutaPasos.length; i++) { if (!estaAprendido(rutaPasos[i].slug)) { return i; } }
+    return 0;
+  }
+  function irAPaso(i) {
+    if (i < 0 || i >= rutaPasos.length) { return; }
+    abrirFicha(rutaPasos[i].slug, null, true);
+  }
+
+  function cargarRuta(alTerminar) {
+    var meta = $('ruta-meta').value;
+    $('ruta-estado').textContent = 'Cargando...';
+    pedir('/api/ruta-aprendizaje/?hasta=' + encodeURIComponent(meta)).then(function (res) {
+      var lista = $('ruta-lista');
+      lista.replaceChildren();
+      if (!res.ok) { rutaPasos = []; $('ruta-progreso').hidden = true; $('ruta-estado').textContent = mensajeDeError(res); return; }
+      rutaPasos = res.datos.pasos;
+      rutaMetaNombre = rutaPasos.length ? rutaPasos[rutaPasos.length - 1].nombre : '';
+      var n = res.datos.total_pasos;
+      $('ruta-estado').textContent = n === 1 ? 'Es un buen punto de partida: no necesitas nada antes.' : n + ' pasos, en orden.';
+      rutaPasos.forEach(function (p, i) {
+        var b = el('button', { type: 'button' }, [p.nombre]);
+        b.addEventListener('click', function () { abrirFicha(p.slug, b, true); });
+        lista.appendChild(el('li', { className: 'tarjeta paso', 'data-slug': p.slug }, [b, el('small', null, [p.nivel.nombre + ' · ' + p.categoria.nombre])]));
+      });
+      $('ruta-progreso').hidden = !rutaPasos.length;
+      pintarRuta();
+      if (typeof alTerminar === 'function') { alTerminar(); }
+    });
+  }
+  $('ruta-meta').addEventListener('change', function () { cargarRuta(); });
+
+  function pintarRuta() {
+    if (!rutaPasos.length) { return; }
+    var hechos = rutaPasos.filter(function (p) { return estaAprendido(p.slug); }).length;
+    var total = rutaPasos.length;
+    var siguiente = hechos < total ? primerPendiente() : -1;
+    document.querySelectorAll('#ruta-lista .paso').forEach(function (li, i) {
+      li.classList.toggle('hecho', estaAprendido(rutaPasos[i].slug));
+      li.classList.toggle('siguiente', i === siguiente);
+    });
+    $('ruta-cuenta').textContent = hechos + ' de ' + total + ' aprendidos';
+    $('ruta-barra').style.width = (hechos / total * 100) + '%';
+    $('ruta-sub').textContent = hechos === total ? '¡Completaste esta ruta! Elige otra meta para seguir.'
+      : hechos === 0 ? 'Avanza paso a paso y marca lo que ya entiendes.'
+      : 'Te faltan ' + (total - hechos) + ' para entender ' + rutaMetaNombre + '.';
+    $('ruta-empezar').textContent = hechos === total ? 'Repasar la ruta' : hechos === 0 ? 'Empezar ruta' : 'Continuar ruta';
+  }
+  $('ruta-empezar').addEventListener('click', function () {
+    origenFoco = $('ruta-empezar');
+    var hechos = rutaPasos.filter(function (p) { return estaAprendido(p.slug); }).length;
+    irAPaso(hechos === rutaPasos.length ? 0 : primerPendiente());
+  });
+
+  // Barra de la ruta (arriba) y botones (abajo) dentro de la ficha
+  function pintarControlesFicha() {
+    var pie = $('ficha-pie');
+    pie.replaceChildren();
+    if (!fichaActual) { pie.hidden = true; $('ficha-ruta').hidden = true; return; }
+    var slug = fichaActual.slug;
+    var aprendido = estaAprendido(slug);
+    var i = enRuta ? indiceDe(slug) : -1;
+    if (enRuta && i < 0) { enRuta = false; }
+
+    // Encabezado de la ruta: "Ruta hacia X · Paso 3 de 9" + puntos
+    $('ficha-ruta').hidden = !enRuta;
+    if (enRuta) {
+      $('ficha-ruta-meta').textContent = 'Ruta hacia ' + rutaMetaNombre;
+      $('ficha-ruta-paso').textContent = 'Paso ' + (i + 1) + ' de ' + rutaPasos.length;
+      var puntos = $('ficha-ruta-puntos');
+      puntos.replaceChildren();
+      rutaPasos.forEach(function (p, j) {
+        var d = el('button', {
+          type: 'button',
+          className: (estaAprendido(p.slug) ? 'hecho' : '') + (j === i ? ' actual' : ''),
+          title: (j + 1) + '. ' + p.nombre + (estaAprendido(p.slug) ? ' (aprendido)' : ''),
+          'aria-label': 'Ir al paso ' + (j + 1) + ': ' + p.nombre
         });
-        a.textContent = c.nombre;
-        li.appendChild(a);
-        li.appendChild(document.createTextNode(' (' + c.nivel.nombre + ', estado ' + c.estado_verificacion + '): ' + c.definicion));
-        lista.appendChild(li);
+        d.addEventListener('click', function () { irAPaso(j); });
+        puntos.appendChild(d);
       });
-      abrirConceptoDelEnlace(res.datos.conceptos);
-    }, function () { $('conceptos-estado').textContent = 'No se pudo conectar con el servidor.'; });
-  }
+    }
 
-  function cargarRuta() {
-    pedir('/api/ruta-aprendizaje/?hasta=credito-hipotecario').then(function (res) {
-      if (!res.ok) { $('ruta-estado').textContent = mensajeDeError(res); return; }
-      $('ruta-estado').textContent = res.datos.total_pasos + ' pasos, en orden.';
-      res.datos.pasos.forEach(function (p) {
-        var li = document.createElement('li');
-        li.textContent = p.nombre + ' (' + p.nivel.nombre + ')';
-        $('ruta-lista').appendChild(li);
+    // Aviso suave si faltan conceptos previos
+    var faltan = (fichaActual.antes || []).filter(function (a) { return !estaAprendido(a.slug); }).length;
+    if (!aprendido && faltan && !enRuta) {
+      pie.appendChild(el('p', { className: 'pista-previos', style: { width: '100%', margin: '0' } },
+        ['Te ' + (faltan === 1 ? 'falta 1 concepto previo' : 'faltan ' + faltan + ' conceptos previos') + ', pero igual puedes marcarlo.']));
+    }
+
+    var esUltimo = enRuta && i === rutaPasos.length - 1;
+    if (enRuta && esUltimo && aprendido && rutaPasos.every(function (p) { return estaAprendido(p.slug); })) {
+      pie.appendChild(el('div', { className: 'felicitacion' }, [
+        '🎉 ¡Completaste la ruta hacia ' + rutaMetaNombre + '!',
+        el('a', { href: '/malla/' }, ['Ver en la malla →'])
+      ]));
+    }
+
+    if (enRuta) {
+      var ant = el('button', { type: 'button', className: 'boton boton-secundario', disabled: i <= 0, 'aria-label': 'Paso anterior' }, ['←']);
+      ant.addEventListener('click', function () { irAPaso(i - 1); });
+      pie.appendChild(ant);
+    }
+
+    var marcar;
+    if (aprendido) {
+      marcar = el('button', { type: 'button', className: 'boton boton-exito crece', title: 'Haz clic para quitarlo de aprendidos' }, ['✓ Aprendido · Quitar']);
+      marcar.addEventListener('click', function () { cambiarAprendido(slug, false); pintarControlesFicha(); });
+    } else {
+      var avanza = enRuta && !esUltimo;
+      marcar = el('button', { type: 'button', className: 'boton boton-principal crece' },
+        [avanza ? 'Marcar como aprendido y seguir →' : 'Marcar como aprendido']);
+      marcar.addEventListener('click', function () {
+        cambiarAprendido(slug, true);
+        if (avanza) { irAPaso(i + 1); } else { pintarControlesFicha(); }
       });
-    }, function () { $('ruta-estado').textContent = 'No se pudo conectar con el servidor.'; });
+    }
+    pie.appendChild(marcar);
+
+    if (enRuta) {
+      var sig = el('button', { type: 'button', className: 'boton boton-secundario', disabled: esUltimo, 'aria-label': 'Paso siguiente' }, ['→']);
+      sig.addEventListener('click', function () { irAPaso(i + 1); });
+      pie.appendChild(sig);
+    }
+    pie.hidden = false;
   }
 
-  function convertir(evento) {
-    if (evento) { evento.preventDefault(); }
-    var salida = $('convertir-resultado');
-    var ruta = '/api/herramientas/convertir/?de=' + encodeURIComponent($('de').value) +
-      '&a=' + encodeURIComponent($('a').value) +
-      '&monto=' + encodeURIComponent($('monto').value.trim());
-    pedir(ruta).then(function (res) {
-      if (!res.ok) { salida.textContent = 'Error: ' + mensajeDeError(res); return; }
-      salida.textContent = res.datos.conversion.lectura_simple;
-    }, function () { salida.textContent = 'No se pudo conectar con el servidor.'; });
+  // ---------------- Herramientas ----------------
+  function mostrarResultado(caja, res, dibujar) {
+    caja.classList.toggle('error', !res.ok);
+    caja.replaceChildren();
+    if (!res.ok) { caja.textContent = mensajeDeError(res); return; }
+    dibujar(caja, res.datos);
   }
 
-  $('nivel').addEventListener('change', cargarConceptos);
-  $('form').addEventListener('submit', convertir);
+  function formulario(id, ruta, parametros, dibujar) {
+    var f = $(id);
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var p = new URLSearchParams();
+      Object.keys(parametros).forEach(function (k) { p.set(k, $(parametros[k]).value.trim()); });
+      var caja = f.querySelector('.resultado');
+      caja.classList.remove('error');
+      caja.textContent = 'Calculando...';
+      pedir(ruta + '?' + p.toString()).then(function (res) { mostrarResultado(caja, res, dibujar); });
+    });
+    f.requestSubmit ? f.requestSubmit() : f.dispatchEvent(new Event('submit', { cancelable: true }));
+  }
+
+  formulario('f-convertir', '/api/herramientas/convertir/', { de: 'c-de', a: 'c-a', monto: 'c-monto' }, function (caja, d) {
+    var partes = d.conversion.lectura_simple.split(' = ');
+    caja.appendChild(el('strong', { className: 'grande' }, [partes[1] || d.conversion.lectura_simple]));
+    caja.appendChild(el('span', null, [partes.length > 1 ? 'por ' + partes[0] : '']));
+  });
+
+  formulario('f-interes', '/api/herramientas/interes-compuesto/', { capital: 'i-capital', tasa: 'i-tasa', anios: 'i-anios' }, function (caja, d) {
+    var r = d.interes_compuesto;
+    caja.appendChild(el('span', null, [r.lectura_simple]));
+    var filas = r.detalle_por_anio || [];
+    if (filas.length > 1) {
+      var max = filas[filas.length - 1].saldo || 1;
+      var barras = el('div', { className: 'barras', 'aria-hidden': 'true' });
+      filas.forEach(function (f) {
+        barras.appendChild(el('div', { title: 'Año ' + f.anio, style: { height: Math.max(3, (f.saldo / max) * 100) + '%' } }));
+      });
+      caja.appendChild(barras);
+      caja.appendChild(el('p', { className: 'ayuda' }, ['Saldo al final de cada año (de 1 a ' + filas.length + ').']));
+    }
+  });
+
+  formulario('f-real', '/api/herramientas/tasa-real/', { nominal: 't-nominal', inflacion: 't-inflacion' }, function (caja, d) {
+    var r = d.tasa_real;
+    var tasa = r.tasa_real_exacta_pct;
+    caja.appendChild(el('strong', { className: 'grande', style: { color: tasa >= 0 ? 'var(--exito)' : 'var(--error)' } },
+      [(tasa > 0 ? '+' : '') + tasa.toLocaleString('es-CL', { maximumFractionDigits: 2 }) + ' % real']));
+    caja.appendChild(el('span', null, [r.lectura_simple]));
+  });
+
   cargarIndicadores();
   cargarConceptos();
   cargarRuta();
-  convertir();
+})();
 </script>
-
+{% endverbatim %}
 </body>
 </html>
