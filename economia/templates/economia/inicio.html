@@ -30,6 +30,11 @@
     --cat-ahorro-e-inversion: #06a85f;
     --cat-deudas-y-creditos: #e0352a;
     --cat-macroeconomia: #7336ee;
+    /* Series de gráficos (paleta validada para daltonismo) */
+    --serie-1: #2a78d6;
+    --serie-2: #eb6834;
+    --serie-3: #1baf7a;
+    --grilla: #e6e9f0;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -50,6 +55,10 @@
       --cat-ahorro-e-inversion: #4fe89d;
       --cat-deudas-y-creditos: #ff8676;
       --cat-macroeconomia: #b88dff;
+      --serie-1: #3987e5;
+      --serie-2: #d95926;
+      --serie-3: #199e70;
+      --grilla: #233157;
       color-scheme: dark;
     }
   }
@@ -304,6 +313,107 @@
   .vivo-mini strong { font-variant-numeric: tabular-nums; }
   body.sin-scroll { overflow: hidden; }
 
+  /* Indicadores: tarjeta clicable */
+  .ind-abrir { all: unset; cursor: pointer; color: var(--enlace); font-size: .88rem; font-weight: 600; }
+  .ind-abrir:hover { text-decoration: underline; }
+  .ind-abrir:focus-visible { outline: 3px solid rgba(255,198,41,.7); outline-offset: 2px; border-radius: 4px; }
+  .ind { cursor: pointer; transition: transform .15s, border-color .15s; }
+  .ind:hover { transform: translateY(-2px); border-color: var(--serie-1); }
+  .vivo-fila { cursor: pointer; border: 0; width: 100%; font: inherit; color: inherit; text-align: left; }
+  .vivo-fila:hover { background: rgba(255,255,255,.12); }
+
+  /* Gráfico de línea */
+  .grafico { position: relative; }
+  .grafico svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+  .grafico svg:focus-visible { outline: 3px solid rgba(255,198,41,.7); outline-offset: 4px; border-radius: 6px; }
+  .grafico .eje { font-size: 11px; fill: var(--texto-suave); font-variant-numeric: tabular-nums; }
+  .grafico .grilla { stroke: var(--grilla); stroke-width: 1; }
+  .grafico .linea { fill: none; stroke: var(--serie-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .grafico .area { fill: var(--serie-1); opacity: .1; }
+  .grafico .cruz { stroke: var(--texto-suave); stroke-width: 1; stroke-dasharray: 3 3; }
+  .grafico .marca { fill: var(--serie-1); stroke: var(--superficie); stroke-width: 2; }
+  .tooltip { position: absolute; top: 0; pointer-events: none; background: var(--texto); color: var(--fondo); padding: 6px 10px; border-radius: 8px; font-size: .82rem; white-space: nowrap; transform: translateX(-50%); box-shadow: var(--sombra); }
+  .tooltip strong { display: block; font-size: .95rem; font-variant-numeric: tabular-nums; }
+  .tooltip[hidden] { display: none; }
+  .rangos { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; font-size: .85rem; color: var(--texto-suave); }
+  .rangos .chip { padding: 5px 12px; font-size: .82rem; }
+  .ind-cifra { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .ind-cifra strong { font-size: 2rem; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .variacion { font-size: .9rem; color: var(--texto-suave); }
+  .variacion b { color: var(--texto); }
+  .tabla-datos { width: 100%; border-collapse: collapse; font-size: .88rem; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .tabla-datos th, .tabla-datos td { padding: 6px 8px; border-bottom: 1px solid var(--borde); text-align: left; }
+  .tabla-datos td:last-child, .tabla-datos th:last-child { text-align: right; }
+  .tabla-scroll { max-height: 240px; overflow-y: auto; }
+  details.datos summary { cursor: pointer; color: var(--enlace); font-size: .9rem; }
+
+  /* Quiz */
+  .quiz { display: grid; gap: 16px; }
+  .quiz-pregunta { padding: 14px; border: 1px solid var(--borde); border-radius: 12px; display: grid; gap: 10px; }
+  .quiz-pregunta p.enunciado { font-weight: 700; }
+  .quiz-contexto { font-style: italic; color: var(--texto-suave); padding-left: 10px; border-left: 3px solid var(--borde); }
+  .quiz-opciones { display: grid; gap: 8px; }
+  .quiz-opcion { text-align: left; font: inherit; font-size: .92rem; cursor: pointer; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--borde); background: var(--superficie); color: var(--texto); display: flex; gap: 10px; align-items: flex-start; }
+  .quiz-opcion:hover:not([disabled]) { border-color: var(--serie-1); background: var(--superficie-2); }
+  .quiz-opcion .letra { flex: none; width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; background: var(--superficie-2); font-weight: 800; font-size: .8rem; text-transform: uppercase; }
+  .quiz-opcion[disabled] { cursor: default; opacity: .6; }
+  .quiz-opcion.correcta { opacity: 1; border-color: var(--exito); background: rgba(15,138,85,.1); }
+  .quiz-opcion.correcta .letra { background: var(--exito); color: #fff; }
+  .quiz-opcion.incorrecta { opacity: 1; border-color: var(--error); background: rgba(198,47,47,.08); }
+  .quiz-opcion.incorrecta .letra { background: var(--error); color: #fff; }
+  .quiz-feedback { font-size: .88rem; }
+  .quiz-feedback.bien { color: var(--exito); }
+  .quiz-feedback.mal { color: var(--error); }
+  .quiz-resultado { padding: 14px; border-radius: 12px; background: var(--superficie-2); display: grid; gap: 10px; }
+  .quiz-resultado strong { font-size: 1.1rem; }
+  .quiz-resultado .acciones { gap: 8px; }
+
+  /* Barras apiladas (presupuesto y crédito) */
+  .apilada { display: flex; gap: 2px; height: 28px; border-radius: 6px; overflow: hidden; margin-top: 10px; }
+  .apilada div { min-width: 2px; }
+  .apilada-leyenda { display: grid; gap: 6px; margin-top: 10px; font-size: .88rem; }
+  .apilada-leyenda div { display: flex; align-items: center; gap: 8px; }
+  .apilada-leyenda .muestra { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .apilada-leyenda .valor { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .apilada-leyenda small { color: var(--texto-suave); }
+  .cifras-credito { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .cifras-credito div { background: var(--superficie); border-radius: 8px; padding: 8px 10px; font-size: .8rem; color: var(--texto-suave); }
+  .cifras-credito strong { display: block; color: var(--texto); font-size: 1rem; font-variant-numeric: tabular-nums; }
+  .segmentado { display: inline-flex; border: 1px solid var(--borde); border-radius: 10px; overflow: hidden; }
+  .segmentado button { font: inherit; font-size: .85rem; padding: 8px 12px; border: 0; background: var(--superficie); color: var(--texto); cursor: pointer; }
+  .segmentado button[aria-pressed="true"] { background: var(--texto); color: var(--fondo); }
+
+  /* Mi progreso */
+  .progreso-grid { display: grid; grid-template-columns: 320px 1fr; gap: 18px; }
+  @media (max-width: 860px) { .progreso-grid { grid-template-columns: 1fr; } }
+  .progreso-total { padding: 22px; display: grid; gap: 14px; align-content: start; }
+  .anillo { width: 150px; height: 150px; margin: 0 auto; position: relative; }
+  .anillo svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .anillo circle { fill: none; stroke-width: 12; }
+  .anillo .fondo-anillo { stroke: var(--superficie-2); }
+  .anillo .relleno-anillo { stroke: var(--acento); stroke-linecap: round; transition: stroke-dashoffset .5s; }
+  .anillo div { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .anillo strong { font-size: 2rem; line-height: 1; }
+  .anillo small { color: var(--texto-suave); }
+  .por-categoria { display: grid; gap: 12px; }
+  .por-categoria .fila { display: grid; gap: 4px; font-size: .9rem; }
+  .por-categoria .fila span { display: flex; justify-content: space-between; }
+  .por-categoria .pista { height: 8px; border-radius: 99px; background: var(--superficie-2); overflow: hidden; }
+  .por-categoria .pista div { height: 100%; border-radius: 99px; transition: width .4s; }
+  .logros { padding: 22px; }
+  .logros h3 { font-size: 1.05rem; margin-bottom: 14px; }
+  .grilla-logros { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .logro { padding: 14px; border-radius: 12px; border: 1px dashed var(--borde); display: grid; gap: 4px; text-align: center; color: var(--texto-suave); }
+  .logro .emoji { font-size: 1.8rem; filter: grayscale(1); opacity: .45; }
+  .logro strong { color: var(--texto-suave); font-size: .92rem; }
+  .logro small { font-size: .78rem; }
+  .logro.obtenido { border-style: solid; border-color: var(--acento); background: var(--superficie-2); color: var(--texto); }
+  .logro.obtenido .emoji { filter: none; opacity: 1; }
+  .logro.obtenido strong { color: var(--texto); }
+  .progreso-acciones { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .boton-peligro { background: transparent; color: var(--error); border-color: var(--borde); font-size: .85rem; padding: 8px 14px; }
+  .boton-peligro:hover { background: rgba(198,47,47,.08); }
+
   /* Pie */
   footer { background: var(--marino); color: #a9b6d3; padding: 44px 0; font-size: .9rem; }
   footer .contenedor { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
@@ -328,6 +438,7 @@
       <li><a href="#conceptos">Conceptos</a></li>
       <li><a href="#ruta">Ruta</a></li>
       <li><a href="#herramientas">Herramientas</a></li>
+      <li><a href="#progreso">Mi progreso</a></li>
       <li><a class="destacado" href="/malla/">Malla de conceptos</a></li>
     </ul>
   </div>
@@ -346,7 +457,7 @@
       <div class="cifras">
         <div><strong id="cifra-conceptos">78</strong>conceptos</div>
         <div><strong>3</strong>niveles</div>
-        <div><strong>3</strong>calculadoras</div>
+        <div><strong>5</strong>calculadoras</div>
       </div>
     </div>
     <aside class="panel-vivo" aria-labelledby="vivo-titulo">
@@ -479,6 +590,37 @@
           <div class="resultado" id="r-interes" aria-live="polite"></div>
         </form>
 
+        <form class="tarjeta herr" id="f-credito" novalidate>
+          <div class="herr-icono" aria-hidden="true">🏦</div>
+          <h3>Simulador de crédito</h3>
+          <p>Cuánto pagas al mes y cuánto se va en intereses. Sirve para créditos de consumo e hipotecarios.</p>
+          <div class="campos">
+            <div class="campo">
+              <span class="visualmente-oculto" id="cr-tipo-etiqueta">Tipo de crédito</span>
+              <div class="segmentado" role="group" aria-labelledby="cr-tipo-etiqueta">
+                <button type="button" data-tipo="consumo" aria-pressed="true">Consumo</button>
+                <button type="button" data-tipo="hipotecario" aria-pressed="false">Hipotecario</button>
+              </div>
+            </div>
+            <div class="campo"><label for="cr-monto" id="cr-monto-etiqueta">Monto que pides ($)</label><input id="cr-monto" type="text" inputmode="decimal" value="2000000"></div>
+            <div class="campos dos">
+              <div class="campo"><label for="cr-tasa">Tasa anual (%)</label><input id="cr-tasa" type="text" inputmode="decimal" value="24"></div>
+              <div class="campo"><label for="cr-meses" id="cr-meses-etiqueta">Plazo (meses)</label><input id="cr-meses" type="text" inputmode="numeric" value="24"></div>
+            </div>
+          </div>
+          <button class="boton boton-principal" type="submit">Simular</button>
+          <div class="resultado" id="r-credito" aria-live="polite"></div>
+        </form>
+
+        <form class="tarjeta herr" id="f-presupuesto" novalidate>
+          <div class="herr-icono" aria-hidden="true">🧾</div>
+          <h3>Presupuesto 50/30/20</h3>
+          <p>Reparte tu ingreso: la mitad para lo necesario, 30 % para gustos y 20 % para ahorrar.</p>
+          <div class="campo"><label for="p-ingreso">Ingreso mensual ($)</label><input id="p-ingreso" type="text" inputmode="decimal" value="700000"></div>
+          <button class="boton boton-principal" type="submit">Repartir</button>
+          <div class="resultado" id="r-presupuesto" aria-live="polite"></div>
+        </form>
+
         <form class="tarjeta herr" id="f-real" novalidate>
           <div class="herr-icono" aria-hidden="true">🧮</div>
           <h3>Tasa real</h3>
@@ -490,6 +632,34 @@
           <button class="boton boton-principal" type="submit">Calcular</button>
           <div class="resultado" id="r-real" aria-live="polite"></div>
         </form>
+      </div>
+    </div>
+  </section>
+  <section class="bloque" id="progreso" aria-labelledby="prog-titulo">
+    <div class="contenedor">
+      <div class="encabezado">
+        <div>
+          <div class="solapa">Tu avance</div>
+          <h2 id="prog-titulo">Mi progreso</h2>
+          <p>Lo que has aprendido y los logros que llevas. Se guarda en este navegador y se comparte con la malla.</p>
+        </div>
+      </div>
+      <div class="progreso-grid">
+        <div class="tarjeta progreso-total">
+          <div class="anillo" role="img" id="anillo" aria-label="0 de 78 conceptos aprendidos">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="fondo-anillo" cx="60" cy="60" r="50"/><circle class="relleno-anillo" id="anillo-relleno" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"/></svg>
+            <div><strong id="prog-numero">0</strong><small id="prog-de">de 78</small></div>
+          </div>
+          <div class="por-categoria" id="prog-categorias"></div>
+          <div class="progreso-acciones">
+            <a class="boton boton-secundario" href="/malla/">Ver en la malla</a>
+            <button type="button" class="boton boton-peligro" id="prog-reiniciar">Reiniciar progreso</button>
+          </div>
+        </div>
+        <div class="tarjeta logros">
+          <h3 id="logros-titulo">Logros</h3>
+          <div class="grilla-logros" id="logros"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -597,12 +767,24 @@
     try { window.localStorage.setItem(CLAVE_PROGRESO, JSON.stringify(aprendidos)); } catch (e) { /* sin almacenamiento */ }
   }
   function estaAprendido(slug) { return !!aprendidos[slug]; }
+
+  // Resultados de quizzes y rutas completadas (solo para los logros)
+  var CLAVE_QUIZ = 'quiz-resultados-v1';
+  var CLAVE_RUTAS = 'rutas-completas-v1';
+  function leerJSON(clave) {
+    try { var t = window.localStorage.getItem(clave); var d = t ? JSON.parse(t) : {}; return (d && typeof d === 'object') ? d : {}; }
+    catch (e) { return {}; }
+  }
+  function guardarJSON(clave, valor) { try { window.localStorage.setItem(clave, JSON.stringify(valor)); } catch (e) { /* sin almacenamiento */ } }
+  var resultadosQuiz = leerJSON(CLAVE_QUIZ);
+  var rutasCompletas = leerJSON(CLAVE_RUTAS);
   function cambiarAprendido(slug, valor) {
     if (valor) { aprendidos[slug] = true; } else { delete aprendidos[slug]; }
     guardarProgreso();
     refrescarProgreso();
   }
   function refrescarProgreso() {
+    pintarMiProgreso();
     document.querySelectorAll('.concepto[data-slug]').forEach(function (t) {
       t.classList.toggle('aprendido', estaAprendido(t.getAttribute('data-slug')));
     });
@@ -610,6 +792,7 @@
   }
   // Si se marca algo en la malla (en otra pestaña), esta página se entera.
   window.addEventListener('storage', function (e) {
+    if (e.key === CLAVE_QUIZ) { resultadosQuiz = leerJSON(CLAVE_QUIZ); pintarMiProgreso(); return; }
     if (e.key !== CLAVE_PROGRESO) { return; }
     aprendidos = leerProgreso();
     refrescarProgreso();
@@ -642,21 +825,19 @@
       var meta = res.datos.meta || {};
 
       lista.forEach(function (i) {
-        var detalles = el('details', null, [
-          el('summary', null, ['¿Qué es y por qué importa?']),
-          i.que_es ? el('p', null, [i.que_es]) : null,
-          i.por_que_importa ? el('p', null, [i.por_que_importa]) : null
-        ]);
-        grilla.appendChild(el('article', { className: 'tarjeta ind' }, [
+        var abrir = el('button', { type: 'button', className: 'ind-abrir' }, ['Ver gráfico →']);
+        var tarjeta = el('article', { className: 'tarjeta ind' }, [
           el('div', { className: 'ind-cabeza' }, [
             el('span', { className: 'ind-nombre' }, [i.nombre]),
             i.dato_atrasado ? el('span', { className: 'insignia insignia-alerta', title: 'Este dato se publica con retraso' }, ['Dato atrasado']) : null
           ]),
           el('div', { className: 'ind-valor' }, [i.valor_formateado]),
           i.lectura_simple ? el('p', { className: 'ind-lectura' }, [i.lectura_simple]) : null,
-          (i.que_es || i.por_que_importa) ? detalles : null,
-          el('div', { className: 'ind-pie' }, [el('span', null, ['Dato del ' + fechaCorta(i.fecha_dato)])])
-        ]));
+          el('div', { className: 'ind-pie' }, [el('span', null, ['Dato del ' + fechaCorta(i.fecha_dato)]), abrir])
+        ]);
+        // Toda la tarjeta abre el gráfico; el botón es el punto accesible con teclado.
+        tarjeta.addEventListener('click', function () { abrirIndicador(i.codigo, abrir); });
+        grilla.appendChild(tarjeta);
       });
 
       // Panel de la portada
@@ -664,7 +845,11 @@
       vivo.replaceChildren();
       DESTACADOS.forEach(function (codigo) {
         var i = lista.filter(function (x) { return x.codigo === codigo; })[0];
-        if (i) { vivo.appendChild(el('div', { className: 'vivo-fila' }, [el('span', null, [i.nombre]), el('strong', null, [i.valor_formateado])])); }
+        if (i) {
+          var fila = el('button', { type: 'button', className: 'vivo-fila', title: 'Ver gráfico de ' + i.nombre }, [el('span', null, [i.nombre]), el('strong', null, [i.valor_formateado])]);
+          fila.addEventListener('click', function () { abrirIndicador(i.codigo, fila); });
+          vivo.appendChild(fila);
+        }
       });
       if (!vivo.children.length) { vivo.appendChild(el('p', { className: 'vivo-pie' }, ['Sin datos por ahora.'])); }
 
@@ -756,7 +941,7 @@
       if (!res.ok) { $('con-estado').textContent = mensajeDeError(res); $('con-estado').classList.add('error'); return; }
       var d = res.datos;
       if (!categoriasCargadas) { categoriasCargadas = true; dibujarChips(d.categorias_disponibles || []); }
-      if (!qs) { todos = d.conceptos; $('cifra-conceptos').textContent = String(d.total); llenarSelectorRuta(); abrirConceptoDelEnlace(); }
+      if (!qs) { todos = d.conceptos; $('cifra-conceptos').textContent = String(d.total); llenarSelectorRuta(); pintarMiProgreso(); abrirConceptoDelEnlace(); }
       $('con-estado').textContent = d.total === 1 ? '1 concepto' : d.total + ' conceptos';
       if (!d.conceptos.length) {
         grilla.appendChild(el('div', { className: 'vacio' }, ['No encontramos conceptos con esos filtros. Prueba con otra palabra.']));
@@ -793,6 +978,7 @@
     document.body.classList.remove('sin-scroll');
     fichaActual = null;
     enRuta = false;
+    indicadorActual = null;
     if (/^#concepto-/.test(window.location.hash)) { history.replaceState(null, '', window.location.pathname + window.location.search); }
     if (origenFoco && document.body.contains(origenFoco)) { origenFoco.focus(); }
   }
@@ -832,6 +1018,7 @@
   function abrirFicha(slug, origen, modoRuta) {
     if (origen) { origenFoco = origen; }
     enRuta = !!modoRuta && indiceDe(slug) >= 0;
+    indicadorActual = null;
     fichaActual = { slug: slug, nombre: '', antes: [] };
     var yaAbierta = $('ficha').classList.contains('visible');
     $('ficha-titulo').textContent = 'Cargando...';
@@ -860,14 +1047,25 @@
       cuerpo.appendChild(el('p', { className: 'definicion' }, [c.definicion]));
       if (c.ejemplo) { cuerpo.appendChild(el('div', { className: 'ejemplo' }, [el('strong', null, ['Ejemplo: ']), c.ejemplo])); }
 
-      // Datos en vivo relacionados
-      if (c.en_vivo && c.en_vivo.disponible && c.en_vivo.indicadores.length) {
-        cuerpo.appendChild(seccion('En Chile hoy', el('div', { className: 'vivo-mini' }, c.en_vivo.indicadores.map(function (i) {
-          return el('div', null, [el('span', null, [i.nombre]), el('strong', null, [i.valor_formateado])]);
+      // Datos en vivo relacionados: cada uno abre su gráfico
+      var relacionados = c.indicadores_relacionados || [];
+      if (relacionados.length) {
+        var vivos = (c.en_vivo && c.en_vivo.disponible) ? c.en_vivo.indicadores : [];
+        cuerpo.appendChild(seccion('En Chile hoy', el('div', { className: 'lista-enlaces' }, relacionados.map(function (r) {
+          var vivo = vivos.filter(function (v) { return v.codigo === r.codigo; })[0];
+          var b = el('button', { type: 'button' }, ['📈 ' + r.nombre + (vivo ? ': ' + vivo.valor_formateado : '')]);
+          b.addEventListener('click', function () { abrirIndicador(r.codigo, null, c.slug); });
+          return b;
         }))));
-      } else if (c.en_vivo && !c.en_vivo.disponible) {
-        cuerpo.appendChild(el('p', { className: 'aviso' }, [c.en_vivo.mensaje]));
       }
+
+      // Mini quiz
+      var cajaQuiz = el('div', { className: 'quiz' });
+      var botonQuiz = el('button', { type: 'button', className: 'boton boton-secundario' }, [
+        resultadosQuiz[c.slug] ? 'Hacer el quiz otra vez (último: ' + resultadosQuiz[c.slug].correctas + '/' + resultadosQuiz[c.slug].total + ')' : 'Hacer el mini quiz'
+      ]);
+      botonQuiz.addEventListener('click', function () { botonQuiz.remove(); cargarQuiz(c.slug, cajaQuiz, 0); });
+      cuerpo.appendChild(seccion('Pon a prueba lo que sabes', el('div', null, [cajaQuiz, botonQuiz])));
 
       if (c.antes_de_aprender && c.antes_de_aprender.length) {
         cuerpo.appendChild(seccion('Conviene saber antes', botonesConceptos(c.antes_de_aprender)));
@@ -977,6 +1175,11 @@
     if (!rutaPasos.length) { return; }
     var hechos = rutaPasos.filter(function (p) { return estaAprendido(p.slug); }).length;
     var total = rutaPasos.length;
+    if (total > 1 && hechos === total && !rutasCompletas[$('ruta-meta').value]) {
+      rutasCompletas[$('ruta-meta').value] = true;
+      guardarJSON(CLAVE_RUTAS, rutasCompletas);
+      pintarMiProgreso();
+    }
     var siguiente = hechos < total ? primerPendiente() : -1;
     document.querySelectorAll('#ruta-lista .paso').forEach(function (li, i) {
       li.classList.toggle('hecho', estaAprendido(rutaPasos[i].slug));
@@ -1068,6 +1271,344 @@
     pie.hidden = false;
   }
 
+  // ---------------- Formato de números ----------------
+  function num(v, dec) {
+    return Number(v).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: dec === undefined ? 2 : dec });
+  }
+  function conUnidad(v, unidad) {
+    if (unidad === 'pesos') { return '$' + num(v); }
+    if (unidad === 'dolares') { return 'US$' + num(v); }
+    if (unidad === 'porcentaje') { return num(v) + ' %'; }
+    return num(v);
+  }
+
+  // ---------------- Gráfico de un indicador (en el panel lateral) ----------------
+  var indicadorActual = null;   // {codigo, ultimos, volverA}
+
+  function abrirIndicador(codigo, origen, volverA) {
+    if (origen) { origenFoco = origen; }
+    var ultimoEnRuta = enRuta;
+    fichaActual = null;
+    enRuta = false;
+    indicadorActual = { codigo: codigo, ultimos: (indicadorActual && indicadorActual.codigo === codigo) ? indicadorActual.ultimos : 30, volverA: volverA || null, volverEnRuta: ultimoEnRuta };
+    pintarControlesFicha();
+    $('ficha').style.setProperty('--color-cat', 'var(--serie-1)');
+    $('ficha-meta').replaceChildren(el('span', { className: 'pastilla' }, ['Indicador']));
+    $('ficha-titulo').textContent = 'Cargando...';
+    $('ficha-cuerpo').replaceChildren();
+    if (!$('ficha').classList.contains('visible')) { abrirPanel(); }
+    var mia = ++cargaFicha;
+    var ultimos = indicadorActual.ultimos;
+    pedir('/api/indicadores/' + encodeURIComponent(codigo) + '/?ultimos=' + ultimos).then(function (res) {
+      if (mia !== cargaFicha) { return; }
+      var cuerpo = $('ficha-cuerpo');
+      if (!res.ok) {
+        $('ficha-titulo').textContent = 'Gráfico no disponible';
+        cuerpo.replaceChildren(el('p', { className: 'aviso' }, [mensajeDeError(res)]));
+        agregarVolver(cuerpo);
+        return;
+      }
+      var i = res.datos.indicador;
+      $('ficha-titulo').textContent = i.nombre;
+      cuerpo.replaceChildren();
+
+      var v = i.variacion;
+      var textoVar = null;
+      if (v && v.absoluta !== 0) {
+        var flecha = v.absoluta > 0 ? '▲ ' : '▼ ';
+        var cuanto = v.porcentual !== null && v.porcentual !== undefined
+          ? num(Math.abs(v.porcentual)) + ' %'
+          : num(Math.abs(v.absoluta)) + (i.unidad === 'porcentaje' ? ' puntos' : '');
+        textoVar = el('span', { className: 'variacion' }, [el('b', null, [flecha + cuanto]), ' respecto del ' + fechaCorta(v.respecto_de)]);
+      } else if (v) {
+        textoVar = el('span', { className: 'variacion' }, ['Sin cambio respecto del ' + fechaCorta(v.respecto_de)]);
+      }
+      cuerpo.appendChild(el('div', null, [
+        el('div', { className: 'ind-cifra' }, [el('strong', null, [i.valor_formateado]), textoVar]),
+        el('p', { className: 'estado', style: { margin: '4px 0 0', 'font-size': '.85rem' } }, ['Dato del ' + fechaCorta(i.fecha_dato) + (i.dato_atrasado ? ' · se publica con retraso' : '')])
+      ]));
+
+      // Rango de datos
+      var rangos = el('div', { className: 'rangos', role: 'group', 'aria-label': 'Cuántos datos mostrar' }, ['Mostrar últimos:']);
+      [12, 30, 90, 365].forEach(function (n) {
+        var b = el('button', { type: 'button', className: 'chip', 'aria-pressed': String(n === ultimos) }, [String(n)]);
+        b.addEventListener('click', function () { indicadorActual.ultimos = n; abrirIndicador(codigo, null, indicadorActual.volverA); });
+        rangos.appendChild(b);
+      });
+      cuerpo.appendChild(rangos);
+
+      var serie = (i.serie || []).slice().reverse();  // la API entrega del más nuevo al más viejo
+      if (serie.length > 1) {
+        cuerpo.appendChild(graficoLinea(serie, i.unidad, i.nombre));
+      } else {
+        cuerpo.appendChild(el('p', { className: 'estado' }, ['La fuente no entregó valores anteriores para graficar.']));
+      }
+
+      if (i.lectura_simple) { cuerpo.appendChild(el('div', { className: 'ejemplo' }, [i.lectura_simple])); }
+      if (i.que_es) { cuerpo.appendChild(seccion('¿Qué es?', el('p', null, [i.que_es]))); }
+      if (i.por_que_importa) { cuerpo.appendChild(seccion('¿Por qué te importa?', el('p', null, [i.por_que_importa]))); }
+      if (i.conceptos_relacionados && i.conceptos_relacionados.length) {
+        cuerpo.appendChild(seccion('Conceptos para entenderlo', el('div', { className: 'lista-enlaces' }, i.conceptos_relacionados.map(function (r) {
+          var b = el('button', { type: 'button' }, [r.nombre]);
+          b.addEventListener('click', function () { abrirFicha(r.slug, null, indicadorActual && indicadorActual.volverEnRuta && indiceDe(r.slug) >= 0); });
+          return b;
+        }))));
+      }
+      var fuente = res.datos.meta && res.datos.meta.fuente && res.datos.meta.fuente.nombre;
+      if (fuente) { cuerpo.appendChild(el('p', { className: 'estado', style: { 'font-size': '.82rem' } }, ['Fuente: ' + fuente])); }
+      agregarVolver(cuerpo);
+      cuerpo.scrollTop = 0;
+    });
+  }
+
+  function agregarVolver(cuerpo) {
+    var volver = indicadorActual && indicadorActual.volverA;
+    if (!volver) { return; }
+    var b = el('button', { type: 'button', className: 'boton boton-secundario' }, ['← Volver al concepto']);
+    var enRutaAntes = indicadorActual.volverEnRuta;
+    b.addEventListener('click', function () { abrirFicha(volver, null, enRutaAntes && indiceDe(volver) >= 0); });
+    cuerpo.appendChild(el('div', null, [b]));
+  }
+
+  // Gráfico de línea en SVG con cruz + tooltip (mouse, dedo y teclado) y tabla de datos.
+  function graficoLinea(serie, unidad, nombre) {
+    var NS = 'http://www.w3.org/2000/svg';
+    function s(tag, attrs) { var n = document.createElementNS(NS, tag); Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); }); return n; }
+    var W = 520, H = 230, m = { t: 14, r: 14, b: 30, l: 70 };
+    var tiempos = serie.map(function (p) { return Date.parse(p.fecha + 'T12:00:00'); });
+    var valores = serie.map(function (p) { return p.valor; });
+    var t0 = tiempos[0], t1 = tiempos[tiempos.length - 1] === t0 ? t0 + 1 : tiempos[tiempos.length - 1];
+    var vmin = Math.min.apply(null, valores), vmax = Math.max.apply(null, valores);
+    if (vmin === vmax) { vmin -= Math.abs(vmin) * 0.01 || 1; vmax += Math.abs(vmax) * 0.01 || 1; }
+    var pad = (vmax - vmin) * 0.1; vmin -= pad; vmax += pad;
+    function x(t) { return m.l + (t - t0) / (t1 - t0) * (W - m.l - m.r); }
+    function y(v) { return m.t + (1 - (v - vmin) / (vmax - vmin)) * (H - m.t - m.b); }
+    var dec = (vmax - vmin) < 10 ? 2 : 0;
+
+    var svg = s('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', tabindex: '0',
+      'aria-label': 'Gráfico de ' + nombre + ': ' + serie.length + ' datos, del ' + fechaCorta(serie[0].fecha) + ' al ' + fechaCorta(serie[serie.length - 1].fecha) + '. Usa las flechas para recorrerlo.' });
+
+    // Grilla y eje Y (4 líneas)
+    for (var k = 0; k <= 3; k++) {
+      var val = vmin + (vmax - vmin) * k / 3;
+      var yy = y(val);
+      svg.appendChild(s('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, 'class': 'grilla' }));
+      var et = s('text', { x: m.l - 8, y: yy + 4, 'text-anchor': 'end', 'class': 'eje' });
+      et.textContent = conUnidad(Number(val.toFixed(dec)), unidad);
+      svg.appendChild(et);
+    }
+    // Eje X: primera, del medio y última fecha
+    [0, Math.floor((serie.length - 1) / 2), serie.length - 1].forEach(function (idx, j) {
+      var tx = s('text', { x: x(tiempos[idx]), y: H - 8, 'text-anchor': j === 0 ? 'start' : j === 2 ? 'end' : 'middle', 'class': 'eje' });
+      tx.textContent = fechaCorta(serie[idx].fecha);
+      svg.appendChild(tx);
+    });
+
+    var d = serie.map(function (p, idx) { return (idx ? 'L' : 'M') + x(tiempos[idx]).toFixed(1) + ' ' + y(p.valor).toFixed(1); }).join(' ');
+    var base = H - m.b;
+    svg.appendChild(s('path', { d: d + ' L' + x(tiempos[tiempos.length - 1]).toFixed(1) + ' ' + base + ' L' + x(t0).toFixed(1) + ' ' + base + ' Z', 'class': 'area' }));
+    svg.appendChild(s('path', { d: d, 'class': 'linea' }));
+    var ult = serie.length - 1;
+    svg.appendChild(s('circle', { cx: x(tiempos[ult]), cy: y(serie[ult].valor), r: 4, 'class': 'marca' }));
+
+    var cruz = s('line', { y1: m.t, y2: base, 'class': 'cruz', visibility: 'hidden' });
+    var punto = s('circle', { r: 5, 'class': 'marca', visibility: 'hidden' });
+    svg.appendChild(cruz); svg.appendChild(punto);
+    var zona = s('rect', { x: m.l, y: 0, width: W - m.l - m.r, height: H, fill: 'transparent' });
+    svg.appendChild(zona);
+
+    var tip = el('div', { className: 'tooltip', hidden: true });
+    var caja = el('div', { className: 'grafico' }, [svg, tip]);
+    var actual = -1;
+
+    function mostrar(idx) {
+      actual = Math.max(0, Math.min(serie.length - 1, idx));
+      var px = x(tiempos[actual]), py = y(serie[actual].valor);
+      cruz.setAttribute('x1', px); cruz.setAttribute('x2', px); cruz.setAttribute('visibility', 'visible');
+      punto.setAttribute('cx', px); punto.setAttribute('cy', py); punto.setAttribute('visibility', 'visible');
+      tip.replaceChildren(el('strong', null, [conUnidad(serie[actual].valor, unidad)]), fechaCorta(serie[actual].fecha));
+      tip.hidden = false;
+      var escala = svg.getBoundingClientRect().width / W || 1;
+      var izq = px * escala;
+      var ancho = tip.offsetWidth;
+      izq = Math.max(ancho / 2, Math.min(svg.getBoundingClientRect().width - ancho / 2, izq));
+      tip.style.left = izq + 'px';
+      tip.style.top = Math.max(0, py * escala - 58) + 'px';
+    }
+    function ocultar() { cruz.setAttribute('visibility', 'hidden'); punto.setAttribute('visibility', 'hidden'); tip.hidden = true; }
+    function desdeEvento(ev) {
+      var r = svg.getBoundingClientRect();
+      var t = t0 + ((ev.clientX - r.left) / r.width * W - m.l) / (W - m.l - m.r) * (t1 - t0);
+      var mejor = 0;
+      for (var q = 1; q < tiempos.length; q++) { if (Math.abs(tiempos[q] - t) < Math.abs(tiempos[mejor] - t)) { mejor = q; } }
+      mostrar(mejor);
+    }
+    svg.addEventListener('pointermove', desdeEvento);
+    svg.addEventListener('pointerdown', desdeEvento);
+    svg.addEventListener('pointerleave', ocultar);
+    svg.addEventListener('blur', ocultar);
+    svg.addEventListener('focus', function () { mostrar(serie.length - 1); });
+    svg.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault(); e.stopPropagation();
+        mostrar((actual < 0 ? serie.length - 1 : actual) + (e.key === 'ArrowRight' ? 1 : -1));
+      }
+    });
+
+    // Vista de tabla (para leer los valores exactos o con lector de pantalla)
+    var filas = serie.slice().reverse().map(function (p) { return el('tr', null, [el('td', null, [fechaCorta(p.fecha)]), el('td', null, [conUnidad(p.valor, unidad)])]); });
+    var tabla = el('details', { className: 'datos' }, [
+      el('summary', null, ['Ver datos en tabla']),
+      el('div', { className: 'tabla-scroll' }, [el('table', { className: 'tabla-datos' }, [
+        el('thead', null, [el('tr', null, [el('th', null, ['Fecha']), el('th', null, ['Valor'])])]),
+        el('tbody', null, filas)
+      ])])
+    ]);
+    return el('div', null, [caja, tabla]);
+  }
+
+  // ---------------- Mini quiz ----------------
+  function cargarQuiz(slug, caja, semilla) {
+    caja.replaceChildren(el('p', { className: 'estado' }, ['Cargando preguntas...']));
+    pedir('/api/conceptos/' + encodeURIComponent(slug) + '/quiz/?semilla=' + semilla).then(function (res) {
+      if (!fichaActual || fichaActual.slug !== slug) { return; }  // ya se cambió de concepto
+      caja.replaceChildren();
+      if (!res.ok) { caja.appendChild(el('p', { className: 'estado error' }, [mensajeDeError(res)])); return; }
+      var q = res.datos.quiz;
+      var respondidas = 0, correctas = 0;
+      var resultado = el('div', { 'aria-live': 'polite' });
+
+      q.preguntas.forEach(function (p, n) {
+        var feedback = el('p', { className: 'quiz-feedback' });
+        var opciones = el('div', { className: 'quiz-opciones' });
+        var botones = p.opciones.map(function (o) {
+          var b = el('button', { type: 'button', className: 'quiz-opcion' }, [el('span', { className: 'letra' }, [o.id]), el('span', null, [o.texto])]);
+          b.addEventListener('click', function () {
+            var bien = o.id === p.correcta;
+            botones.forEach(function (x, j) {
+              x.disabled = true;
+              if (p.opciones[j].id === p.correcta) { x.classList.add('correcta'); }
+            });
+            if (!bien) { b.classList.add('incorrecta'); }
+            feedback.className = 'quiz-feedback ' + (bien ? 'bien' : 'mal');
+            feedback.textContent = bien ? '¡Correcto!' : 'No era esa. ' + p.explicacion;
+            respondidas++; if (bien) { correctas++; }
+            if (respondidas === q.total_preguntas) { terminar(); }
+          });
+          opciones.appendChild(b);
+          return b;
+        });
+        caja.appendChild(el('div', { className: 'quiz-pregunta' }, [
+          el('p', { className: 'enunciado' }, [(n + 1) + '. ' + p.pregunta]),
+          p.contexto ? el('p', { className: 'quiz-contexto' }, ['«' + p.contexto + '»']) : null,
+          opciones,
+          feedback
+        ]));
+      });
+      caja.appendChild(resultado);
+
+      function terminar() {
+        var aprobado = correctas >= q.minimo_para_aprobar;
+        var previo = resultadosQuiz[slug];
+        if (!previo || correctas >= previo.correctas) {
+          resultadosQuiz[slug] = { correctas: correctas, total: q.total_preguntas, aprobado: aprobado };
+          guardarJSON(CLAVE_QUIZ, resultadosQuiz);
+        }
+        var acciones = el('div', { className: 'acciones' });
+        if (aprobado && !estaAprendido(slug)) {
+          var marcar = el('button', { type: 'button', className: 'boton boton-principal' }, ['Marcar como aprendido']);
+          marcar.addEventListener('click', function () {
+            var i = indiceEnRuta();
+            cambiarAprendido(slug, true);
+            if (enRuta && i >= 0 && i < rutaPasos.length - 1) { irAPaso(i + 1); } else { pintarControlesFicha(); marcar.remove(); }
+          });
+          acciones.appendChild(marcar);
+        }
+        var otra = el('button', { type: 'button', className: 'boton boton-secundario' }, ['Intentar con otras preguntas']);
+        otra.addEventListener('click', function () { cargarQuiz(slug, caja, semilla + 1); });
+        acciones.appendChild(otra);
+        resultado.replaceChildren(el('div', { className: 'quiz-resultado' }, [
+          el('strong', null, [(correctas === q.total_preguntas ? '🎉 ' : aprobado ? '👍 ' : '📚 ') + correctas + ' de ' + q.total_preguntas + ' correctas']),
+          el('span', null, [aprobado ? '¡Aprobado! Ya puedes marcar este concepto como aprendido.' : 'Repasa la definición y el ejemplo, y vuelve a intentarlo.']),
+          acciones
+        ]));
+        pintarMiProgreso();
+      }
+    });
+  }
+
+  // ---------------- Mi progreso y logros ----------------
+  var NOMBRES_CATEGORIA = { 'fundamentos': 'Fundamentos', 'ahorro-e-inversion': 'Ahorro e inversión', 'deudas-y-creditos': 'Deudas y créditos', 'macroeconomia': 'Macroeconomía' };
+
+  function pintarMiProgreso() {
+    if (!todos.length) { return; }
+    var total = todos.length;
+    var hechos = todos.filter(function (c) { return estaAprendido(c.slug); }).length;
+    $('prog-numero').textContent = String(hechos);
+    $('prog-de').textContent = 'de ' + total;
+    $('anillo').setAttribute('aria-label', hechos + ' de ' + total + ' conceptos aprendidos');
+    $('anillo-relleno').setAttribute('stroke-dashoffset', String(314.16 * (1 - hechos / total)));
+
+    var porCat = {};
+    todos.forEach(function (c) {
+      var k = c.categoria.slug;
+      porCat[k] = porCat[k] || { nombre: c.categoria.nombre, total: 0, hechos: 0 };
+      porCat[k].total++;
+      if (estaAprendido(c.slug)) { porCat[k].hechos++; }
+    });
+    var cont = $('prog-categorias');
+    cont.replaceChildren();
+    Object.keys(porCat).forEach(function (k) {
+      var d = porCat[k];
+      cont.appendChild(el('div', { className: 'fila' }, [
+        el('span', null, [el('b', null, [d.nombre]), d.hechos + '/' + d.total]),
+        el('div', { className: 'pista', role: 'img', 'aria-label': d.nombre + ': ' + d.hechos + ' de ' + d.total }, [
+          el('div', { style: { width: (d.hechos / d.total * 100) + '%', background: colorCategoria(k) } })
+        ])
+      ]));
+    });
+
+    var quizzes = Object.keys(resultadosQuiz).map(function (k) { return resultadosQuiz[k]; });
+    var aprobados = quizzes.filter(function (r) { return r.aprobado; }).length;
+    var perfectos = quizzes.filter(function (r) { return r.correctas === r.total; }).length;
+    var rutas = Object.keys(rutasCompletas).length;
+    var basicos = todos.filter(function (c) { return c.nivel.slug === 'basico'; });
+    function catCompleta(k) { return porCat[k] && porCat[k].hechos === porCat[k].total; }
+
+    var LOGROS = [
+      { emoji: '🌱', nombre: 'Primer paso', desc: 'Aprende tu primer concepto', ok: hechos >= 1 },
+      { emoji: '📚', nombre: 'Constante', desc: 'Aprende 10 conceptos', ok: hechos >= 10 },
+      { emoji: '🧱', nombre: 'Buenas bases', desc: 'Aprende todos los conceptos básicos', ok: basicos.length > 0 && basicos.every(function (c) { return estaAprendido(c.slug); }) },
+      { emoji: '🏃', nombre: 'Mitad del camino', desc: 'Aprende la mitad de los conceptos', ok: hechos >= Math.ceil(total / 2) },
+      { emoji: '🧭', nombre: 'Ruta completa', desc: 'Termina una ruta de aprendizaje', ok: rutas >= 1 },
+      { emoji: '✅', nombre: 'Buen alumno', desc: 'Aprueba 5 mini quizzes', ok: aprobados >= 5 },
+      { emoji: '💯', nombre: 'Puntaje perfecto', desc: 'Responde un quiz sin errores', ok: perfectos >= 1 },
+      { emoji: '💡', nombre: NOMBRES_CATEGORIA['fundamentos'], desc: 'Completa todo el tema', ok: catCompleta('fundamentos') },
+      { emoji: '🐷', nombre: NOMBRES_CATEGORIA['ahorro-e-inversion'], desc: 'Completa todo el tema', ok: catCompleta('ahorro-e-inversion') },
+      { emoji: '💳', nombre: NOMBRES_CATEGORIA['deudas-y-creditos'], desc: 'Completa todo el tema', ok: catCompleta('deudas-y-creditos') },
+      { emoji: '🌎', nombre: NOMBRES_CATEGORIA['macroeconomia'], desc: 'Completa todo el tema', ok: catCompleta('macroeconomia') },
+      { emoji: '🏆', nombre: 'Experto', desc: 'Aprende los ' + total + ' conceptos', ok: hechos === total }
+    ];
+    var obtenidos = LOGROS.filter(function (l) { return l.ok; }).length;
+    $('logros-titulo').textContent = 'Logros · ' + obtenidos + ' de ' + LOGROS.length;
+    var grilla = $('logros');
+    grilla.replaceChildren();
+    LOGROS.forEach(function (l) {
+      grilla.appendChild(el('div', { className: 'logro' + (l.ok ? ' obtenido' : ''), title: l.ok ? 'Logro obtenido' : 'Bloqueado' }, [
+        el('span', { className: 'emoji', 'aria-hidden': 'true' }, [l.emoji]),
+        el('strong', null, [l.nombre]),
+        el('small', null, [(l.ok ? '✓ ' : '🔒 ') + l.desc])
+      ]));
+    });
+  }
+
+  $('prog-reiniciar').addEventListener('click', function () {
+    if (!window.confirm('¿Borrar los conceptos aprendidos, los resultados de los quizzes y los logros? También se borra el avance de la malla.')) { return; }
+    aprendidos = {}; resultadosQuiz = {}; rutasCompletas = {};
+    guardarProgreso(); guardarJSON(CLAVE_QUIZ, {}); guardarJSON(CLAVE_RUTAS, {});
+    refrescarProgreso();
+  });
+
   // ---------------- Herramientas ----------------
   function mostrarResultado(caja, res, dibujar) {
     caja.classList.toggle('error', !res.ok);
@@ -1109,6 +1650,77 @@
       caja.appendChild(barras);
       caja.appendChild(el('p', { className: 'ayuda' }, ['Saldo al final de cada año (de 1 a ' + filas.length + ').']));
     }
+  });
+
+  // Simulador de crédito: consumo (en pesos) o hipotecario (en UF, plazo en años)
+  var tipoCredito = 'consumo';
+  var VALORES_CREDITO = {
+    consumo: { monto: '2000000', tasa: '24', plazo: '24', etiquetaMonto: 'Monto que pides ($)', etiquetaPlazo: 'Plazo (meses)' },
+    hipotecario: { monto: '3000', tasa: '4.5', plazo: '25', etiquetaMonto: 'Monto que pides (UF)', etiquetaPlazo: 'Plazo (años)' }
+  };
+  document.querySelectorAll('#f-credito .segmentado button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      tipoCredito = b.getAttribute('data-tipo');
+      document.querySelectorAll('#f-credito .segmentado button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      var v = VALORES_CREDITO[tipoCredito];
+      $('cr-monto').value = v.monto; $('cr-tasa').value = v.tasa; $('cr-meses').value = v.plazo;
+      $('cr-monto-etiqueta').textContent = v.etiquetaMonto; $('cr-meses-etiqueta').textContent = v.etiquetaPlazo;
+      $('f-credito').requestSubmit ? $('f-credito').requestSubmit() : $('f-credito').dispatchEvent(new Event('submit', { cancelable: true }));
+    });
+  });
+
+  function barraApilada(partes) {
+    var total = partes.reduce(function (a, p) { return a + p.valor; }, 0) || 1;
+    return el('div', null, [
+      el('div', { className: 'apilada', role: 'img', 'aria-label': partes.map(function (p) { return p.nombre + ' ' + p.texto; }).join(', ') },
+        partes.map(function (p) { return el('div', { style: { flex: String(p.valor / total), background: p.color } }); })),
+      el('div', { className: 'apilada-leyenda' }, partes.map(function (p) {
+        return el('div', null, [
+          el('span', { className: 'muestra', style: { background: p.color } }),
+          el('span', null, [p.nombre, p.detalle ? el('small', null, [' · ' + p.detalle]) : null]),
+          el('span', { className: 'valor' }, [p.texto])
+        ]);
+      }))
+    ]);
+  }
+
+  $('f-credito').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var caja = $('r-credito');
+    var hip = tipoCredito === 'hipotecario';
+    var plazo = $('cr-meses').value.trim();
+    var meses = hip && /^\d{1,3}$/.test(plazo) ? String(parseInt(plazo, 10) * 12) : plazo;
+    var p = new URLSearchParams({ monto: $('cr-monto').value.trim(), tasa: $('cr-tasa').value.trim(), meses: meses });
+    caja.classList.remove('error');
+    caja.textContent = 'Calculando...';
+    pedir('/api/herramientas/credito/?' + p.toString()).then(function (res) {
+      mostrarResultado(caja, res, function (caja, d) {
+        var r = d.credito;
+        function m(v) { return hip ? num(v, 2) + ' UF' : '$' + num(v, 0); }
+        caja.appendChild(el('strong', { className: 'grande' }, [m(r.cuota_mensual) + ' al mes']));
+        caja.appendChild(el('span', null, [r.meses + ' cuotas' + (hip ? ' (' + (r.meses / 12) + ' años)' : '')]));
+        caja.appendChild(barraApilada([
+          { nombre: 'Lo que pediste', valor: r.monto, texto: m(r.monto), color: 'var(--serie-1)' },
+          { nombre: 'Intereses', valor: r.total_intereses, texto: m(r.total_intereses), detalle: num(r.intereses_sobre_monto_pct, 0) + ' % extra', color: 'var(--serie-2)' }
+        ]));
+        caja.appendChild(el('div', { className: 'cifras-credito' }, [
+          el('div', null, ['Total a pagar', el('strong', null, [m(r.total_pagado)])]),
+          el('div', null, ['Tasa efectiva anual', el('strong', null, [num(r.tasa_efectiva_anual_pct) + ' %'])])
+        ]));
+        caja.appendChild(el('p', { className: 'ayuda', style: { 'margin-top': '8px' } }, ['⚠️ ' + r.advertencia]));
+      });
+    });
+  });
+  $('f-credito').requestSubmit ? $('f-credito').requestSubmit() : $('f-credito').dispatchEvent(new Event('submit', { cancelable: true }));
+
+  formulario('f-presupuesto', '/api/herramientas/presupuesto/', { ingreso: 'p-ingreso' }, function (caja, d) {
+    var r = d.presupuesto;
+    var colores = ['var(--serie-1)', 'var(--serie-2)', 'var(--serie-3)'];
+    caja.appendChild(barraApilada(r.partes.map(function (p, i) {
+      return { nombre: p.nombre + ' (' + p.porcentaje + ' %)', valor: p.monto, texto: '$' + num(p.monto, 0), color: colores[i], detalle: null };
+    })));
+    caja.appendChild(el('p', { style: { margin: '10px 0 0' } }, ['Ahorrando eso cada mes juntas ', el('b', null, ['$' + num(r.ahorro_en_un_anio, 0)]), ' en un año.']));
+    caja.appendChild(el('p', { className: 'ayuda', style: { 'margin-top': '6px' } }, [r.nota]));
   });
 
   formulario('f-real', '/api/herramientas/tasa-real/', { nominal: 't-nominal', inflacion: 't-inflacion' }, function (caja, d) {
