@@ -97,3 +97,34 @@ class ConvertirTests(SimpleTestCase):
     def test_texto_legible(self):
         t = herramientas.convertir(D(100), "usd", "clp", self.TASAS)["lectura_simple"]
         self.assertEqual(t, "100 USD = 100.000 CLP")
+
+
+class CreditoTests(SimpleTestCase):
+    def test_cuota_fija_conocida(self):
+        # 1.000.000 al 12 % anual (1 % mensual) en 12 cuotas -> cuota de 88.848,79 (tabla estándar)
+        r = herramientas.credito(D(1000000), D(12), 12)
+        self.assertEqual(r["cuota_mensual"], 88848.79)
+        self.assertEqual(r["total_intereses"], 66185.46)
+        self.assertEqual(r["detalle_por_anio"][-1]["saldo_pendiente"], 0.0)
+
+    def test_tasa_cero_divide_en_partes_iguales(self):
+        r = herramientas.credito(D(1200), D(0), 12)
+        self.assertEqual(r["cuota_mensual"], 100.0)
+        self.assertEqual(r["total_intereses"], 0.0)
+
+    def test_detalle_por_anio_suma_el_monto(self):
+        r = herramientas.credito(D(5000000), D(18), 30)
+        self.assertEqual([a["anio"] for a in r["detalle_por_anio"]], [1, 2, 3])
+        self.assertAlmostEqual(sum(a["capital_pagado"] for a in r["detalle_por_anio"]), 5000000, delta=0.05)
+
+    def test_tasa_efectiva_es_mayor_que_la_nominal(self):
+        r = herramientas.credito(D(1000000), D(12), 12)
+        self.assertEqual(r["tasa_efectiva_anual_pct"], 12.68)
+
+
+class PresupuestoTests(SimpleTestCase):
+    def test_regla_50_30_20(self):
+        r = herramientas.presupuesto(D(700000))
+        self.assertEqual([p["monto"] for p in r["partes"]], [350000.0, 210000.0, 140000.0])
+        self.assertEqual(r["ahorro_en_un_anio"], 1680000.0)
+        self.assertIn("$140.000 para ahorrar", r["lectura_simple"])

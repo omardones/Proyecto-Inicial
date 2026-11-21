@@ -214,7 +214,35 @@ class IndicadoresApiTests(ApiBase):
         self.assertIn("aviso", d["meta"])
 
 
+class QuizApiTests(ApiBase):
+    def test_quiz_de_un_concepto(self):
+        d = self.json("/api/conceptos/uf/quiz/")["quiz"]
+        self.assertEqual(d["concepto"]["slug"], "uf")
+        self.assertEqual(d["total_preguntas"], 3)
+        self.assertEqual(d["minimo_para_aprobar"], 2)
+        self.assertEqual(self.fuente.llamadas, [])  # el quiz no usa datos en vivo
+
+    def test_quiz_valida_parametros_y_concepto(self):
+        self.assertError("/api/conceptos/no-existe/quiz/", 404, "no_encontrado")
+        self.assertError("/api/conceptos/uf/quiz/?semilla=abc", 400, "parametro_invalido")
+
+
 class HerramientasApiTests(ApiBase):
+    def test_credito(self):
+        d = self.json("/api/herramientas/credito/?monto=1000000&tasa=12&meses=12")["credito"]
+        self.assertEqual(d["cuota_mensual"], 88848.79)
+        self.assertEqual(self.fuente.llamadas, [])
+
+    def test_credito_valida_los_parametros(self):
+        for query in ("tasa=12&meses=12", "monto=1000000&tasa=12&meses=0", "monto=1000000&tasa=12&meses=481",
+                      "monto=1.000.000&tasa=12&meses=12", "monto=1000000&tasa=101&meses=12"):
+            self.assertError(f"/api/herramientas/credito/?{query}", 400, "parametro_invalido")
+
+    def test_presupuesto(self):
+        d = self.json("/api/herramientas/presupuesto/?ingreso=700000")["presupuesto"]
+        self.assertEqual(d["partes"][2]["monto"], 140000.0)
+        self.assertError("/api/herramientas/presupuesto/?ingreso=0", 400, "parametro_invalido")
+
     def test_convertir_dolares_a_pesos_con_valor_en_vivo(self):
         d = self.json("/api/herramientas/convertir/?de=usd&a=clp&monto=100")
         self.assertEqual(d["conversion"]["resultado"], 98658.0)
