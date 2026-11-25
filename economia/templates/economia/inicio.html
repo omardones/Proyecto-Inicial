@@ -513,12 +513,6 @@
       <p class="estado" id="con-estado" aria-live="polite">Cargando conceptos...</p>
       <div class="grilla-conceptos" id="con-grilla"></div>
       <div class="mas" id="con-mas" hidden><button type="button" class="boton boton-secundario" id="con-mas-boton">Mostrar más</button></div>
-      <div class="leyenda-verif" aria-label="Qué significa la letra de cada concepto">
-        <span><b class="verif verif-A">A</b>Verificado en fuente oficial</span>
-        <span><b class="verif verif-B">B</b>Parcialmente verificado</span>
-        <span><b class="verif verif-C">C</b>Solo bibliografía, por contrastar</span>
-        <span><b class="verif verif-P">P</b>Pendiente de verificación</span>
-      </div>
     </div>
   </section>
 
@@ -748,10 +742,6 @@
 
   function colorCategoria(slug) { return 'var(--cat-' + slug + ', var(--enlace))'; }
 
-  function insigniaVerif(letra) {
-    return el('b', { className: 'verif verif-' + letra, title: 'Estado de verificación ' + letra }, [letra]);
-  }
-
   // ---------------- Progreso (el mismo que usa la malla) ----------------
   var CLAVE_PROGRESO = 'malla-aprendidos-v1';
   var aprendidos = leerProgreso();
@@ -833,7 +823,7 @@
           ]),
           el('div', { className: 'ind-valor' }, [i.valor_formateado]),
           i.lectura_simple ? el('p', { className: 'ind-lectura' }, [i.lectura_simple]) : null,
-          el('div', { className: 'ind-pie' }, [el('span', null, ['Dato del ' + fechaCorta(i.fecha_dato)]), abrir])
+          el('div', { className: 'ind-pie' }, [el('span', null, [(i.vigente_hasta_cambio ? 'Vigente desde el ' : 'Dato del ') + fechaCorta(i.fecha_dato)]), abrir])
         ]);
         // Toda la tarjeta abre el gráfico; el botón es el punto accesible con teclado.
         tarjeta.addEventListener('click', function () { abrirIndicador(i.codigo, abrir); });
@@ -888,7 +878,6 @@
       el('div', { className: 'meta' }, [
         el('span', { className: 'pastilla cat' }, [c.categoria.nombre]),
         el('span', { className: 'pastilla' }, [c.nivel.nombre]),
-        insigniaVerif(c.estado_verificacion),
         el('span', { className: 'check-aprendido' }, ['✓ Aprendido'])
       ]),
       el('h3', null, [c.nombre]),
@@ -1076,7 +1065,6 @@
 
       var v = c.verificacion;
       cuerpo.appendChild(seccion('Qué tan respaldado está', el('div', { className: 'verif-caja' }, [
-        insigniaVerif(v.estado),
         el('div', null, [el('strong', null, [v.para_el_lector]), v.nota ? el('small', null, [v.nota]) : null])
       ])));
 
@@ -1299,7 +1287,7 @@
     if (!$('ficha').classList.contains('visible')) { abrirPanel(); }
     var mia = ++cargaFicha;
     var ultimos = indicadorActual.ultimos;
-    pedir('/api/indicadores/' + encodeURIComponent(codigo) + '/?ultimos=' + ultimos).then(function (res) {
+    pedir('/api/indicadores/' + encodeURIComponent(codigo) + '/?dias=' + ultimos).then(function (res) {
       if (mia !== cargaFicha) { return; }
       var cuerpo = $('ficha-cuerpo');
       if (!res.ok) {
@@ -1325,11 +1313,13 @@
       }
       cuerpo.appendChild(el('div', null, [
         el('div', { className: 'ind-cifra' }, [el('strong', null, [i.valor_formateado]), textoVar]),
-        el('p', { className: 'estado', style: { margin: '4px 0 0', 'font-size': '.85rem' } }, ['Dato del ' + fechaCorta(i.fecha_dato) + (i.dato_atrasado ? ' · se publica con retraso' : '')])
+        el('p', { className: 'estado', style: { margin: '4px 0 0', 'font-size': '.85rem' } }, [i.vigente_hasta_cambio
+          ? 'Vigente desde el ' + fechaCorta(i.fecha_dato) + ' · se mantiene hasta que el Banco Central la cambie'
+          : 'Dato del ' + fechaCorta(i.fecha_dato) + (i.dato_atrasado ? ' · se publica con retraso' : '')])
       ]));
 
       // Rango de datos
-      var rangos = el('div', { className: 'rangos', role: 'group', 'aria-label': 'Cuántos datos mostrar' }, ['Mostrar últimos:']);
+      var rangos = el('div', { className: 'rangos', role: 'group', 'aria-label': 'Cuántos datos mostrar' }, ['Mostrar últimos (días):']);
       [12, 30, 90, 365].forEach(function (n) {
         var b = el('button', { type: 'button', className: 'chip', 'aria-pressed': String(n === ultimos) }, [String(n)]);
         b.addEventListener('click', function () { indicadorActual.ultimos = n; abrirIndicador(codigo, null, indicadorActual.volverA); });
@@ -1339,7 +1329,7 @@
 
       var serie = (i.serie || []).slice().reverse();  // la API entrega del más nuevo al más viejo
       if (serie.length > 1) {
-        cuerpo.appendChild(graficoLinea(serie, i.unidad, i.nombre));
+        cuerpo.appendChild(graficoLinea(serie, i.unidad, i.nombre, i.vigente_hasta_cambio));
       } else {
         cuerpo.appendChild(el('p', { className: 'estado' }, ['La fuente no entregó valores anteriores para graficar.']));
       }
@@ -1371,7 +1361,7 @@
   }
 
   // Gráfico de línea en SVG con cruz + tooltip (mouse, dedo y teclado) y tabla de datos.
-  function graficoLinea(serie, unidad, nombre) {
+  function graficoLinea(serie, unidad, nombre, escalonado) {
     var NS = 'http://www.w3.org/2000/svg';
     function s(tag, attrs) { var n = document.createElementNS(NS, tag); Object.keys(attrs || {}).forEach(function (k) { n.setAttribute(k, attrs[k]); }); return n; }
     var W = 520, H = 230, m = { t: 14, r: 14, b: 30, l: 70 };
@@ -1397,14 +1387,29 @@
       et.textContent = conUnidad(Number(val.toFixed(dec)), unidad);
       svg.appendChild(et);
     }
-    // Eje X: primera, del medio y última fecha
-    [0, Math.floor((serie.length - 1) / 2), serie.length - 1].forEach(function (idx, j) {
-      var tx = s('text', { x: x(tiempos[idx]), y: H - 8, 'text-anchor': j === 0 ? 'start' : j === 2 ? 'end' : 'middle', 'class': 'eje' });
+    // Eje X: primera, última y (si cabe) la del medio en el tiempo. Se omite
+    // cualquier etiqueta que quede encima de otra (series con pocos puntos).
+    var ultIdx = serie.length - 1, tMedio = (t0 + t1) / 2, medio = 0;
+    tiempos.forEach(function (t, idx) { if (Math.abs(t - tMedio) < Math.abs(tiempos[medio] - tMedio)) { medio = idx; } });
+    var ANCHO_ETIQUETA = 80, ocupados = [];   // [desde, hasta] en px de cada etiqueta puesta
+    [[0, 'start'], [ultIdx, 'end'], [medio, 'middle']].forEach(function (par) {
+      var idx = par[0], ancla = par[1], px = x(tiempos[idx]);
+      var desde = ancla === 'start' ? px : ancla === 'end' ? px - ANCHO_ETIQUETA : px - ANCHO_ETIQUETA / 2;
+      var hasta = desde + ANCHO_ETIQUETA;
+      if (ancla !== 'start' && idx === 0) { return; }
+      if (ocupados.some(function (o) { return desde < o[1] + 8 && hasta > o[0] - 8; })) { return; }
+      ocupados.push([desde, hasta]);
+      var tx = s('text', { x: px, y: H - 8, 'text-anchor': ancla, 'class': 'eje' });
       tx.textContent = fechaCorta(serie[idx].fecha);
       svg.appendChild(tx);
     });
 
-    var d = serie.map(function (p, idx) { return (idx ? 'L' : 'M') + x(tiempos[idx]).toFixed(1) + ' ' + y(p.valor).toFixed(1); }).join(' ');
+    // Escalonado: el valor se mantiene plano hasta el siguiente cambio (ej. TPM)
+    var d = serie.map(function (p, idx) {
+      var px = x(tiempos[idx]).toFixed(1), py = y(p.valor).toFixed(1);
+      if (!idx) { return 'M' + px + ' ' + py; }
+      return (escalonado ? 'L' + px + ' ' + y(serie[idx - 1].valor).toFixed(1) + ' ' : '') + 'L' + px + ' ' + py;
+    }).join(' ');
     var base = H - m.b;
     svg.appendChild(s('path', { d: d + ' L' + x(tiempos[tiempos.length - 1]).toFixed(1) + ' ' + base + ' L' + x(t0).toFixed(1) + ' ' + base + ' Z', 'class': 'area' }));
     svg.appendChild(s('path', { d: d, 'class': 'linea' }));
