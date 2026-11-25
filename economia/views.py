@@ -131,7 +131,8 @@ def indice(request):
             "datos_en_vivo": [
                 e("/api/indicadores/", "Último valor de UF, dólar, euro, TPM, IPC, Imacec, desempleo, UTM, bitcoin y cobre."),
                 e("/api/indicadores/{codigo}/", "Un indicador con su variación y sus valores anteriores.",
-                  "/api/indicadores/dolar/", {"ultimos": "cuántos valores anteriores mostrar, 1 a 366 (por defecto 30)"}),
+                  "/api/indicadores/dolar/", {"ultimos": "cuántos valores anteriores mostrar, 1 a 366 (por defecto 30)",
+                   "dias": "opcional: período en días (1 a 3660) hacia atrás desde el último dato; reemplaza a ultimos"}),
             ],
             "herramientas": [
                 e("/api/herramientas/convertir/", "Convierte entre pesos (clp), UF (uf), dólares (usd) y euros (eur) con valores en vivo.",
@@ -301,10 +302,11 @@ def indicador_detalle(request, codigo):
         )
     try:
         ultimos = _entero(request, "ultimos", 1, 366, defecto=30)
+        dias = _entero(request, "dias", 1, 3660) if request.GET.get("dias", "").strip() else None
     except ParametroInvalido as e:
         return _parametro_invalido(e)
     try:
-        return ok(indicadores.detalle(codigo, ultimos))
+        return ok(indicadores.detalle(codigo, ultimos, dias))
     except FuenteNoDisponible as e:
         return _sin_fuente(e)
 

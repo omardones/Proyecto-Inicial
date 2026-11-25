@@ -160,6 +160,10 @@ MONEDAS = {"clp": None, "uf": "uf", "usd": "dolar", "eur": "euro"}
 # (Los datos mensuales se publican con semanas de retraso, por eso el margen es mayor.)
 _DIAS_MAX = {"diaria": 10, "mensual": 110}
 
+# Indicadores cuya fuente solo publica los cambios: el último valor sigue vigente
+# hasta el próximo cambio, así que la fecha del dato es "vigente desde" y nunca está atrasado.
+_VIGENTE_HASTA_CAMBIO = {"tpm"}
+
 
 def indicadores_de_concepto(slug):
     return [i for i in CATALOGO if slug in i.conceptos]
@@ -474,6 +478,7 @@ def _con_unidad(ind, valor):
 def _armar(ind, punto):
     fecha = _fecha_del_dato(punto["fecha"])
     dias = (hoy_chile() - fecha).days
+    por_cambios = ind.codigo in _VIGENTE_HASTA_CAMBIO
     return {
         "codigo": ind.codigo,
         "nombre": ind.nombre,
@@ -484,7 +489,8 @@ def _armar(ind, punto):
         "lectura_simple": ind.lectura.format(valor=formato_cl(punto["valor"])),
         "fecha_dato": fecha.isoformat(),
         "dias_desde_el_dato": dias,
-        "dato_atrasado": dias > _DIAS_MAX[ind.frecuencia],
+        "dato_atrasado": not por_cambios and dias > _DIAS_MAX[ind.frecuencia],
+        "vigente_hasta_cambio": por_cambios,
         "que_es": ind.que_es,
         "por_que_importa": ind.por_que_importa,
         "conceptos_relacionados": [
@@ -558,8 +564,12 @@ def _consultar_bitcoin_serie():
     )
 
 
-def detalle(codigo, ultimos=30):
-    """Último valor de un indicador + sus valores anteriores y la variación."""
+def detalle(codigo, ultimos=30, dias=None):
+    """Último valor de un indicador + sus valores anteriores y la variación.
+
+    Con `dias`, la serie trae los valores de ese período (contado hacia atrás desde
+    el dato más reciente) en vez de una cantidad fija de valores.
+    """
     ind = POR_CODIGO[codigo]
     ruta = {
         "tasa_desempleo": "desempleo",
@@ -593,9 +603,24 @@ def detalle(codigo, ultimos=30):
         }
     else:
         resultado["variacion"] = None
-    resultado["serie"] = [
-        {"fecha": _fecha_del_dato(p["fecha"]).isoformat(), "valor": p["valor"]} for p in puntos[:ultimos]
-    ]
+    serie = [{"fecha": _fecha_del_dato(p["fecha"]).isoformat(), "valor": p["valor"]} for p in puntos]
+    por_cambios = codigo in _VIGENTE_HASTA_CAMBIO
+    if por_cambios and serie[0]["fecha"] < hoy.isoformat():
+        # la tasa sigue vigente: se extiende hasta hoy para que el gráfico llegue al presente
+        serie.insert(0, {"fecha": hoy.isoformat(), "valor": serie[0]["valor"]})
+
+    if dias is not None:
+        desde = (_fecha_del_dato(serie[0]["fecha"]) - timedelta(days=dias)).isoformat()
+        seleccion = [p for p in serie if p["fecha"] >= desde]
+        anteriores = [p for p in serie if p["fecha"] < desde]
+        if por_cambios and anteriores:
+            # la tasa vigente al inicio del período, ubicada en el borde izquierdo
+            seleccion.append({"fecha": desde, "valor": anteriores[0]["valor"]})
+        if len(seleccion) < 2:
+            seleccion = serie[:2]  # siempre algo que graficar
+    else:
+        seleccion = serie[:ultimos]
+    resultado["serie"] = seleccion
     return {
         "indicador": resultado,
         "meta": _meta(
