@@ -161,6 +161,21 @@ class DetalleTests(PruebaConFuenteFalsa):
         d = indicadores.detalle("uf", ultimos=2)["indicador"]
         self.assertEqual([p["fecha"] for p in d["serie"]], ["2026-10-25", "2026-10-24"])
 
+    def test_dias_filtra_la_serie_por_fecha(self):
+        d = indicadores.detalle("uf", dias=1)["indicador"]
+        self.assertEqual([p["fecha"] for p in d["serie"]], ["2026-10-25", "2026-10-24"])
+
+    def test_dias_entrega_al_menos_dos_valores(self):
+        d = indicadores.detalle("tpm", dias=1)["indicador"]
+        self.assertGreaterEqual(len(d["serie"]), 2)
+
+    def test_tpm_sigue_vigente_hasta_hoy_y_no_esta_atrasada(self):
+        d = indicadores.detalle("tpm", dias=3660)["indicador"]
+        self.assertTrue(d["vigente_hasta_cambio"])
+        self.assertFalse(d["dato_atrasado"])
+        self.assertEqual(d["serie"][0]["fecha"], indicadores.hoy_chile().isoformat())
+        self.assertEqual(d["serie"][0]["valor"], d["valor"])
+
     def test_indicador_en_porcentaje_no_tiene_variacion_porcentual(self):
         d = indicadores.detalle("tpm")["indicador"]
         self.assertEqual(d["variacion"]["absoluta"], -0.25)

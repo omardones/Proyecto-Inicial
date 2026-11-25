@@ -196,6 +196,10 @@ class IndicadoresApiTests(ApiBase):
         self.assertIn("uf", error["disponibles"])
         self.assertIn("tasa_desempleo", error["disponibles"])
 
+    def test_parametro_dias_invalido(self):
+        for malo in ("0", "abc", "3661"):
+            self.assertError(f"/api/indicadores/uf/?dias={malo}", 400, "parametro_invalido")
+
     def test_parametro_ultimos_invalido(self):
         for malo in ("0", "-1", "abc", "367", "2.5"):
             self.assertError(f"/api/indicadores/uf/?ultimos={malo}", 400, "parametro_invalido")
