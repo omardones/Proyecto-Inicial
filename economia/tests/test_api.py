@@ -53,7 +53,7 @@ class GeneralTests(ApiBase):
         self.assertEqual(r.status_code, 200)
         self.assertIn("text/html", r["Content-Type"])
         html = r.content.decode()
-        self.assertIn("Economía para jóvenes", html)
+        self.assertIn("Noesis", html)
         # La página consume rutas reales de la API
         for ruta in ("/api/indicadores/", "/api/conceptos/", "/api/ruta-aprendizaje/", "/api/herramientas/convertir/"):
             self.assertIn(ruta, html)
