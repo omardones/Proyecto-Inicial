@@ -1,151 +1,147 @@
-<!doctype html>
-<html lang="es">
+{% load static %}<!doctype html>
+<html lang="es" data-type="software" data-radius="soft" data-buttons="solid" data-motion>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Conceptos de economía y finanzas personales explicados en simple, con datos de Chile en vivo.">
-<title>Noesis</title>
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
+<title>Noesis: economía y finanzas personales para jóvenes en Chile</title>
+<meta name="description" content="78 conceptos de economía y finanzas explicados en simple, con la UF, el dólar y la TPM de hoy, una ruta de estudio y cinco calculadoras.">
+<meta name="theme-color" content="#0d1735">
+<meta property="og:title" content="Noesis: economía y finanzas personales para jóvenes en Chile">
+<meta property="og:description" content="78 conceptos explicados en simple, con los valores de Chile de hoy.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230d1735'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ffc629'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400..700&family=Funnel+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'economia/kit/system.css' %}">
+<link rel="stylesheet" href="{% static 'economia/kit/ui/cards.css' %}">
+<link rel="stylesheet" href="{% static 'economia/kit/motion/motion.css' %}">
+<link rel="stylesheet" href="{% static 'economia/kit/layout/layout.css' %}">
+<link rel="stylesheet" href="{% static 'economia/kit/icons/icon.css' %}">
+<script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
+<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
+<link rel="modulepreload" href="{% static 'economia/kit/moments/moments.js' %}">
+<link rel="modulepreload" href="{% static 'economia/kit/moments/lib.js' %}">
+<link rel="modulepreload" href="{% static 'economia/kit/moments/counter-rolls/moment.js' %}">
+<link rel="modulepreload" href="{% static 'economia/kit/moments/marquee-row/moment.js' %}">
 {% verbatim %}
 <style>
-  :root {
-    --fondo: #f4f6fb;
-    --superficie: #ffffff;
-    --superficie-2: #eef2f9;
-    --texto: #15203b;
-    --texto-suave: #55617d;
-    --borde: #dde3ef;
-    --marino: #0d1735;
-    --marino-2: #16254f;
-    --acento: #ffc629;
-    --acento-texto: #1b1400;
-    --enlace: #1b5fd1;
-    --exito: #0f8a55;
-    --alerta-fondo: #fff4d1;
-    --alerta-texto: #6b4b00;
-    --error: #c62f2f;
-    --sombra: 0 1px 2px rgba(13,23,53,.06), 0 6px 20px rgba(13,23,53,.06);
-    --radio: 14px;
-    /* Colores por categoría (los mismos tonos que la malla) */
-    --cat-fundamentos: #0a7fe0;
-    --cat-ahorro-e-inversion: #06a85f;
-    --cat-deudas-y-creditos: #e0352a;
-    --cat-macroeconomia: #7336ee;
-    /* Series de gráficos (paleta validada para daltonismo) */
-    --serie-1: #2a78d6;
-    --serie-2: #eb6834;
-    --serie-3: #1baf7a;
-    --grilla: #e6e9f0;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --fondo: #0b1229;
-      --superficie: #121c3a;
-      --superficie-2: #1a2649;
-      --texto: #e8edf8;
-      --texto-suave: #a5b1cc;
-      --borde: #26345e;
-      --enlace: #8cc4ff;
-      --exito: #4fe89d;
-      --alerta-fondo: #3a2f0b;
-      --alerta-texto: #ffd97a;
-      --error: #ff8a8a;
-      --sombra: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
-      --cat-fundamentos: #62c4ff;
-      --cat-ahorro-e-inversion: #4fe89d;
-      --cat-deudas-y-creditos: #ff8676;
-      --cat-macroeconomia: #b88dff;
-      --serie-1: #3987e5;
-      --serie-2: #d95926;
-      --serie-3: #199e70;
-      --grilla: #233157;
-      color-scheme: dark;
-    }
-  }
+:root {
+  --p-bg: #ffffff; --p-surface: #eef2f9; --p-ink: #0d1735; --p-muted: #55617d;
+  --p-accent: #ffc629; --p-accent-ink: #111111; --p-action: #0d1735; --p-action-ink: #ffffff;
+  --p-inv-bg: #0d1735; --p-inv-surface: #1a2542; --p-inv-ink: #ffffff; --p-inv-muted: #989fae;
+  --p-inv-accent: #ffc629; --p-inv-accent-ink: #111111; --p-inv-action: #ffc629; --p-inv-action-ink: #111111;
+  --font-display: "Funnel Display", system-ui, sans-serif;
+  --font-text: "Funnel Sans", system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 400;
+  --display-tracking: -0.03em;
+  --display-tracking-xl: -0.04em;
+  --ly-scale: 0.98;
+}
+/* Colores de los componentes que arma el JavaScript (fichas, quiz, gráficos), tomados de la paleta */
+:root {
+  --fondo: #ffffff; --superficie: #ffffff; --superficie-2: #eef2f9;
+  --texto: #0d1735; --texto-suave: #46516d; --borde: #dde3ef;
+  --marino: #0d1735; --acento: #ffc629; --acento-texto: #1b1400; --enlace: #1b5fd1;
+  --exito: #0f8a55; --alerta-fondo: #fff4d1; --alerta-texto: #6b4b00; --error: #c62f2f;
+  --sombra: 0 1px 2px rgba(13,23,53,.05), 0 8px 24px -12px rgba(13,23,53,.12);
+  --radio: 14px;
+  /* Un color por tema (los mismos que la malla) */
+  --cat-fundamentos: #1b5fd1; --cat-ahorro-e-inversion: #0b7347; --cat-deudas-y-creditos: #c62f2f; --cat-macroeconomia: #0a6b78;
+  --serie-1: #1b5fd1; --serie-2: #eb6834; --serie-3: #1baf7a; --grilla: #e6e9f0;
+  color-scheme: light;
+}
+.visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
-  body {
-    margin: 0; background: var(--fondo); color: var(--texto);
-    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: var(--enlace); }
-  h1, h2, h3 { line-height: 1.2; margin: 0; }
-  .contenedor { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
-  .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* ---------- Hero: la ventana muestra la app con los valores de hoy ---------- */
+.hero--centred .hero__window { background:
+  radial-gradient(70% 90% at 82% 0%, rgb(255 198 41 / .30), transparent 60%),
+  radial-gradient(80% 90% at 10% 100%, rgb(27 95 209 / .55), transparent 65%),
+  linear-gradient(160deg, #16254f, #0d1735); }
+.n-win { background: #ffffff; color: #0d1735; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 1px rgb(255 255 255 / .12), 0 30px 60px -24px rgb(0 0 0 / .6); text-align: left; }
+.n-win__bar { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-bottom: 1px solid #e4e8f1; font-size: 13px; color: #55617d; }
+.n-win__bar b { color: #0d1735; font-weight: 500; }
+.n-win__bar .sp { flex: 1; }
+.n-win__dots { display: inline-flex; gap: 6px; } .n-win__dots i { width: 10px; height: 10px; border-radius: 50%; background: #dde3ef; }
+.n-win__dots i:first-child { background: #ffc629; }
+.n-win__body { display: grid; grid-template-columns: 300px 1fr; }
+.n-vivo { border-right: 1px solid #e4e8f1; padding: 14px; display: grid; align-content: start; gap: 6px; }
+.n-vivo .n-vivo__t { font: 500 13px/1.3 var(--font-text); letter-spacing: 0; color: #55617d; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.punto-vivo { width: 8px; height: 8px; border-radius: 50%; background: #0f8a55; box-shadow: 0 0 0 4px rgb(15 138 85 / .16); }
+.vivo-lista { display: grid; gap: 4px; }
+.vivo-fila { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 9px 10px; border-radius: 9px; background: transparent; border: 0; width: 100%; font: inherit; color: inherit; text-align: left; cursor: pointer; transition: background .15s; }
+.vivo-fila:hover { background: #e4e9f4; }
+.vivo-fila span { font-size: 13px; color: #55617d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vivo-fila strong { font: 500 15px/1.2 var(--font-mono); font-variant-numeric: tabular-nums; color: #0d1735; }
+.vivo-pie { font-size: 13px; color: #3f4a66; margin-top: 6px; }
+#vivo-pie { display: none; }
+.n-ficha { padding: 18px 22px; display: grid; gap: 10px; align-content: start; }
+.n-ficha__meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.n-ficha__meta span { font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 99px; background: #eef2f9; color: #55617d; }
+.n-ficha__meta span:first-child { background: rgb(14 124 140 / .12); color: #0a6b78; }
+.n-ficha h3 { font: 400 26px/1.1 var(--font-display); letter-spacing: -0.02em; }
+.n-ficha p { font-size: 14px; line-height: 1.5; color: #33405e; max-width: 52ch; }
+.n-ficha .n-ej { padding: 10px 12px; border-radius: 10px; background: #fff8e1; border-left: 3px solid #ffc629; color: #4a3b00; }
+.n-ficha .n-acts { display: flex; gap: 8px; margin-top: 2px; }
+.n-ficha .n-acts span { height: 30px; padding: 0 12px; border-radius: 8px; display: inline-flex; align-items: center; font-size: 13px; font-weight: 500; background: #0d1735; color: #fff; }
+.n-ficha .n-acts span + span { background: #eef2f9; color: #0d1735; }
+@media (max-width: 860px) { .n-win__body { grid-template-columns: minmax(0, 1fr); } .n-vivo { min-width: 0; } .n-ficha { display: none; } .n-vivo { border-right: 0; } }
 
-  /* ---------- Barra de navegación ---------- */
-  .nav {
-    position: sticky; top: 0; z-index: 20;
-    background: rgba(13,23,53,.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255,255,255,.08);
-  }
-  .nav .contenedor { display: flex; align-items: center; gap: 16px; height: 60px; }
-  .marca { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font-weight: 800; letter-spacing: .01em; white-space: nowrap; }
-  .marca-logo { width: 32px; height: 32px; border-radius: 9px; background: var(--acento); color: var(--acento-texto); display: grid; place-items: center; font-size: 18px; }
-  .nav-enlaces { display: flex; gap: 4px; margin-left: auto; list-style: none; padding: 0; margin-top: 0; margin-bottom: 0; }
-  .nav-enlaces a { display: block; padding: 8px 12px; border-radius: 8px; color: #cfd8ea; text-decoration: none; font-size: .94rem; }
-  .nav-enlaces a:hover, .nav-enlaces a:focus-visible { color: #fff; background: rgba(255,255,255,.08); }
-  .nav-enlaces a.destacado { background: var(--acento); color: var(--acento-texto); font-weight: 700; }
-  .nav-enlaces a.destacado:hover { background: #ffd34f; }
-  .menu-boton { display: none; margin-left: auto; background: none; border: 1px solid rgba(255,255,255,.25); color: #fff; border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
-  @media (max-width: 860px) {
-    .menu-boton { display: block; }
-    .nav-enlaces { display: none; position: absolute; top: 60px; left: 0; right: 0; flex-direction: column; padding: 8px 16px 16px; background: var(--marino); border-bottom: 1px solid rgba(255,255,255,.08); }
-    .nav-enlaces.abierto { display: flex; }
-  }
+/* ---------- Secciones de la app: su largo depende de la API y de lo que abre la persona ---------- */
+main > section.app { height: auto; min-height: 100vh; min-height: 100svh; }
+main > section.app > .wrap { height: auto; }
+.section-head h2 .muted { display: block; }
+.bloque-gris { background: var(--p-surface); }
+.bloque-gris .tarjeta { box-shadow: none; }
 
-  /* ---------- Portada ---------- */
-  .portada {
-    color: #fff; padding: 64px 0 88px; position: relative; overflow: hidden;
-    background:
-      radial-gradient(ellipse at 80% 10%, rgba(255,198,41,.16), transparent 55%),
-      radial-gradient(ellipse at 15% 90%, rgba(70,120,215,.35), transparent 60%),
-      linear-gradient(165deg, var(--marino) 0%, var(--marino-2) 100%);
-  }
-  .portada-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; }
-  @media (max-width: 860px) { .portada-grid { grid-template-columns: 1fr; } .portada { padding: 44px 0 72px; } }
-  .etiqueta-portada { display: inline-block; font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--acento); margin-bottom: 14px; }
-  .portada h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -.02em; }
-  .portada h1 span { color: var(--acento); }
-  .portada p.bajada { font-size: 1.12rem; color: #cfd8ea; max-width: 34em; margin: 18px 0 28px; }
-  .acciones { display: flex; gap: 12px; flex-wrap: wrap; }
-  .boton {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    font: inherit; font-weight: 700; cursor: pointer; text-decoration: none;
-    padding: 11px 20px; border-radius: 10px; border: 1px solid transparent; transition: background .15s, transform .15s;
-  }
-  .boton:active { transform: translateY(1px); }
-  .boton-principal { background: var(--acento); color: var(--acento-texto); }
-  .boton-principal:hover { background: #ffd34f; }
-  .boton-fantasma { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.06); }
-  .boton-fantasma:hover { background: rgba(255,255,255,.14); }
-  .cifras { display: flex; gap: 28px; margin-top: 32px; flex-wrap: wrap; }
-  .cifras div { font-size: .88rem; color: #a9b6d3; }
-  .cifras strong { display: block; font-size: 1.6rem; color: #fff; }
+/* Cifras que ruedan bajo los indicadores */
+.cifras-fila { margin-top: var(--s-8, 64px); }
+.cifras-fila > div { grid-column: span 3; }
+@media (max-width: 860px) { .cifras-fila > div { grid-column: span 6; } }
+.cifras-fila .t-stat { color: var(--ink); }
+.cifras-fila .t-stat + p { margin-top: var(--s-2); }
 
-  .panel-vivo {
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 18px;
-    padding: 20px; backdrop-filter: blur(4px);
-  }
-  .panel-vivo h2 { font-size: .9rem; font-weight: 700; color: #cfd8ea; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-  .punto-vivo { width: 8px; height: 8px; border-radius: 50%; background: #4fe89d; box-shadow: 0 0 0 4px rgba(79,232,157,.2); }
-  .vivo-lista { display: grid; gap: 10px; }
-  .vivo-fila { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.05); }
-  .vivo-fila span { color: #cfd8ea; font-size: .95rem; }
-  .vivo-fila strong { font-size: 1.15rem; font-variant-numeric: tabular-nums; }
-  .vivo-pie { font-size: .78rem; color: #8e9bbb; margin-top: 12px; }
+/* Fila de conceptos que corre bajo la ruta */
+.fila-conceptos { margin-top: var(--s-8, 64px); font: 400 clamp(22px, 2.4vw, 32px)/1.2 var(--font-display); letter-spacing: -0.02em; color: var(--ink); }
+.fila-conceptos li::after { content: "·"; margin-left: var(--mo-gap, 64px); color: var(--acento); position: absolute; }
+.fila-conceptos li { position: relative; }
 
-  /* ---------- Secciones ---------- */
-  section.bloque { padding: 72px 0; }
-  section.bloque.alterno { background: var(--superficie); border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde); }
-  .encabezado { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
-  .encabezado h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -.01em; }
-  .encabezado p { margin: 6px 0 0; color: var(--texto-suave); max-width: 40em; }
-  .solapa { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--enlace); margin-bottom: 6px; }
+/* Cierre y pie */
+.footer.closing .closing__cta { display: grid; gap: var(--s-5); justify-items: start; }
+.footer__nota { max-width: 60ch; color: var(--muted); font-size: var(--t-small); }
+.footer a.enlace { text-decoration: underline; text-underline-offset: 3px; }
 
+/* ---------- Componentes (los arma el JavaScript) ---------- */
+.hero--centred .hero__lead { color: #c9d0e0; }
+:focus-visible, input:focus, select:focus, button:focus-visible, a:focus-visible, .concepto:focus-visible { outline: 3px solid #1b5fd1 !important; outline-offset: 2px; }
+.ground-inverse :focus-visible { outline-color: #ffc629 !important; }
+.n-win :focus-visible { outline-color: #1b5fd1 !important; outline-offset: -3px !important; }
+@media (max-width: 639px) { .vivo-fila:nth-child(n+4) { display: none; } }
+.ind-abrir { min-height: 44px; display: inline-flex !important; align-items: center; }
+.grilla-herr { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)) !important; }
+@media (min-width: 1024px) { .grilla-herr { grid-template-columns: repeat(6, 1fr) !important; } .grilla-herr > .herr { grid-column: span 2; } .grilla-herr > .herr:nth-child(4), .grilla-herr > .herr:nth-child(5) { grid-column: span 3; } }
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px;
+  font: 500 15px/1 var(--font-text); cursor: pointer; text-decoration: none;
+  padding: 0 18px; border-radius: var(--r-md, 10px); border: 1px solid transparent; transition: background .15s, transform .15s;
+}
+.boton:hover { transform: translateY(-1px); }
+.boton:active { transform: translateY(1px); }
+.boton-principal { background: var(--marino); color: #fff; }
+.boton-principal:hover { background: #1a2a5c; }
+.acciones { display: flex; gap: 12px; flex-wrap: wrap; }
+.ficha:not(.visible) { box-shadow: none; visibility: hidden; transition: transform .25s ease, visibility 0s .25s; }
+.ficha.visible { visibility: visible; }
+/* La ficha y su velo van sobre la barra fija del sitio, así el nombre del concepto se ve entero */
+.velo { z-index: 60 !important; }
+.ficha { z-index: 61 !important; }
+.herr-icono { background: var(--acento) !important; color: var(--marino); }
+.enlace-flecha { color: var(--enlace); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+</style>
+<style>
   .estado { color: var(--texto-suave); }
   .estado.error { color: var(--error); }
   .tarjeta {
@@ -414,86 +410,91 @@
   .boton-peligro { background: transparent; color: var(--error); border-color: var(--borde); font-size: .85rem; padding: 8px 14px; }
   .boton-peligro:hover { background: rgba(198,47,47,.08); }
 
-  /* Pie */
-  footer { background: var(--marino); color: #a9b6d3; padding: 44px 0; font-size: .9rem; }
-  footer .contenedor { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
-  @media (max-width: 700px) { footer .contenedor { grid-template-columns: 1fr; } }
-  footer a { color: #cfe3ff; }
-  footer strong { color: #fff; }
-  footer p { margin: 8px 0 0; }
-
   .esqueleto { background: linear-gradient(90deg, var(--superficie-2), var(--borde), var(--superficie-2)); background-size: 200% 100%; animation: brillo 1.3s infinite; border-radius: var(--radio); min-height: 140px; }
   @keyframes brillo { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 </style>
 {% endverbatim %}
 </head>
+<!-- type: software (app educativa de economía para jóvenes)
+     deal: hero centred (ventana de la app), nav nav-centre, close close-type, footer footer-dark, rhythm surface-pairs, buttons solid, mark dots
+     palette: los colores de la marca (azul marino #0d1735, amarillo #ffc629, blanco), por start.mjs brand; type funnel
+     moments: counter-rolls (última fila de #indicadores), marquee-row (última fila de #ruta) -->
 <body>
-
-<nav class="nav" aria-label="Principal">
-  <div class="contenedor">
-    <a class="marca" href="#inicio"><span class="marca-logo" aria-hidden="true">$</span>Noesis</a>
-    <button class="menu-boton" id="menu-boton" aria-expanded="false" aria-controls="nav-enlaces">Menú</button>
-    <ul class="nav-enlaces" id="nav-enlaces">
-      <li><a href="#indicadores">Valores de hoy</a></li>
-      <li><a href="#conceptos">Conceptos</a></li>
-      <li><a href="#ruta">Ruta</a></li>
-      <li><a href="#herramientas">Herramientas</a></li>
-      <li><a href="#progreso">Mi progreso</a></li>
-      <li><a class="destacado" href="/malla/">Malla de conceptos</a></li>
-    </ul>
-  </div>
-</nav>
-
-<header class="portada" id="inicio">
-  <div class="contenedor portada-grid">
-    <div>
-      <span class="etiqueta-portada">Finanzas personales en simple</span>
-      <h1>Entiende la economía <span>que te rodea</span></h1>
-      <p class="bajada">Conceptos de economía y finanzas explicados sin enredos, conectados con los valores reales de Chile: UF, dólar, inflación y más.</p>
-      <div class="acciones">
-        <a class="boton boton-principal" href="#conceptos">Explorar conceptos</a>
-        <a class="boton boton-fantasma" href="/malla/">Ver la malla →</a>
-      </div>
-      <div class="cifras">
-        <div><strong id="cifra-conceptos">78</strong>conceptos</div>
-        <div><strong>3</strong>niveles</div>
-        <div><strong>5</strong>calculadoras</div>
-      </div>
+<header class="nav nav--centre">
+  <div class="wrap nav__bar">
+    <a class="skip-link" href="#top">Ir al contenido</a>
+    <a class="nav__logo" href="#top"><span class="mark" data-mark="dots" aria-hidden="true"></span>Noesis</a>
+    <nav class="nav__links" aria-label="Principal">
+      <div class="nav__item"><a class="nav__link" href="#indicadores">Valores de hoy</a></div>
+      <div class="nav__item"><a class="nav__link" href="#conceptos">Conceptos</a></div>
+      <div class="nav__item"><a class="nav__link" href="#ruta">Ruta</a></div>
+      <div class="nav__item"><a class="nav__link" href="#herramientas">Calculadoras</a></div>
+      <div class="nav__item"><a class="nav__link" href="#progreso">Mi progreso</a></div>
+    </nav>
+    <div class="nav__actions">
+      <a class="btn btn--primary" href="/malla/">Abrir la malla</a>
     </div>
-    <aside class="panel-vivo" aria-labelledby="vivo-titulo">
-      <h2 id="vivo-titulo"><span class="punto-vivo" aria-hidden="true"></span>Hoy en Chile</h2>
-      <div class="vivo-lista" id="vivo-lista"><p class="vivo-pie">Cargando valores...</p></div>
-      <p class="vivo-pie" id="vivo-pie"></p>
-    </aside>
+    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menú">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
   </div>
 </header>
 
-<main>
-  <section class="bloque" id="indicadores" aria-labelledby="ind-titulo">
-    <div class="contenedor">
-      <div class="encabezado">
-        <div>
-          <div class="solapa">Datos en vivo</div>
-          <h2 id="ind-titulo">Valores de hoy en Chile</h2>
-          <p>Cada indicador viene con una explicación de qué es y por qué te importa.</p>
+<main id="top">
+  <section class="hero hero--centred ground-inverse" data-enter aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text">
+      <div class="hero__c">
+        <a class="pill" href="#indicadores"><span>UF, dólar y TPM de hoy</span><span class="muted">Ver los valores</span></a>
+        <h1 id="hero-h">Economía y finanzas personales para jóvenes en Chile</h1>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#conceptos">Explorar los conceptos<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+          <a class="btn btn--secondary" href="#ruta">Armar mi ruta</a>
         </div>
+      </div>
+      <div class="hero__window">
+        <div class="ly-piece n-win">
+          <div class="n-win__bar"><span class="n-win__dots" aria-hidden="true"><i></i><i></i><i></i></span><span><b>Noesis</b> · Hoy en Chile</span><span class="sp"></span><span aria-hidden="true">Ficha: UF</span></div>
+          <div class="n-win__body">
+            <div class="n-vivo" aria-labelledby="vivo-titulo">
+              <p class="n-vivo__t" id="vivo-titulo"><span class="punto-vivo" aria-hidden="true"></span>Valores de hoy</p>
+              <div class="vivo-lista" id="vivo-lista"><p class="vivo-pie">Cargando valores...</p></div>
+              <p class="vivo-pie" id="vivo-pie"></p>
+            </div>
+            <div class="n-ficha" aria-hidden="true">
+              <div class="n-ficha__meta"><span>Macroeconomía</span><span>Intermedio</span><span>Verificado</span></div>
+              <h3>UF (Unidad de Fomento)</h3>
+              <p>Índice del Banco Central que sigue la inflación. No es dinero: sirve para expresar precios y deudas, como un crédito hipotecario o un arriendo.</p>
+                            <div class="n-acts"><span>Marcar como aprendido</span><span>Hacer el quiz</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <section class="section app" id="indicadores" aria-labelledby="ind-titulo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="ind-titulo">Los valores de Chile de hoy. <span class="muted">Qué es cada uno y por qué te importa.</span></h2>
       </div>
       <p class="aviso" id="ind-aviso" hidden></p>
       <p class="estado" id="ind-estado" aria-live="polite"></p>
       <div class="grilla-ind" id="ind-grilla">
         <div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div><div class="esqueleto"></div>
       </div>
+      <div class="grid cifras-fila" data-moment="counter-rolls">
+        <div><p class="t-stat">78</p><p class="t-small muted">conceptos con definición y ejemplo</p></div>
+        <div><p class="t-stat">4</p><p class="t-small muted">temas, de fundamentos a macroeconomía</p></div>
+        <div><p class="t-stat">10</p><p class="t-small muted">indicadores actualizados cada 10 minutos</p></div>
+        <div><p class="t-stat">5</p><p class="t-small muted">calculadoras con valores en pesos</p></div>
+      </div>
     </div>
   </section>
 
-  <section class="bloque alterno" id="conceptos" aria-labelledby="con-titulo">
-    <div class="contenedor">
-      <div class="encabezado">
-        <div>
-          <div class="solapa">Aprende</div>
-          <h2 id="con-titulo">Conceptos</h2>
-          <p>Busca un concepto o filtra por nivel y tema. Toca una tarjeta para ver la ficha completa.</p>
-        </div>
+  <section class="section app bloque-gris" id="conceptos" aria-labelledby="con-titulo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="con-titulo">Conceptos de economía en simple. <span class="muted">Busca, filtra y abre la ficha.</span></h2>
       </div>
       <div class="filtros">
         <div class="buscador">
@@ -512,18 +513,14 @@
       <div class="chips" id="chips" role="group" aria-label="Filtrar por tema"></div>
       <p class="estado" id="con-estado" aria-live="polite">Cargando conceptos...</p>
       <div class="grilla-conceptos" id="con-grilla"></div>
-      <div class="mas" id="con-mas" hidden><button type="button" class="boton boton-secundario" id="con-mas-boton">Mostrar más</button></div>
+      <div class="mas" id="con-mas" hidden><button type="button" class="boton boton-secundario" id="con-mas-boton">Mostrar más conceptos</button></div>
     </div>
   </section>
 
-  <section class="bloque" id="ruta" aria-labelledby="ruta-titulo">
-    <div class="contenedor">
-      <div class="encabezado">
-        <div>
-          <div class="solapa">Paso a paso</div>
-          <h2 id="ruta-titulo">Ruta de aprendizaje</h2>
-          <p>Elige a qué concepto quieres llegar y te mostramos todo lo que conviene aprender antes, en orden.</p>
-        </div>
+  <section class="section app" id="ruta" aria-labelledby="ruta-titulo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="ruta-titulo">La ruta de aprendizaje hacia cada concepto. <span class="muted">Elige una meta y ve lo que va antes.</span></h2>
       </div>
       <div class="ruta-controles">
         <label for="ruta-meta">Quiero entender:</label>
@@ -534,26 +531,25 @@
         <div class="texto"><span id="ruta-cuenta">0 de 0 aprendidos</span><small id="ruta-sub">Avanza paso a paso y marca lo que ya entiendes.</small></div>
         <div class="barra-progreso" aria-hidden="true"><div id="ruta-barra"></div></div>
         <div class="acciones-ruta">
-          <button type="button" class="boton boton-principal" id="ruta-empezar">Empezar ruta</button>
-          <a href="/malla/">Ver mi avance en la malla →</a>
+          <button type="button" class="boton boton-principal" id="ruta-empezar">Empezar la ruta</button>
+          <a class="enlace-flecha" href="/malla/">Ver mi avance en la malla</a>
         </div>
       </div>
       <ol class="ruta" id="ruta-lista"></ol>
+      <div class="fila-conceptos" data-moment="marquee-row" data-moment-opts='{"speed": 30}'>
+        <ul class="mo-mq__track"><li>Presupuesto</li><li>Fondo de emergencia</li><li>Interés compuesto</li><li>Inflación</li><li>Tarjeta de crédito</li><li>CAE</li><li>Diversificación</li><li>Fondos mutuos y ETF</li><li>Política monetaria y TPM</li><li>Tipo de cambio</li><li>Crédito hipotecario</li><li>Pensión y ahorro previsional</li></ul>
+      </div>
     </div>
   </section>
 
-  <section class="bloque alterno" id="herramientas" aria-labelledby="herr-titulo">
-    <div class="contenedor">
-      <div class="encabezado">
-        <div>
-          <div class="solapa">Calcula</div>
-          <h2 id="herr-titulo">Herramientas</h2>
-          <p>Escribe los números sin puntos de miles: 100000, no 100.000. Usa punto para decimales (1.5).</p>
-        </div>
+  <section class="section app bloque-gris" id="herramientas" aria-labelledby="herr-titulo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="herr-titulo">Cinco calculadoras para tu plata. <span class="muted">Escribe 100000, no 100.000.</span></h2>
       </div>
       <div class="grilla-herr">
         <form class="tarjeta herr" id="f-convertir" novalidate>
-          <div class="herr-icono" aria-hidden="true">💱</div>
+          <div class="herr-icono" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg></div>
           <h3>Convertidor de monedas</h3>
           <p>Pesos, UF, dólares y euros con el valor de hoy.</p>
           <div class="campos">
@@ -570,7 +566,7 @@
         </form>
 
         <form class="tarjeta herr" id="f-interes" novalidate>
-          <div class="herr-icono" aria-hidden="true">📈</div>
+          <div class="herr-icono" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></div>
           <h3>Interés compuesto</h3>
           <p>Cuánto crece tu ahorro si reinviertes los intereses.</p>
           <div class="campos">
@@ -585,7 +581,7 @@
         </form>
 
         <form class="tarjeta herr" id="f-credito" novalidate>
-          <div class="herr-icono" aria-hidden="true">🏦</div>
+          <div class="herr-icono" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6M5 10v8M10 10v8M14 10v8M19 10v8M3 21h18"/></svg></div>
           <h3>Simulador de crédito</h3>
           <p>Cuánto pagas al mes y cuánto se va en intereses. Sirve para créditos de consumo e hipotecarios.</p>
           <div class="campos">
@@ -607,7 +603,7 @@
         </form>
 
         <form class="tarjeta herr" id="f-presupuesto" novalidate>
-          <div class="herr-icono" aria-hidden="true">🧾</div>
+          <div class="herr-icono" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h4"/></svg></div>
           <h3>Presupuesto 50/30/20</h3>
           <p>Reparte tu ingreso: la mitad para lo necesario, 30 % para gustos y 20 % para ahorrar.</p>
           <div class="campo"><label for="p-ingreso">Ingreso mensual ($)</label><input id="p-ingreso" type="text" inputmode="decimal" value="700000"></div>
@@ -616,7 +612,7 @@
         </form>
 
         <form class="tarjeta herr" id="f-real" novalidate>
-          <div class="herr-icono" aria-hidden="true">🧮</div>
+          <div class="herr-icono" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18H5zM8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg></div>
           <h3>Tasa real</h3>
           <p>¿Tu dinero gana de verdad, o la inflación se lo come?</p>
           <div class="campos dos">
@@ -629,14 +625,11 @@
       </div>
     </div>
   </section>
-  <section class="bloque" id="progreso" aria-labelledby="prog-titulo">
-    <div class="contenedor">
-      <div class="encabezado">
-        <div>
-          <div class="solapa">Tu avance</div>
-          <h2 id="prog-titulo">Mi progreso</h2>
-          <p>Lo que has aprendido y los logros que llevas. Se guarda en este navegador y se comparte con la malla.</p>
-        </div>
+
+  <section class="section app" id="progreso" aria-labelledby="prog-titulo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="prog-titulo">Tu avance en los 78 conceptos. <span class="muted">Se guarda aquí y en la malla.</span></h2>
       </div>
       <div class="progreso-grid">
         <div class="tarjeta progreso-total">
@@ -659,15 +652,22 @@
   </section>
 </main>
 
-<footer>
-  <div class="contenedor">
-    <div>
-      <strong>Noesis</strong>
-      <p>Proyecto Inicial IWG400 · USM. Los contenidos vienen del documento <em>“Conceptos financieros: prerrequisitos y fuentes”</em>. Esta página es educativa y no constituye asesoría financiera.</p>
+<footer class="footer closing footer--dark ground-inverse" aria-labelledby="close-h">
+  <div class="wrap">
+    <div class="closing__cta close--type">
+      <div class="section-head"><h2 id="close-h">Empieza por el primer concepto de tu ruta</h2></div>
+      <a class="btn btn--primary btn--xl" href="#ruta">Armar mi ruta<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
     </div>
-    <div>
-      <strong>Fuentes de datos</strong>
-      <p>Indicadores de Chile: <a href="https://indicadores.cl/" rel="noopener noreferrer" target="_blank">indicadores.cl</a> · Bitcoin: <a href="https://www.coingecko.com/" rel="noopener noreferrer" target="_blank">CoinGecko</a></p>
+    <div class="closing__links">
+      <div class="grid">
+        <div class="span-6 stack-5">
+          <a class="footer__mark" href="#top"><span class="mark" data-mark="dots" aria-hidden="true"></span>Noesis</a>
+          <p class="footer__nota">Proyecto Inicial IWG400 · USM. Los contenidos vienen del documento “Conceptos financieros: prerrequisitos y fuentes”. Es una página educativa y no es asesoría financiera.</p>
+        </div>
+        <div class="span-3 start-7 footer__col"><h4>Aprende</h4><ul><li><a href="#conceptos">Conceptos</a></li><li><a href="#ruta">Ruta de aprendizaje</a></li><li><a href="/malla/">Malla de conceptos</a></li></ul></div>
+        <div class="span-3 footer__col"><h4>Datos</h4><ul><li><a href="https://indicadores.cl/" rel="noopener noreferrer" target="_blank">indicadores.cl</a></li><li><a href="https://www.coingecko.com/" rel="noopener noreferrer" target="_blank">CoinGecko</a></li><li><a href="#herramientas">Calculadoras</a></li></ul></div>
+      </div>
+      <div class="footer__legal"><span>Noesis · USM 2026</span><span><a href="#top">Volver arriba</a></span></div>
     </div>
   </div>
 </footer>
@@ -789,14 +789,6 @@
     if (fichaActual) { pintarControlesFicha(); }
   });
 
-  // ---------------- Menú móvil ----------------
-  $('menu-boton').addEventListener('click', function () {
-    var abierto = $('nav-enlaces').classList.toggle('abierto');
-    this.setAttribute('aria-expanded', String(abierto));
-  });
-  $('nav-enlaces').addEventListener('click', function (e) {
-    if (e.target.tagName === 'A') { $('nav-enlaces').classList.remove('abierto'); $('menu-boton').setAttribute('aria-expanded', 'false'); }
-  });
 
   // ---------------- Indicadores ----------------
   var DESTACADOS = ['uf', 'dolar', 'euro', 'tpm'];
@@ -930,7 +922,7 @@
       if (!res.ok) { $('con-estado').textContent = mensajeDeError(res); $('con-estado').classList.add('error'); return; }
       var d = res.datos;
       if (!categoriasCargadas) { categoriasCargadas = true; dibujarChips(d.categorias_disponibles || []); }
-      if (!qs) { todos = d.conceptos; $('cifra-conceptos').textContent = String(d.total); llenarSelectorRuta(); pintarMiProgreso(); abrirConceptoDelEnlace(); }
+      if (!qs) { todos = d.conceptos; llenarSelectorRuta(); pintarMiProgreso(); abrirConceptoDelEnlace(); }
       $('con-estado').textContent = d.total === 1 ? '1 concepto' : d.total + ' conceptos';
       if (!d.conceptos.length) {
         grilla.appendChild(el('div', { className: 'vacio' }, ['No encontramos conceptos con esos filtros. Prueba con otra palabra.']));
@@ -1742,5 +1734,8 @@
 })();
 </script>
 {% endverbatim %}
+<script type="module" src="{% static 'economia/kit/system.js' %}"></script>
+<script type="module" src="{% static 'economia/kit/motion/motion.js' %}"></script>
+<script type="module" src="{% static 'economia/kit/layout/layout.js' %}"></script>
 </body>
 </html>
